@@ -18,8 +18,17 @@ def process_step1():
 
 @app.route('/body_goal')
 def body_goal():
+    return render_template('body_goal.html')
+
+@app.route('/process_body_goal', methods=['POST'])
+def process_body_goal():
+    session['body_goal'] = request.form['body_goal']
+    return redirect(url_for('problem_area'))  # Redirect to the next step
+
+@app.route('/problem_area')
+def problem_area():
     # This will be implemented in the next step
-    return "Body Goal Page - To be implemented"
+    return "Problem Area Page - To be implemented"
 
 if __name__ == '__main__':
     app.run(debug=True)
