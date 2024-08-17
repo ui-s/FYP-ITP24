@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Planner - Workout Days</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/workout_days.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1>Choose Your Workout Days</h1>
+        
+        <form action="{{ url_for('process_workout_days') }}" method="post">
+            <div class="form-group">
+                <label for="workout_days">How many days per week do you want to work out?</label>
+                <select id="workout_days" name="workout_days" required>
+                    <option value="">--Please choose an option--</option>
+                    {% for i in range(1, 8) %}
+                        <option value="{{ i }}" {% if session.get('workout_days') == i|string %}selected{% endif %}>{{ i }} day{% if i != 1 %}s{% endif %}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            
+            <button type="submit" class="next-btn">Next</button>
+        </form>
+        
+        <a href="{{ url_for('fitness_level') }}" class="back-btn">Back</a>
+    </main>
+</body>
+</html>

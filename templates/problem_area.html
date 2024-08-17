@@ -13,28 +13,28 @@
         <form action="{{ url_for('process_problem_areas') }}" method="post">
             <div class="problem-areas">
                 <div class="form-check">
-                    <input type="checkbox" id="weak-chest" name="problem_areas" value="weak_chest">
-                    <label for="weak-chest">Weak Chest</label>
+                    <input type="checkbox" id="weak-chest" name="problem_areas" value="weak_chest" {% if 'weak_chest' in session.get('problem_areas', []) %}checked{% endif %}>
+                    <label for="weak-chest"><strong>Weak Chest</strong></label>
                 </div>
                 
                 <div class="form-check">
-                    <input type="checkbox" id="weak-back" name="problem_areas" value="weak_back">
-                    <label for="weak-back">Weak Back</label>
+                    <input type="checkbox" id="weak-back" name="problem_areas" value="weak_back" {% if 'weak_back' in session.get('problem_areas', []) %}checked{% endif %}>
+                    <label for="weak-back"><strong>Weak Back</strong></label>
                 </div>
                 
                 <div class="form-check">
-                    <input type="checkbox" id="big-belly" name="problem_areas" value="big_belly">
-                    <label for="big-belly">Big Belly</label>
+                    <input type="checkbox" id="big-belly" name="problem_areas" value="big_belly" {% if 'big_belly' in session.get('problem_areas', []) %}checked{% endif %}>
+                    <label for="big-belly"><strong>Big Belly</strong></label>
                 </div>
                 
                 <div class="form-check">
-                    <input type="checkbox" id="small-arms" name="problem_areas" value="small_arms">
-                    <label for="small-arms">Small Arms</label>
+                    <input type="checkbox" id="small-arms" name="problem_areas" value="small_arms" {% if 'small_arms' in session.get('problem_areas', []) %}checked{% endif %}>
+                    <label for="small-arms"><strong>Small Arms</strong></label>
                 </div>
                 
                 <div class="form-check">
-                    <input type="checkbox" id="small-legs" name="problem_areas" value="small_legs">
-                    <label for="small-legs">Small Legs</label>
+                    <input type="checkbox" id="small-legs" name="problem_areas" value="small_legs" {% if 'small_legs' in session.get('problem_areas', []) %}checked{% endif %}>
+                    <label for="small-legs"><strong>Small Legs</strong></label>
                 </div>
             </div>
             

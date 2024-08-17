@@ -34,22 +34,30 @@ def problem_area():
 @app.route('/process_problem_areas', methods=['POST'])
 def process_problem_areas():
     session['problem_areas'] = request.form.getlist('problem_areas')
+    return redirect(url_for('fitness_level'))
+
+@app.route('/fitness_level')
+def fitness_level():
+    return render_template('fitness_level.html')
+
+@app.route('/process_fitness_level', methods=['POST'])
+def process_fitness_level():
+    session['fitness_level'] = request.form['fitness_level']
+    return redirect(url_for('workout_days'))
+
+@app.route('/workout_days')
+def workout_days():
+    return render_template('workout_days.html')
+
+@app.route('/process_workout_days', methods=['POST'])
+def process_workout_days():
+    session['workout_days'] = int(request.form['workout_days'])
     return redirect(url_for('workout_plan'))
 
 @app.route('/workout_plan')
 def workout_plan():
     # This will be implemented in the next step
     return "Workout Plan Page - To be implemented"
-
-@app.route('/fitness_level')
-def fitness_level():
-    # This will be implemented in a future step
-    return "Fitness Level Page - To be implemented"
-
-@app.route('/workout_days')
-def workout_days():
-    # This will be implemented in a future step
-    return "Workout Days Page - To be implemented"
 
 if __name__ == '__main__':
     app.run(debug=True)

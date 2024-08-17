@@ -4,29 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Planner - Body Goal</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/body_goal.css') }}">
 </head>
 <body>
     <main class="container">
-        <h1>What's Your Primary Body Goal?</h1>
+        <h1 id="choose-your-body-goal">Choose Your Body Goal</h1>
+        
         <form action="{{ url_for('process_body_goal') }}" method="post">
-            <div class="goal-container">
-                <div class="goal-box" onclick="selectGoal('lose-weight')">
-                    <input type="radio" id="lose-weight" name="body_goal" value="lose_weight" required>
-                    <label for="lose-weight">Lose Weight</label>
+            <div class="body-goals">
+                <div class="form-check">
+                    <input type="radio" id="lose-weight" name="body_goal" value="lose_weight" required {% if session.get('body_goal') == 'lose_weight' %}checked{% endif %}>
+                    <label for="lose-weight"><strong>Lose Weight</strong></label>
                 </div>
-                <div class="goal-box" onclick="selectGoal('gain-muscle')">
-                    <input type="radio" id="gain-muscle" name="body_goal" value="gain_muscle" required>
-                    <label for="gain-muscle">Gain Muscle</label>
+                
+                <div class="form-check">
+                    <input type="radio" id="gain-muscle" name="body_goal" value="gain_muscle" required {% if session.get('body_goal') == 'gain_muscle' %}checked{% endif %}>
+                    <label for="gain-muscle"><strong>Gain Muscle</strong></label>
                 </div>
-                <div class="goal-box" onclick="selectGoal('increase-strength')">
-                    <input type="radio" id="increase-strength" name="body_goal" value="increase_strength" required>
-                    <label for="increase-strength">Increase Strength</label>
+                
+                <div class="form-check">
+                    <input type="radio" id="increase-strength" name="body_goal" value="increase_strength" required {% if session.get('body_goal') == 'increase_strength' %}checked{% endif %}>
+                    <label for="increase-strength"><strong>Increase Strength</strong></label>
                 </div>
             </div>
+            
             <button type="submit" class="next-btn">Next</button>
         </form>
+        
+        <a href="{{ url_for('index') }}" class="back-btn">Back</a>
     </main>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Planner - Fitness Level</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/fitness_level.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1 id="choose-your-fitness-level">Choose Your Fitness Level</h1>
+        
+        <form action="{{ url_for('process_fitness_level') }}" method="post">
+            <div class="fitness-levels">
+                <div class="form-check">
+                    <input type="radio" id="beginner" name="fitness_level" value="beginner" required {% if session.get('fitness_level') == 'beginner' %}checked{% endif %}>
+                    <label for="beginner"><strong>Beginner</strong></label>
+                </div>
+                
+                <div class="form-check">
+                    <input type="radio" id="intermediate" name="fitness_level" value="intermediate" required {% if session.get('fitness_level') == 'intermediate' %}checked{% endif %}>
+                    <label for="intermediate"><strong>Intermediate</strong></label>
+                </div>
+                
+                <div class="form-check">
+                    <input type="radio" id="advanced" name="fitness_level" value="advanced" required {% if session.get('fitness_level') == 'advanced' %}checked{% endif %}>
+                    <label for="advanced"><strong>Advanced</strong></label>
+                </div>
+            </div>
+            
+            <button type="submit" class="next-btn">Next</button>
+        </form>
+        
+        <a href="{{ url_for('problem_area') }}" class="back-btn">Back</a>
+    </main>
+</body>
+</html>
