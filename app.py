@@ -14,6 +14,8 @@ def index():
 def process_step1():
     session['age_group'] = request.form['age_group']
     session['gender'] = request.form['gender']
+    session['height'] = float(request.form['height'])
+    session['weight'] = float(request.form['weight'])
     return redirect(url_for('body_goal'))
 
 @app.route('/body_goal')
