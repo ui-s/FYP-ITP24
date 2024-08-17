@@ -1,0 +1,242 @@
+,WorkoutDay,Exercise,FitnessLevel,TargetedMuscle
+0,chest day,dumbbell bench press,beginner,middle chest
+1,chest day,incline dumbbell press,beginner,upper chest
+2,chest day,decline dumbbell press,beginner,lower chest
+3,chest day,push-ups,beginner,middle chest
+4,chest day,chest fly,beginner,middle chest
+5,chest day,barbell bench press,intermediate,middle chest
+6,chest day,incline barbell press,intermediate,upper chest
+7,chest day,decline barbell press,intermediate,lower chest
+8,chest day,dumbbell pullovers,intermediate,upper chest
+9,chest day,machine chest press,intermediate,middle chest
+10,chest day,cable fly,intermediate,middle chest
+11,chest day,barbell bench press,advanced,middle chest
+12,chest day,incline barbell press,advanced,upper chest
+13,chest day,decline barbell press,advanced,lower chest
+14,chest day,chest dips,advanced,lower chest
+15,chest day,cable crossover,advanced,middle chest
+16,chest day,pec deck machine,advanced,middle chest
+17,chest day,single-arm cable fly,advanced,upper chest
+18,back day,lat pulldowns,beginner,upper back
+19,back day,seated cable rows,beginner,middle back
+20,back day,dumbbell rows,beginner,middle back
+21,back day,face pulls,beginner,upper back
+22,back day,back extensions,beginner,lower back
+23,back day,lat pulldowns,intermediate,upper back
+24,back day,seated cable rows,intermediate,middle back
+25,back day,barbell rows,intermediate,middle back
+26,back day,T-bar rows,intermediate,middle back
+27,back day,pull-ups,intermediate,upper back
+28,back day,single-arm dumbbell rows,intermediate,middle back
+29,back day,deadlifts,intermediate,lower back
+30,back day,lat pulldowns,advanced,upper back
+31,back day,seated cable rows,advanced,middle back
+32,back day,barbell rows,advanced,middle back
+33,back day,T-bar rows,advanced,middle back
+34,back day,pull-ups,advanced,upper back
+35,back day,single-arm dumbbell rows,advanced,middle back
+36,back day,deadlifts,advanced,lower back
+37,back day,weighted pull-ups,advanced,upper back
+38,back day,chest-supported rows,advanced,middle back
+39,back day,rack pulls,advanced,lower back
+40,back day,rope climbs,advanced,full back
+41,arm day,bicep curls,beginner,biceps
+42,arm day,tricep pushdowns,beginner,triceps
+43,arm day,shoulder press,beginner,shoulders
+44,arm day,lateral raises,beginner,shoulders
+45,arm day,wrist curls,beginner,forearms
+46,arm day,hammer curls,beginner,biceps
+47,arm day,tricep dips,beginner,triceps
+48,arm day,front raises,beginner,shoulders
+49,arm day,reverse wrist curls,beginner,forearms
+50,arm day,bicep curls,intermediate,biceps
+51,arm day,tricep pushdowns,intermediate,triceps
+52,arm day,shoulder press,intermediate,shoulders
+53,arm day,lateral raises,intermediate,shoulders
+54,arm day,wrist curls,intermediate,forearms
+55,arm day,hammer curls,intermediate,biceps
+56,arm day,tricep dips,intermediate,triceps
+57,arm day,front raises,intermediate,shoulders
+58,arm day,reverse wrist curls,intermediate,forearms
+59,arm day,concentration curls,intermediate,biceps
+60,arm day,overhead tricep extensions,intermediate,triceps
+61,arm day,arnold press,intermediate,shoulders
+62,arm day,reverse curls,intermediate,forearms
+63,arm day,bicep curls,advanced,biceps
+64,arm day,tricep pushdowns,advanced,triceps
+65,arm day,shoulder press,advanced,shoulders
+66,arm day,lateral raises,advanced,shoulders
+67,arm day,wrist curls,advanced,forearms
+68,arm day,hammer curls,advanced,biceps
+69,arm day,tricep dips,advanced,triceps
+70,arm day,front raises,advanced,shoulders
+71,arm day,reverse wrist curls,advanced,forearms
+72,arm day,concentration curls,advanced,biceps
+73,arm day,overhead tricep extensions,advanced,triceps
+74,arm day,arnold press,advanced,shoulders
+75,arm day,reverse curls,advanced,forearms
+76,arm day,preacher curls,advanced,biceps
+77,arm day,skull crushers,advanced,triceps
+78,arm day,lateral raises with dumbbells,advanced,shoulders
+79,arm day,wrist rollers,advanced,forearms
+80,arm day,incline bicep curls,advanced,biceps
+81,arm day,tricep kickbacks,advanced,triceps
+82,arm day,military press,advanced,shoulders
+83,arm day,farmer's walk,advanced,forearms
+84,leg day,bodyweight squats,beginner,quadriceps
+85,leg day,lunges,beginner,quadriceps
+86,leg day,glute bridges,beginner,glutes
+87,leg day,calf raises,beginner,calves
+88,leg day,leg press,beginner,quadriceps
+89,leg day,hamstring curls,beginner,hamstrings
+90,leg day,step-ups,beginner,quadriceps
+91,leg day,leg extensions,beginner,quadriceps
+92,leg day,bodyweight squats,intermediate,quadriceps
+93,leg day,lunges,intermediate,quadriceps
+94,leg day,glute bridges,intermediate,glutes
+95,leg day,calf raises,intermediate,calves
+96,leg day,leg press,intermediate,quadriceps
+97,leg day,hamstring curls,intermediate,hamstrings
+98,leg day,step-ups,intermediate,quadriceps
+99,leg day,leg extensions,intermediate,quadriceps
+100,leg day,barbell squats,intermediate,quadriceps
+101,leg day,Bulgarian split squats,intermediate,quadriceps
+102,leg day,Romanian deadlifts,intermediate,hamstrings
+103,leg day,seated calf raises,intermediate,calves
+104,leg day,sumo squats,intermediate,inner thighs
+105,leg day,barbell squats,advanced,quadriceps
+106,leg day,Bulgarian split squats,advanced,quadriceps
+107,leg day,Romanian deadlifts,advanced,hamstrings
+108,leg day,seated calf raises,advanced,calves
+109,leg day,sumo squats,advanced,inner thighs
+110,leg day,deadlifts,advanced,hamstrings
+111,leg day,hack squats,advanced,quadriceps
+112,leg day,walking lunges,advanced,quadriceps
+113,leg day,single-leg press,advanced,quadriceps
+114,leg day,pistol squats,advanced,quadriceps
+115,leg day,standing calf raises with weight,advanced,calves
+116,leg day,hip thrusts,advanced,glutes
+117,leg day,leg curls,advanced,hamstrings
+118,leg day,box jumps,advanced,full legs
+119,upper body,push-ups,beginner,chest
+120,upper body,bent-over rows,beginner,back
+121,upper body,shoulder press,beginner,shoulders
+122,upper body,bicep curls,beginner,biceps
+123,upper body,tricep pushdowns,beginner,triceps
+124,upper body,chest fly,beginner,chest
+125,upper body,lat pulldowns,beginner,back
+126,upper body,lateral raises,beginner,shoulders
+127,upper body,hammer curls,beginner,biceps
+128,upper body,tricep dips,beginner,triceps
+129,upper body,push-ups,intermediate,chest
+130,upper body,bent-over rows,intermediate,back
+131,upper body,shoulder press,intermediate,shoulders
+132,upper body,bicep curls,intermediate,biceps
+133,upper body,tricep pushdowns,intermediate,triceps
+134,upper body,chest fly,intermediate,chest
+135,upper body,lat pulldowns,intermediate,back
+136,upper body,lateral raises,intermediate,shoulders
+137,upper body,hammer curls,intermediate,biceps
+138,upper body,tricep dips,intermediate,triceps
+139,upper body,bench press,intermediate,chest
+140,upper body,pull-ups,intermediate,back
+141,upper body,arnold press,intermediate,shoulders
+142,upper body,concentration curls,intermediate,biceps
+143,upper body,overhead tricep extensions,intermediate,triceps
+144,upper body,incline dumbbell press,intermediate,chest
+145,upper body,single-arm dumbbell rows,intermediate,back
+146,upper body,front raises,intermediate,shoulders
+147,upper body,preacher curls,intermediate,biceps
+148,upper body,skull crushers,intermediate,triceps
+149,upper body,bench press,advanced,chest
+150,upper body,pull-ups,advanced,back
+151,upper body,arnold press,advanced,shoulders
+152,upper body,concentration curls,advanced,biceps
+153,upper body,overhead tricep extensions,advanced,triceps
+154,upper body,incline dumbbell press,advanced,chest
+155,upper body,single-arm dumbbell rows,advanced,back
+156,upper body,front raises,advanced,shoulders
+157,upper body,preacher curls,advanced,biceps
+158,upper body,skull crushers,advanced,triceps
+159,upper body,chest dips,advanced,chest
+160,upper body,deadlifts,advanced,back
+161,upper body,lateral raises with dumbbells,advanced,shoulders
+162,upper body,incline bicep curls,advanced,biceps
+163,upper body,tricep kickbacks,advanced,triceps
+164,upper body,military press,advanced,shoulders
+165,upper body,cable crossovers,advanced,chest
+166,upper body,T-bar rows,advanced,back
+167,lower body,bodyweight squats,beginner,quadriceps
+168,lower body,lunges,beginner,quadriceps
+169,lower body,glute bridges,beginner,glutes
+170,lower body,calf raises,beginner,calves
+171,lower body,leg press,beginner,quadriceps
+172,lower body,hamstring curls,beginner,hamstrings
+173,lower body,step-ups,beginner,quadriceps
+174,lower body,leg extensions,beginner,quadriceps
+175,lower body,bodyweight squats,intermediate,quadriceps
+176,lower body,lunges,intermediate,quadriceps
+177,lower body,glute bridges,intermediate,glutes
+178,lower body,calf raises,intermediate,calves
+179,lower body,leg press,intermediate,quadriceps
+180,lower body,hamstring curls,intermediate,hamstrings
+181,lower body,step-ups,intermediate,quadriceps
+182,lower body,leg extensions,intermediate,quadriceps
+183,lower body,barbell squats,intermediate,quadriceps
+184,lower body,Bulgarian split squats,intermediate,quadriceps
+185,lower body,Romanian deadlifts,intermediate,hamstrings
+186,lower body,seated calf raises,intermediate,calves
+187,lower body,sumo squats,intermediate,inner thighs
+188,lower body,barbell squats,advanced,quadriceps
+189,lower body,Bulgarian split squats,advanced,quadriceps
+190,lower body,Romanian deadlifts,advanced,hamstrings
+191,lower body,seated calf raises,advanced,calves
+192,lower body,sumo squats,advanced,inner thighs
+193,lower body,deadlifts,advanced,hamstrings
+194,lower body,hack squats,advanced,quadriceps
+195,lower body,walking lunges,advanced,quadriceps
+196,lower body,single-leg press,advanced,quadriceps
+197,lower body,pistol squats,advanced,quadriceps
+198,lower body,standing calf raises with weight,advanced,calves
+199,lower body,hip thrusts,advanced,glutes
+200,lower body,leg curls,advanced,hamstrings
+201,lower body,box jumps,advanced,full legs
+202,lower body,front squats,advanced,quadriceps
+203,lower body,good mornings,advanced,hamstrings
+204,lower body,kettlebell swings,advanced,glutes
+205,lower body,goblet squats,advanced,quadriceps
+206,lower body,reverse lunges,advanced,quadriceps
+207,lower body,calf press on leg press machine,advanced,calves
+208,cardio,brisk walking,beginner,full body
+209,cardio,stationary bike,beginner,legs
+210,cardio,jumping jacks,beginner,full body
+211,cardio,basic step aerobics,beginner,legs
+212,cardio,elliptical trainer,beginner,full body
+213,cardio,jogging,beginner,legs
+214,cardio,brisk walking,intermediate,full body
+215,cardio,stationary bike,intermediate,legs
+216,cardio,jumping jacks,intermediate,full body
+217,cardio,basic step aerobics,intermediate,legs
+218,cardio,elliptical trainer,intermediate,full body
+219,cardio,jogging,intermediate,legs
+220,cardio,running,intermediate,legs
+221,cardio,rowing machine,intermediate,full body
+222,cardio,swimming,intermediate,full body
+223,cardio,high-intensity interval training (HIIT),intermediate,full body
+224,cardio,stair climbing,intermediate,legs
+225,cardio,treadmill sprints,intermediate,legs
+226,cardio,running,advanced,legs
+227,cardio,rowing machine,advanced,full body
+228,cardio,swimming,advanced,full body
+229,cardio,high-intensity interval training (HIIT),advanced,full body
+230,cardio,stair climbing,advanced,legs
+231,cardio,treadmill sprints,advanced,legs
+232,cardio,cycling,advanced,legs
+233,cardio,jump rope,advanced,full body
+234,cardio,kickboxing,advanced,full body
+235,cardio,burpees,advanced,full body
+236,cardio,mountain climbers,advanced,full body
+237,cardio,agility ladder drills,advanced,full body
+238,cardio,sprint intervals,advanced,legs
+239,cardio,rowing sprints,advanced,full body
+240,cardio,hill sprints,advanced,legs
