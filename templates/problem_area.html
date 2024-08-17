@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Select Problem Areas</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 text-center">Focus on Problem Areas</h1>
+        <form method="POST" action="{{ url_for('problem_area') }}" class="mt-4">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="weak_chest" id="weakChest" name="problem_areas">
+                <label class="form-check-label" for="weakChest">Weak Chest</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="weak_back" id="weakBack" name="problem_areas">
+                <label class="form-check-label" for="weakBack">Weak Back</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="big_belly" id="bigBelly" name="problem_areas">
+                <label class="form-check-label" for="bigBelly">Big Belly</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="small_arms" id="smallArms" name="problem_areas">
+                <label class="form-check-label" for="smallArms">Small Arms</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="small_legs" id="smallLegs" name="problem_areas">
+                <label class="form-check-label" for="smallLegs">Small Legs</label>
+            </div>
+            <br>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        <br>
+        <a href="{{ url_for('workout_plan') }}" class="btn btn-secondary">Back to Weekly Workout Plan</a>
+    </div>
+</body>
+</html>

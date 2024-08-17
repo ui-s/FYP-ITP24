@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record Workout</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .workout-input {
+            margin-top: 15px;
+        }
+        .timer {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 text-center text-primary">Record Your Workout</h1>
+        
+        <div class="text-center timer">
+            <span id="timer-display">00:00:00</span><br>
+            <button id="start-timer" class="btn btn-success">Start</button>
+            <button id="stop-timer" class="btn btn-danger" disabled>Stop</button>
+        </div>
+
+        <div class="text-center">
+            <label for="current_weight">Current Weight (lbs):</label>
+            <input type="number" id="current_weight" name="current_weight" placeholder="Weight (lbs)" required>
+        </div>
+
+        <form id="workout-form" method="POST" action="{{ url_for('workout', day='your_day') }}">
+            <div class="workout-input">
+                <h4>Chest Workouts</h4>
+                <div id="chest-workouts">
+                    <div class="workout-set">
+                        <label>Bench Press - Set 1:</label>
+                        <input type="number" name="bench_press_weight[]" placeholder="Weight (lbs)" required>
+                        <input type="number" name="bench_press_reps[]" placeholder="Reps" required>
+                        <button type="button" class="btn btn-danger remove-set">Remove Set</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-info add-set" data-exercise="bench press">Add Set</button>
+                <div class="workout-set">
+                    <label>Incline Chest Press:</label>
+                    <input type="number" name="incline_chest_press_weight[]" placeholder="Weight (lbs)" required>
+                    <input type="number" name="incline_chest_press_reps[]" placeholder="Reps" required>
+                </div>
+                <div class="workout-set">
+                    <label>Chest Flys:</label>
+                    <input type="number" name="chest_flys_weight[]" placeholder="Weight (lbs)" required>
+                    <input type="number" name="chest_flys_reps[]" placeholder="Reps" required>
+                </div>
+            </div>
+
+            <div class="workout-input">
+                <h4>Tricep Workouts</h4>
+                <div id="tricep-workouts">
+                    <div class="workout-set">
+                        <label>Tricep Pushdowns - Set 1:</label>
+                        <input type="number" name="tricep_pushdowns_weight[]" placeholder="Weight (lbs)" required>
+                        <input type="number" name="tricep_pushdowns_reps[]" placeholder="Reps" required>
+                        <button type="button" class="btn btn-danger remove-set">Remove Set</button>
+                    </div>
+                </div>
+                <button type="button" class="btn btn-info add-set" data-exercise="tricep pushdowns">Add Set</button>
+                <div class="workout-set">
+                    <label>Skull Crushers:</label>
+                    <input type="number" name="skull_crushers_weight[]" placeholder="Weight (lbs)" required>
+                    <input type="number" name="skull_crushers_reps[]" placeholder="Reps" required>
+                </div>
+                <div class="workout-set">
+                    <label>Dips:</label>
+                    <input type="number" name="dips_weight[]" placeholder="Weight (lbs)" required>
+                    <input type="number" name="dips_reps[]" placeholder="Reps" required>
+                </div>
+            </div>
+
+            <input type="hidden" name="workout_duration" id="workout_duration">
+
+            <button type="submit" class="btn btn-primary">Save Workout</button>
+        </form>
+        
+        <br>
+        <a href="{{ url_for('workout_plan') }}" class="btn btn-secondary">Back to Weekly Workout Plan</a>
+    </div>
+
+    <script>
+        let timer;
+        let isRunning = false;
+        let seconds = 0;
+
+        document.getElementById("start-timer").onclick = function() {
+            if (!isRunning) {
+                isRunning = true;
+                timer = setInterval(function() {
+                    seconds++;
+                    const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
+                    const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+                    const secondsDisplay = String(seconds % 60).padStart(2, '0');
+                    document.getElementById("timer-display").textContent = `${hours}:${minutes}:${secondsDisplay}`;
+                }, 1000);
+                this.disabled = true;
+                document.getElementById("stop-timer").disabled = false;
+            }
+        };
+
+        document.getElementById("stop-timer").onclick = function() {
+            if (isRunning) {
+                clearInterval(timer);
+                isRunning = false;
+                this.disabled = true;
+                document.getElementById("start-timer").disabled = false;
+
+                // Save duration in hidden input before form submission
+                document.getElementById("workout_duration").value = seconds;
+            }
+        };
+
+        // Add New Sets Functionality
+        document.querySelectorAll('.add-set').forEach(button => {
+            button.addEventListener('click', function() {
+                const exerciseType = this.dataset.exercise;
+                const workoutSection = this.previousElementSibling;
+                const newSet = document.createElement('div');
+                newSet.className = 'workout-set';
+                newSet.innerHTML = `
+                    <label>${exerciseType.charAt(0).toUpperCase() + exerciseType.slice(1)} - Set ${workoutSection.querySelectorAll('.workout-set').length + 1}:</label>
+                    <input type="number" name="${exerciseType.replace(' ', '_')}_weight[]" placeholder="Weight (lbs)" required>
+                    <input type="number" name="${exerciseType.replace(' ', '_')}_reps[]" placeholder="Reps" required>
+                    <button type="button" class="btn btn-danger remove-set">Remove Set</button>
+                `;
+                workoutSection.appendChild(newSet);
+            });
+        });
+
+        // Remove Sets Functionality
+        document.body.addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-set')) {
+                event.target.parentElement.remove();
+            }
+        });
+    </script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
