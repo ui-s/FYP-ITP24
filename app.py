@@ -52,12 +52,18 @@ def workout_days():
 @app.route('/process_workout_days', methods=['POST'])
 def process_workout_days():
     session['workout_days'] = int(request.form['workout_days'])
-    return redirect(url_for('workout_plan'))
+    return redirect(url_for('confirmation'))
 
-@app.route('/workout_plan')
-def workout_plan():
-    # This will be implemented in the next step
-    return "Workout Plan Page - To be implemented"
+@app.route('/confirmation')
+def confirmation():
+    return render_template('confirmation.html')
+
+@app.route('/generate_workout_plan', methods=['POST'])
+def generate_workout_plan():
+    # This is where you'll implement the logic to generate the workout plan
+    # based on the user's inputs stored in the session
+    # For now, we'll just return a placeholder message
+    return "Your personalized workout plan is being generated based on your inputs!"
 
 if __name__ == '__main__':
     app.run(debug=True)

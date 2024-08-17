@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workout Planner - Confirmation</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/confirmation.css') }}">
+</head>
+<body>
+    <main class="container">
+        <h1>Confirm Your Choices</h1>
+        <p>Please review your selections below. If you need to make any changes, use the 'Back' button to navigate to the appropriate page.</p>
+        
+        <div class="summary">
+            <h2>Your Information:</h2>
+            <ul>
+                <li><strong>Age Group:</strong> {{ session.get('age_group') }}</li>
+                <li><strong>Gender:</strong> {{ session.get('gender').capitalize() }}</li>
+                <li><strong>Height:</strong> {{ session.get('height') }} cm</li>
+                <li><strong>Weight:</strong> {{ session.get('weight') }} kg</li>
+            </ul>
+
+            <h2>Your Goals:</h2>
+            <ul>
+                <li><strong>Body Goal:</strong> {{ session.get('body_goal', '').replace('_', ' ').capitalize() }}</li>
+                <li><strong>Problem Areas:</strong> 
+                    {% if session.get('problem_areas') %}
+                        {{ session.get('problem_areas')|map('replace', '_', ' ')|map('capitalize')|join(', ') }}
+                    {% else %}
+                        None specified
+                    {% endif %}
+                </li>
+            </ul>
+
+            <h2>Your Fitness Profile:</h2>
+            <ul>
+                <li><strong>Fitness Level:</strong> {{ session.get('fitness_level', '').capitalize() }}</li>
+                <li><strong>Workout Days Per Week:</strong> {{ session.get('workout_days') }}</li>
+            </ul>
+        </div>
+        
+        <form action="{{ url_for('generate_workout_plan') }}" method="post">
+            <button type="submit" class="next-btn">Generate Workout Plan</button>
+        </form>
+        
+        <a href="{{ url_for('workout_days') }}" class="back-btn">Back</a>
+    </main>
+</body>
+</html>
