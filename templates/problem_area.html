@@ -3,38 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Select Problem Areas</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Workout Planner - Problem Areas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/problem_area.css') }}">
 </head>
 <body>
-    <div class="container">
-        <h1 class="mt-5 text-center">Focus on Problem Areas</h1>
-        <form method="POST" action="{{ url_for('problem_area') }}" class="mt-4">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="weak_chest" id="weakChest" name="problem_areas">
-                <label class="form-check-label" for="weakChest">Weak Chest</label>
+    <main class="container">
+        <h1 id="focus-on-problem-areas">Focus on Problem Areas</h1>
+        
+        <form action="{{ url_for('process_problem_areas') }}" method="post">
+            <div class="problem-areas">
+                <div class="form-check">
+                    <input type="checkbox" id="weak-chest" name="problem_areas" value="weak_chest">
+                    <label for="weak-chest">Weak Chest</label>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" id="weak-back" name="problem_areas" value="weak_back">
+                    <label for="weak-back">Weak Back</label>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" id="big-belly" name="problem_areas" value="big_belly">
+                    <label for="big-belly">Big Belly</label>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" id="small-arms" name="problem_areas" value="small_arms">
+                    <label for="small-arms">Small Arms</label>
+                </div>
+                
+                <div class="form-check">
+                    <input type="checkbox" id="small-legs" name="problem_areas" value="small_legs">
+                    <label for="small-legs">Small Legs</label>
+                </div>
             </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="weak_back" id="weakBack" name="problem_areas">
-                <label class="form-check-label" for="weakBack">Weak Back</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="big_belly" id="bigBelly" name="problem_areas">
-                <label class="form-check-label" for="bigBelly">Big Belly</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="small_arms" id="smallArms" name="problem_areas">
-                <label class="form-check-label" for="smallArms">Small Arms</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="small_legs" id="smallLegs" name="problem_areas">
-                <label class="form-check-label" for="smallLegs">Small Legs</label>
-            </div>
-            <br>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            
+            <button type="submit" class="next-btn">Next</button>
         </form>
-        <br>
-        <a href="{{ url_for('workout_plan') }}" class="btn btn-secondary">Back to Weekly Workout Plan</a>
-    </div>
+        
+        <a href="{{ url_for('body_goal') }}" class="back-btn">Back</a>
+    </main>
 </body>
 </html>
