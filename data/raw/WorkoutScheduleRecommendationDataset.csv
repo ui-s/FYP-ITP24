@@ -1,0 +1,403 @@
+Id,Gender,Age,BodyGoal,ProblemAreas,Height_cm,Weight_kg,FitnessLevel,WorkoutDaysPerWeek,Monday,Tuesday,Wednesday,Thursday,Friday,Saturday,Sunday
+DDAS0001,Male,18,lose weight,big belly,171,75,advanced,4,cardio,upper body,rest,lower body,cardio,rest,rest
+DDAS0002,Male,18,gain muscle mass,small arms,173,69,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0003,Male,18,gain muscle mass,weak chest,180,79,beginner,3,upper body,rest,rest,lower body,upper body,rest,rest
+DDAS0004,Female,18,increase strength,small legs,163,55,intermediate,4,leg day,back day,rest,leg day,cardio,rest,rest
+DDAS0005,Female,22,lose weight,big belly,165,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0006,Male,25,gain muscle mass,small arms,178,85,advanced,5,chest day,rest,back day,rest,leg day,arm day,rest
+DDAS0007,Female,30,increase strength,small legs,160,55,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0008,Male,27,lose weight,big belly,175,90,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0009,Female,20,gain muscle mass,weak chest,168,50,advanced,6,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0010,Male,35,increase strength,small legs,180,100,intermediate,4,leg day,back day,rest,leg day,upper body,rest,cardio
+DDAS0011,Female,19,lose weight,big belly,158,52,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0012,Male,21,gain muscle mass,small arms,170,72,advanced,5,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0013,Female,29,increase strength,small legs,165,65,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0014,Male,24,lose weight,big belly,177,88,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0015,Female,33,gain muscle mass,weak chest,162,53,advanced,6,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0016,Male,28,increase strength,small legs,182,98,intermediate,4,leg day,back day,rest,leg day,upper body,rest,cardio
+DDAS0017,Female,23,lose weight,big belly,159,55,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0018,Male,26,gain muscle mass,small arms,174,78,advanced,5,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0019,Female,32,increase strength,small legs,167,60,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0020,Male,29,lose weight,big belly,176,87,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0021,Female,24,gain muscle mass,weak chest,164,54,advanced,6,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0022,Male,31,increase strength,small legs,179,95,intermediate,4,leg day,back day,rest,leg day,upper body,rest,cardio
+DDAS0023,Female,27,lose weight,big belly,157,56,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0024,Male,33,gain muscle mass,small arms,173,80,advanced,5,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0025,Female,25,increase strength,small legs,161,59,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0026,Male,22,lose weight,big belly,178,89,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0027,Female,30,gain muscle mass,weak chest,166,57,advanced,6,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0028,Male,36,increase strength,small legs,181,97,intermediate,4,leg day,back day,rest,leg day,upper body,rest,cardio
+DDAS0029,Female,21,lose weight,big belly,160,53,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0030,Male,25,gain muscle mass,small arms,171,74,advanced,5,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0031,Female,28,increase strength,small legs,164,58,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0032,Male,23,lose weight,big belly,174,86,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0033,Female,34,gain muscle mass,weak chest,168,56,advanced,6,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0034,Male,32,increase strength,small legs,183,96,intermediate,4,leg day,back day,rest,leg day,upper body,rest,cardio
+DDAS0035,Female,22,lose weight,big belly,158,55,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0036,Male,27,gain muscle mass,small arms,172,79,advanced,5,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0037,Female,29,increase strength,small legs,163,61,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0038,Male,30,lose weight,big belly,175,85,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0039,Female,26,gain muscle mass,weak chest,161,58,advanced,6,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0040,Male,24,increase strength,small legs,177,94,intermediate,4,leg day,back day,rest,leg day,upper body,rest,cardio
+DDAS0041,Female,31,lose weight,big belly,159,52,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0042,Male,28,gain muscle mass,small arms,174,76,advanced,5,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0043,Female,27,increase strength,small legs,162,60,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0044,Male,35,lose weight,big belly,178,90,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0045,Female,25,gain muscle mass,weak chest,167,59,advanced,6,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0046,Male,26,increase strength,small legs,180,92,intermediate,4,leg day,back day,rest,leg day,upper body,rest,cardio
+DDAS0047,Female,23,lose weight,big belly,157,54,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0048,Male,31,gain muscle mass,small arms,176,82,advanced,5,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0049,Female,33,increase strength,small legs,165,62,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0050,Male,29,lose weight,big belly,179,88,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0051,Female,28,gain muscle mass,weak chest,164,57,advanced,6,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0052,Male,27,increase strength,small legs,182,93,intermediate,4,leg day,back day,rest,leg day,upper body,rest,cardio
+DDAS0053,Female,22,lose weight,big belly,160,52,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0054,Male,25,gain muscle mass,small arms,173,75,advanced,5,chest day,back day,rest,leg day,arm day,rest,full body
+DDAS0055,Female,34,increase strength,small legs,166,61,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0056,Female,15,lose weight,big belly,155,45,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0057,Male,16,gain muscle mass,small arms,160,50,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0058,Female,17,increase strength,small legs,165,55,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0059,Male,18,lose weight,big belly,170,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0060,Female,19,gain muscle mass,weak chest,175,65,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0061,Male,20,increase strength,small legs,180,70,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0062,Female,21,lose weight,big belly,185,75,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0063,Male,22,gain muscle mass,small arms,190,80,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0064,Female,23,increase strength,small legs,195,85,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0065,Male,24,lose weight,big belly,200,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0066,Female,25,gain muscle mass,weak chest,205,95,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0067,Male,26,increase strength,small legs,210,100,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0068,Female,27,lose weight,big belly,140,40,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0069,Male,28,gain muscle mass,small arms,145,45,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0070,Female,29,increase strength,small legs,150,50,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0071,Male,30,lose weight,big belly,155,55,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0072,Female,31,gain muscle mass,weak chest,160,60,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0073,Male,32,increase strength,small legs,165,65,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0074,Female,33,lose weight,big belly,170,70,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0075,Male,34,gain muscle mass,small arms,175,75,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0076,Female,35,increase strength,small legs,180,80,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0077,Male,36,lose weight,big belly,185,85,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0078,Female,37,gain muscle mass,weak chest,190,90,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0079,Male,38,increase strength,small legs,195,95,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0080,Female,39,lose weight,big belly,200,100,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0081,Male,40,gain muscle mass,small arms,205,105,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0082,Female,41,increase strength,small legs,210,110,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0083,Male,42,lose weight,big belly,140,45,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0084,Female,43,gain muscle mass,weak chest,145,50,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0085,Male,44,increase strength,small legs,150,55,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0086,Female,45,lose weight,big belly,155,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0087,Male,46,gain muscle mass,small arms,160,65,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0088,Female,47,increase strength,small legs,165,70,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0089,Male,48,lose weight,big belly,170,75,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0090,Female,49,gain muscle mass,weak chest,175,80,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0091,Male,50,increase strength,small legs,180,85,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0092,Female,51,lose weight,big belly,185,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0093,Male,52,gain muscle mass,small arms,190,95,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0094,Female,53,increase strength,small legs,195,100,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0095,Male,54,lose weight,big belly,200,105,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0096,Female,55,gain muscle mass,weak chest,205,110,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0097,Male,56,increase strength,small legs,210,115,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0098,Female,57,lose weight,big belly,140,50,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0099,Male,58,gain muscle mass,small arms,145,55,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0100,Female,59,increase strength,small legs,150,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0101,Male,60,lose weight,big belly,155,65,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0102,Female,61,gain muscle mass,weak chest,160,70,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0103,Male,62,increase strength,small legs,165,75,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0104,Female,63,lose weight,big belly,170,80,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0105,Male,64,gain muscle mass,small arms,175,85,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0106,Female,65,increase strength,small legs,180,90,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0107,Male,66,lose weight,big belly,185,95,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0108,Female,67,gain muscle mass,weak chest,190,100,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0109,Female,25,lose weight,big belly,167,64,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0110,Male,30,gain muscle mass,small arms,185,85,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0111,Female,22,increase strength,small legs,172,58,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0112,Male,45,lose weight,big belly,176,92,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0113,Female,50,gain muscle mass,weak chest,168,73,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0114,Male,35,increase strength,small legs,190,99,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0115,Female,27,lose weight,big belly,160,61,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0116,Male,29,gain muscle mass,small arms,180,77,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0117,Female,33,increase strength,small legs,177,66,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0118,Male,55,lose weight,big belly,175,88,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0119,Female,48,gain muscle mass,weak chest,169,70,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0120,Male,40,increase strength,small legs,192,104,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0121,Female,32,lose weight,big belly,162,65,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0122,Male,28,gain muscle mass,small arms,183,80,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0123,Female,37,increase strength,small legs,174,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0124,Male,50,lose weight,big belly,178,95,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0125,Female,45,gain muscle mass,weak chest,171,69,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0126,Male,42,increase strength,small legs,187,93,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0127,Female,29,lose weight,big belly,164,62,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0128,Male,36,gain muscle mass,small arms,189,98,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0129,Female,31,increase strength,small legs,173,67,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0130,Male,38,lose weight,big belly,180,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0131,Female,42,gain muscle mass,weak chest,165,71,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0132,Male,47,increase strength,small legs,193,100,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0133,Female,50,lose weight,big belly,169,68,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0134,Male,34,gain muscle mass,small arms,185,86,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0135,Female,41,increase strength,small legs,174,59,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0136,Male,52,lose weight,big belly,177,94,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0137,Female,38,gain muscle mass,weak chest,170,72,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0138,Male,44,increase strength,small legs,188,102,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0139,Female,36,lose weight,big belly,163,64,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0140,Male,32,gain muscle mass,small arms,181,79,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0141,Female,48,increase strength,small legs,176,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0142,Male,46,lose weight,big belly,179,89,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0143,Female,40,gain muscle mass,weak chest,168,66,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0144,Male,37,increase strength,small legs,190,97,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0145,Female,35,lose weight,big belly,161,61,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0146,Male,33,gain muscle mass,small arms,182,83,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0147,Female,47,increase strength,small legs,175,63,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0148,Male,45,lose weight,big belly,174,91,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0149,Female,43,gain muscle mass,weak chest,167,68,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0150,Male,35,increase strength,small legs,191,100,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0151,Female,39,lose weight,big belly,162,65,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0152,Male,31,gain muscle mass,small arms,183,84,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0153,Female,46,increase strength,small legs,178,61,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0154,Male,50,lose weight,big belly,175,93,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0155,Female,44,gain muscle mass,weak chest,170,69,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0156,Male,36,increase strength,small legs,189,99,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0157,Female,42,lose weight,big belly,166,66,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0158,Male,38,gain muscle mass,small arms,181,82,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0159,Female,40,increase strength,small legs,177,65,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0160,Male,49,lose weight,big belly,176,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0161,Female,41,gain muscle mass,weak chest,169,67,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0162,Male,47,increase strength,small legs,192,98,advanced,5,leg day,back day,upper body,rest,cardio,chest day,rest
+DDAS0163,Female,23,lose weight,big belly,160,54,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0164,Male,28,gain muscle mass,small arms,180,75,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0165,Female,35,increase strength,small legs,167,63,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0166,Male,42,lose weight,big belly,175,87,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0167,Female,50,gain muscle mass,weak chest,172,72,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0168,Male,30,increase strength,small legs,190,94,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0169,Female,27,lose weight,big belly,161,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0170,Male,38,gain muscle mass,small arms,183,81,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0171,Female,32,increase strength,small legs,174,66,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0172,Male,45,lose weight,big belly,179,89,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0173,Female,43,gain muscle mass,weak chest,169,71,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0174,Male,55,increase strength,small legs,193,101,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0175,Female,24,lose weight,big belly,163,57,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0176,Male,36,gain muscle mass,small arms,185,86,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0177,Female,48,increase strength,small legs,171,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0178,Male,47,lose weight,big belly,177,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0179,Female,40,gain muscle mass,weak chest,168,67,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0180,Male,31,increase strength,small legs,191,96,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0181,Female,29,lose weight,big belly,162,61,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0182,Male,34,gain muscle mass,small arms,184,82,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0183,Female,39,increase strength,small legs,173,65,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0184,Male,41,lose weight,big belly,178,88,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0185,Female,46,gain muscle mass,weak chest,170,69,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0186,Male,49,increase strength,small legs,192,100,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0187,Female,26,lose weight,big belly,164,59,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0188,Male,35,gain muscle mass,small arms,186,84,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0189,Female,31,increase strength,small legs,175,62,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0190,Male,37,lose weight,big belly,180,91,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0191,Female,44,gain muscle mass,weak chest,166,66,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0192,Male,50,increase strength,small legs,189,97,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0193,Female,33,lose weight,big belly,165,63,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0194,Male,29,gain muscle mass,small arms,182,83,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0195,Female,47,increase strength,small legs,178,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0196,Male,48,lose weight,big belly,174,89,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0197,Female,42,gain muscle mass,weak chest,167,68,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0198,Male,38,increase strength,small legs,190,95,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0199,Female,37,lose weight,big belly,161,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0200,Male,32,gain muscle mass,small arms,183,80,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0201,Female,49,increase strength,small legs,177,64,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0202,Male,51,lose weight,big belly,173,92,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0203,Female,41,gain muscle mass,weak chest,171,70,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0204,Male,30,increase strength,small legs,188,98,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0205,Female,40,lose weight,big belly,164,67,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0206,Male,33,gain muscle mass,small arms,181,84,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0207,Female,45,increase strength,small legs,176,61,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0208,Male,47,lose weight,big belly,179,87,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0209,Female,39,gain muscle mass,weak chest,168,66,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0210,Male,37,increase strength,small legs,191,99,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0211,Female,36,lose weight,big belly,162,65,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0212,Male,29,gain muscle mass,small arms,184,82,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0213,Female,48,increase strength,small legs,179,62,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0214,Male,45,lose weight,big belly,176,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0215,Male,31,lose weight,big belly,189,120,beginner,4,cardio,rest,upper body,rest,lower body,cardio,rest
+DDAS0216,Female,27,lose weight,big belly,168,62,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0217,Male,29,gain muscle mass,small arms,182,80,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0218,Female,32,increase strength,small legs,170,58,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0219,Male,34,lose weight,big belly,178,88,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0220,Female,25,gain muscle mass,weak chest,165,55,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0221,Male,28,increase strength,small legs,186,94,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0222,Female,36,lose weight,big belly,163,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0223,Male,30,gain muscle mass,small arms,180,82,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0224,Female,40,increase strength,small legs,172,63,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0225,Male,38,lose weight,big belly,175,85,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0226,Female,45,gain muscle mass,weak chest,169,70,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0227,Male,42,increase strength,small legs,190,96,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0228,Female,24,lose weight,big belly,160,56,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0229,Male,31,gain muscle mass,small arms,183,84,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0230,Female,27,increase strength,small legs,174,59,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0231,Male,36,lose weight,big belly,177,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0232,Female,34,gain muscle mass,weak chest,166,68,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0233,Male,39,increase strength,small legs,188,92,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0234,Female,22,lose weight,big belly,161,61,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0235,Male,29,gain muscle mass,small arms,181,81,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0236,Female,32,increase strength,small legs,175,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0237,Male,35,lose weight,big belly,179,89,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0238,Female,37,gain muscle mass,weak chest,170,66,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0239,Male,40,increase strength,small legs,187,93,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0240,Female,25,lose weight,big belly,162,58,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0241,Male,28,gain muscle mass,small arms,182,79,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0242,Female,45,increase strength,small legs,173,64,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0243,Male,38,lose weight,big belly,176,87,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0244,Female,40,gain muscle mass,weak chest,167,68,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0245,Male,44,increase strength,small legs,189,98,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0246,Female,23,lose weight,big belly,160,54,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0247,Male,30,gain muscle mass,small arms,181,83,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0248,Female,27,increase strength,small legs,174,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0249,Male,34,lose weight,big belly,178,88,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0250,Female,25,gain muscle mass,weak chest,165,55,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0251,Male,28,increase strength,small legs,186,94,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0252,Female,36,lose weight,big belly,163,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0253,Male,30,gain muscle mass,small arms,180,82,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0254,Female,40,increase strength,small legs,172,63,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0255,Male,38,lose weight,big belly,175,85,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0256,Female,45,gain muscle mass,weak chest,169,70,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0257,Male,42,increase strength,small legs,190,96,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0258,Female,24,lose weight,big belly,160,56,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0259,Male,31,gain muscle mass,small arms,183,84,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0260,Female,27,increase strength,small legs,174,59,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0261,Male,36,lose weight,big belly,177,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0262,Female,34,gain muscle mass,weak chest,166,68,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0263,Male,39,increase strength,small legs,188,92,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0264,Female,22,lose weight,big belly,161,61,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0265,Male,29,gain muscle mass,small arms,181,81,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0266,Female,32,increase strength,small legs,175,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0267,Female,27,lose weight,big belly,168,62,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0268,Male,29,gain muscle mass,small arms,182,80,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0269,Female,32,increase strength,small legs,170,58,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0270,Male,34,lose weight,big belly,178,88,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0271,Female,25,gain muscle mass,weak chest,165,55,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0272,Male,28,increase strength,small legs,186,94,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0273,Female,36,lose weight,big belly,163,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0274,Male,30,gain muscle mass,small arms,180,82,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0275,Female,40,increase strength,small legs,172,63,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0276,Male,38,lose weight,big belly,175,85,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0277,Female,45,gain muscle mass,weak chest,169,70,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0278,Male,42,increase strength,small legs,190,96,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0279,Female,24,lose weight,big belly,160,56,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0280,Male,31,gain muscle mass,small arms,183,84,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0281,Female,27,increase strength,small legs,174,59,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0282,Male,36,lose weight,big belly,177,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0283,Female,34,gain muscle mass,weak chest,166,68,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0284,Male,39,increase strength,small legs,188,92,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0285,Female,22,lose weight,big belly,161,61,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0286,Male,29,gain muscle mass,small arms,181,81,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0287,Female,32,increase strength,small legs,175,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0288,Male,35,lose weight,big belly,179,89,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0289,Female,37,gain muscle mass,weak chest,170,66,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0290,Male,40,increase strength,small legs,187,93,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0291,Female,25,lose weight,big belly,162,58,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0292,Male,28,gain muscle mass,small arms,182,79,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0293,Female,45,increase strength,small legs,173,64,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0294,Male,38,lose weight,big belly,176,87,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0295,Female,40,gain muscle mass,weak chest,167,68,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0296,Male,44,increase strength,small legs,189,98,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0297,Female,23,lose weight,big belly,160,54,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0298,Male,30,gain muscle mass,small arms,181,83,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0299,Female,27,increase strength,small legs,174,60,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0300,Male,34,lose weight,big belly,178,88,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0301,Female,25,gain muscle mass,weak chest,165,55,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0302,Male,28,increase strength,small legs,186,94,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0303,Female,36,lose weight,big belly,163,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0304,Male,30,gain muscle mass,small arms,180,82,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0305,Female,40,increase strength,small legs,172,63,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0306,Male,38,lose weight,big belly,175,85,beginner,7,cardio,cardio,upper body,cardio,lower body,cardio,cardio
+DDAS0307,Female,45,gain muscle mass,weak chest,169,70,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0308,Male,42,increase strength,small legs,190,96,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0309,Female,24,lose weight,big belly,160,56,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0310,Male,31,gain muscle mass,small arms,183,84,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0311,Female,27,increase strength,small legs,174,59,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0312,Male,36,lose weight,big belly,177,90,beginner,7,cardio,cardio,upper body,cardio,lower body,cardio,cardio
+DDAS0313,Female,34,gain muscle mass,weak chest,166,68,intermediate,4,chest day,back day,rest,leg day,upper body,rest,rest
+DDAS0314,Male,39,increase strength,small legs,188,92,advanced,5,leg day,back day,upper body,rest,cardio,rest,full body
+DDAS0315,Male,18,lose weight,big belly,171,75,advanced,4,cardio,upper body,rest,lower body,cardio,rest,rest
+DDAS0316,Male,18,gain muscle mass,small arms,173,69,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0317,Male,18,gain muscle mass,weak chest,180,79,beginner,3,upper body,rest,rest,lower body,upper body,rest,rest
+DDAS0318,Female,18,increase strength,small legs,163,55,intermediate,4,leg day,back day,rest,leg day,cardio,rest,rest
+DDAS0319,Female,22,lose weight,big belly,165,60,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0320,Male,25,gain muscle mass,small arms,178,85,advanced,5,chest day,back day,lower body,rest,leg day,arm day,rest
+DDAS0321,Female,30,increase strength,small legs,160,55,intermediate,4,leg day,back day,rest,upper body,rest,cardio,rest
+DDAS0322,Male,14,lose weight,big belly,150,45,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0323,Female,15,gain muscle mass,small arms,155,50,beginner,3,upper body,rest,lower body,rest,upper body,rest,rest
+DDAS0324,Male,16,increase strength,small legs,160,55,intermediate,4,leg day,back day,rest,leg day,upper body,rest,rest
+DDAS0325,Female,17,lose weight,weak chest,165,60,intermediate,4,cardio,upper body,rest,lower body,cardio,rest,rest
+DDAS0326,Male,18,gain muscle mass,small arms,170,65,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0327,Female,19,increase strength,big belly,175,70,advanced,5,upper body,lower body,back day,rest,leg day,arm day,rest
+DDAS0328,Male,20,lose weight,small arms,180,75,advanced,5,cardio,upper body,rest,lower body,cardio,cardio,rest
+DDAS0329,Female,21,gain muscle mass,weak chest,185,80,beginner,3,upper body,rest,rest,lower body,upper body,rest,rest
+DDAS0330,Male,22,increase strength,small legs,190,85,intermediate,4,leg day,back day,rest,leg day,cardio,rest,rest
+DDAS0331,Female,23,lose weight,big belly,195,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0332,Male,24,gain muscle mass,small arms,200,95,advanced,5,chest day,back day,cardio,rest,leg day,arm day,rest
+DDAS0333,Female,25,increase strength,weak chest,160,60,advanced,5,upper body,cardio,lower body,back day,rest,leg day,rest
+DDAS0334,Male,26,lose weight,small legs,165,65,intermediate,4,cardio,lower body,rest,upper body,rest,back day,rest
+DDAS0335,Female,27,gain muscle mass,big belly,170,70,advanced,5,upper body,lower body,rest,chest day,back day,rest,leg day
+DDAS0336,Male,28,increase strength,small arms,175,75,beginner,3,lower body,rest,rest,rest,lower body,rest,back day
+DDAS0337,Female,29,lose weight,weak chest,180,80,intermediate,4,cardio,rest,back day,rest,leg day,upper body,rest
+DDAS0338,Male,30,gain muscle mass,small legs,185,85,advanced,5,chest day,back day,lower body,rest,back day,leg day,rest
+DDAS0339,Female,14,lose weight,big belly,150,45,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0340,Male,15,gain muscle mass,small arms,155,50,beginner,3,upper body,rest,lower body,rest,upper body,rest,rest
+DDAS0341,Female,16,increase strength,small legs,160,55,intermediate,4,leg day,back day,rest,leg day,upper body,rest,rest
+DDAS0342,Male,17,lose weight,weak chest,165,60,intermediate,4,cardio,upper body,rest,lower body,cardio,rest,rest
+DDAS0343,Female,18,gain muscle mass,small arms,170,65,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0344,Male,19,increase strength,big belly,175,70,advanced,5,upper body,lower body,back day,rest,leg day,arm day,rest
+DDAS0345,Female,20,lose weight,small arms,180,75,advanced,5,cardio,upper body,rest,lower body,cardio,cardio,rest
+DDAS0346,Male,21,gain muscle mass,weak chest,185,80,beginner,3,upper body,rest,rest,lower body,upper body,rest,rest
+DDAS0347,Female,22,increase strength,small legs,190,85,intermediate,4,leg day,back day,rest,leg day,cardio,rest,rest
+DDAS0348,Male,23,lose weight,big belly,195,90,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0349,Female,24,gain muscle mass,small arms,200,95,advanced,5,chest day,back day,cardio,rest,leg day,arm day,rest
+DDAS0350,Male,,increase strength,weak chest,160,60,advanced,5,upper body,lower body,cardio,back day,rest,leg day,rest
+DDAS0351,Female,26,lose weight,small legs,165,65,intermediate,4,cardio,lower body,rest,upper body,rest,back day,rest
+DDAS0352,Male,27,gain muscle mass,big belly,170,70,advanced,5,upper body,lower body,rest,lower body,back day,rest,leg day
+DDAS0353,Female,28,increase strength,small arms,175,75,beginner,3,lower body,upper body,rest,rest,lower body,rest,rest
+DDAS0354,Male,29,lose weight,weak chest,180,80,intermediate,4,cardio,rest,back day,rest,leg day,upper body,rest
+DDAS0355,Female,30,gain muscle mass,small legs,185,85,advanced,5,chest day,back day,upper body,rest,back day,leg day,rest
+DDAS0356,Male,14,lose weight,big belly,150,45,beginner,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0357,Female,15,gain muscle mass,small arms,155,50,beginner,3,upper body,rest,lower body,rest,upper body,rest,rest
+DDAS0358,Male,16,increase strength,small legs,160,55,intermediate,4,leg day,back day,rest,leg day,upper body,rest,rest
+DDAS0359,Female,17,lose weight,weak chest,165,60,intermediate,4,cardio,upper body,rest,lower body,cardio,rest,rest
+DDAS0360,Male,18,gain muscle mass,small arms,170,65,intermediate,4,chest day,back day,rest,leg day,arm day,rest,rest
+DDAS0361,Female,,increase strength,big belly,175,70,advanced,5,upper body,lower body,back day,rest,leg day,arm day,rest
+DDAS0362,Male,20,lose weight,small arms,180,75,advanced,5,cardio,upper body,rest,lower body,cardio,cardio,rest
+DDAS0363,Female,21,gain muscle mass,weak chest,185,80,beginner,3,upper body,rest,rest,lower body,upper body,rest,rest
+DDAS0364,Male,22,increase strength,small legs,190,85,,4,leg day,back day,rest,leg day,cardio,rest,rest
+DDAS0365,Female,23,lose weight,big belly,195,90,,3,cardio,rest,upper body,rest,lower body,rest,rest
+DDAS0366,Male,,gain muscle mass,small arms,200,95,advanced,5,chest day,back day,upper body,rest,leg day,arm day,rest
+DDAS0367,Female,25,increase strength,weak chest,160,60,advanced,5,upper body,lower body,cardio,back day,rest,leg day,rest
+DDAS0368,Male,26,lose weight,small legs,165,65,intermediate,4,cardio,lower body,rest,upper body,rest,back day,rest
+DDAS0369,Female,,gain muscle mass,big belly,170,70,advanced,5,upper body,arm day,rest,lower body,back day,rest,leg day
+DDAS0370,Male,28,increase strength,small arms,175,75,beginner,3,lower body,upper body,rest,rest,lower body,rest,rest
+DDAS0371,Male,28,increase strength,small arms,175,75,beginner,3,lower body,upper body,rest,rest,lower body,rest,rest
+DDAS0372,Male,31,gain muscle mass,small arms,175,75,advanced,1,chest day,rest,rest,rest,rest,rest,rest
+DDAS0373,Female,32,lose weight,big belly,160,60,intermediate,1,cardio,rest,rest,cardio,rest,rest,rest
+DDAS0374,Male,33,increase strength,small arms,170,65,intermediate,1,upper body,rest,rest,rest,rest,rest,rest
+DDAS0375,Female,34,lose weight,weak chest,185,85,advanced,6,chest day,back day,leg day,arm day,cardio,cardio,rest
+DDAS0376,Male,35,gain muscle mass,small arms,165,60,beginner,7,chest day,back day,leg day,arm day,cardio,upper body,lower body
+DDAS0377,Female,36,increase strength,small legs,175,75,intermediate,2,leg day,rest,rest,full body,rest,rest,rest
+DDAS0378,Male,37,lose weight,big belly,160,60,beginner,2,cardio,rest,rest,full body,rest,rest,rest
+DDAS0379,Female,38,gain muscle mass,small arms,170,65,intermediate,2,upper body,rest,rest,lower body,rest,rest,rest
+DDAS0380,Male,39,increase strength,small legs,185,85,advanced,6,chest day,back day,leg day,arm day,cardio,rest,rest
+DDAS0381,Female,40,lose weight,weak chest,165,60,beginner,7,chest day,back day,leg day,arm day,cardio,upper body,lower body
+DDAS0382,Male,41,gain muscle mass,small arms,175,75,intermediate,3,upper body,lower body,rest,rest,full body,rest,rest
+DDAS0383,Female,42,lose weight,big belly,160,60,beginner,3,cardio,rest,full body,rest,cardio,rest,rest
+DDAS0384,Male,43,increase strength,small legs,170,65,intermediate,3,upper body,lower body,rest,rest,full body,rest,rest
+DDAS0385,Female,44,lose weight,weak chest,185,85,advanced,6,chest day,back day,leg day,arm day,cardio,cardio,rest
+DDAS0386,Male,45,gain muscle mass,small arms,165,60,beginner,7,chest day,back day,leg day,arm day,cardio,upper body,lower body
+DDAS0387,Female,46,increase strength,small legs,175,75,intermediate,1,full body,rest,rest,rest,rest,rest,rest
+DDAS0388,Male,47,lose weight,big belly,160,60,beginner,2,cardio,rest,rest,cardio,rest,rest,rest
+DDAS0389,Female,48,gain muscle mass,small arms,170,65,intermediate,3,upper body,lower body,rest,rest,full body,rest,rest
+DDAS0390,Male,49,increase strength,small legs,185,85,advanced,6,chest day,back day,leg day,arm day,cardio,cardio,rest
+DDAS0391,Female,50,lose weight,weak chest,165,60,beginner,7,chest day,back day,leg day,arm day,cardio,cardio,cardio
+DDAS0392,Male,51,gain muscle mass,small arms,175,75,intermediate,1,full body,rest,rest,rest,rest,rest,rest
+DDAS0393,Female,52,lose weight,big belly,160,60,beginner,2,cardio,rest,rest,full body,rest,rest,rest
+DDAS0394,Male,53,increase strength,small legs,170,65,intermediate,3,upper body,lower body,rest,rest,full body,rest,rest
+DDAS0396,Female,54,lose weight,weak chest,185,85,advanced,6,chest day,back day,leg day,arm day,cardio,cardio,cardio
+DDAS0397,Male,55,gain muscle mass,small arms,165,60,beginner,7,chest day,back day,leg day,arm day,cardio,rest,rest
+DDAS0398,Female,56,increase strength,small legs,175,75,intermediate,1,full body,rest,rest,rest,rest,rest,rest
+DDAS0399,Male,57,lose weight,big belly,160,60,beginner,2,cardio,rest,rest,full body,rest,rest,rest
+DDAS0400,Female,58,gain muscle mass,small arms,170,65,intermediate,3,upper body,lower body,rest,rest,full body,rest,rest
+DDAS0401,Male,59,increase strength,small legs,185,85,advanced,6,chest day,back day,leg day,arm day,cardio,rest,rest
+DDAS0402,Female,60,lose weight,weak chest,165,60,beginner,7,chest day,back day,leg day,arm day,cardio,upper body,lower body
+DDAS0403,Male,61,gain muscle mass,small arms,175,75,intermediate,1,full body,rest,rest,rest,rest,rest,rest

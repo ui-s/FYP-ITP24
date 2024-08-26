@@ -1,0 +1,269 @@
+WorkoutDay,Exercise,FitnessLevel,TargetedMuscle
+Chest Day,Dumbbell Bench Press,Beginner,Middle Chest
+Chest Day,Incline Dumbbell Press,Beginner,Upper Chest
+Chest Day,Decline Dumbbell Press,Beginner,Lower Chest
+Chest Day,Push-Ups,Beginner,Middle Chest
+Chest Day,Chest Fly,Beginner,Middle Chest
+Chest Day,Barbell Bench Press,Intermediate,Middle Chest
+Chest Day,Incline Barbell Press,Intermediate,Upper Chest
+Chest Day,Decline Barbell Press,Intermediate,Lower Chest
+Chest Day,Dumbbell Pullovers,Intermediate,Upper Chest
+Chest Day,Machine Chest Press,Intermediate,Middle Chest
+Chest Day,Cable Fly,Intermediate,Middle Chest
+Chest Day,Barbell Bench Press,Advanced,Middle Chest
+Chest Day,Incline Barbell Press,Advanced,Upper Chest
+Chest Day,Decline Barbell Press,Advanced,Lower Chest
+Chest Day,Chest Dips,Advanced,Lower Chest
+Chest Day,Cable Crossover,Advanced,Middle Chest
+Chest Day,Pec Deck Machine,Advanced,Middle Chest
+Chest Day,Single-Arm Cable Fly,Advanced,Upper Chest
+Back Day,Lat Pulldowns,Beginner,Upper Back
+Back Day,Seated Cable Rows,Beginner,Middle Back
+Back Day,Dumbbell Rows,Beginner,Middle Back
+Back Day,Face Pulls,Beginner,Upper Back
+Back Day,Back Extensions,Beginner,Lower Back
+Back Day,Lat Pulldowns,Intermediate,Upper Back
+Back Day,Seated Cable Rows,Intermediate,Middle Back
+Back Day,Barbell Rows,Intermediate,Middle Back
+Back Day,T-Bar Rows,Intermediate,Middle Back
+Back Day,Pull-Ups,Intermediate,Upper Back
+Back Day,Single-Arm Dumbbell Rows,Intermediate,Middle Back
+Back Day,Deadlifts,Intermediate,Lower Back
+Back Day,Lat Pulldowns,Advanced,Upper Back
+Back Day,Seated Cable Rows,Advanced,Middle Back
+Back Day,Barbell Rows,Advanced,Middle Back
+Back Day,T-Bar Rows,Advanced,Middle Back
+Back Day,Pull-Ups,Advanced,Upper Back
+Back Day,Single-Arm Dumbbell Rows,Advanced,Middle Back
+Back Day,Deadlifts,Advanced,Lower Back
+Back Day,Weighted Pull-Ups,Advanced,Upper Back
+Back Day,Chest-Supported Rows,Advanced,Middle Back
+Back Day,Rack Pulls,Advanced,Lower Back
+Back Day,Rope Climbs,Advanced,Full Back
+Arm Day,Bicep Curls,Beginner,Biceps
+Arm Day,Tricep Pushdowns,Beginner,Triceps
+Arm Day,Shoulder Press,Beginner,Shoulders
+Arm Day,Lateral Raises,Beginner,Shoulders
+Arm Day,Wrist Curls,Beginner,Forearms
+Arm Day,Hammer Curls,Beginner,Biceps
+Arm Day,Tricep Dips,Beginner,Triceps
+Arm Day,Front Raises,Beginner,Shoulders
+Arm Day,Reverse Wrist Curls,Beginner,Forearms
+Arm Day,Bicep Curls,Intermediate,Biceps
+Arm Day,Tricep Pushdowns,Intermediate,Triceps
+Arm Day,Shoulder Press,Intermediate,Shoulders
+Arm Day,Lateral Raises,Intermediate,Shoulders
+Arm Day,Wrist Curls,Intermediate,Forearms
+Arm Day,Hammer Curls,Intermediate,Biceps
+Arm Day,Tricep Dips,Intermediate,Triceps
+Arm Day,Front Raises,Intermediate,Shoulders
+Arm Day,Reverse Wrist Curls,Intermediate,Forearms
+Arm Day,Concentration Curls,Intermediate,Biceps
+Arm Day,Overhead Tricep Extensions,Intermediate,Triceps
+Arm Day,Arnold Press,Intermediate,Shoulders
+Arm Day,Reverse Curls,Intermediate,Forearms
+Arm Day,Bicep Curls,Advanced,Biceps
+Arm Day,Tricep Pushdowns,Advanced,Triceps
+Arm Day,Shoulder Press,Advanced,Shoulders
+Arm Day,Lateral Raises,Advanced,Shoulders
+Arm Day,Wrist Curls,Advanced,Forearms
+Arm Day,Hammer Curls,Advanced,Biceps
+Arm Day,Tricep Dips,Advanced,Triceps
+Arm Day,Front Raises,Advanced,Shoulders
+Arm Day,Reverse Wrist Curls,Advanced,Forearms
+Arm Day,Concentration Curls,Advanced,Biceps
+Arm Day,Overhead Tricep Extensions,Advanced,Triceps
+Arm Day,Arnold Press,Advanced,Shoulders
+Arm Day,Reverse Curls,Advanced,Forearms
+Arm Day,Preacher Curls,Advanced,Biceps
+Arm Day,Skull Crushers,Advanced,Triceps
+Arm Day,Lateral Raises With Dumbbells,Advanced,Shoulders
+Arm Day,Wrist Rollers,Advanced,Forearms
+Arm Day,Incline Bicep Curls,Advanced,Biceps
+Arm Day,Tricep Kickbacks,Advanced,Triceps
+Arm Day,Military Press,Advanced,Shoulders
+Arm Day,Farmer'S Walk,Advanced,Forearms
+Leg Day,Bodyweight Squats,Beginner,Quadriceps
+Leg Day,Lunges,Beginner,Quadriceps
+Leg Day,Glute Bridges,Beginner,Glutes
+Leg Day,Calf Raises,Beginner,Calves
+Leg Day,Leg Press,Beginner,Quadriceps
+Leg Day,Hamstring Curls,Beginner,Hamstrings
+Leg Day,Step-Ups,Beginner,Quadriceps
+Leg Day,Leg Extensions,Beginner,Quadriceps
+Leg Day,Bodyweight Squats,Intermediate,Quadriceps
+Leg Day,Lunges,Intermediate,Quadriceps
+Leg Day,Glute Bridges,Intermediate,Glutes
+Leg Day,Calf Raises,Intermediate,Calves
+Leg Day,Leg Press,Intermediate,Quadriceps
+Leg Day,Hamstring Curls,Intermediate,Hamstrings
+Leg Day,Step-Ups,Intermediate,Quadriceps
+Leg Day,Leg Extensions,Intermediate,Quadriceps
+Leg Day,Barbell Squats,Intermediate,Quadriceps
+Leg Day,Bulgarian Split Squats,Intermediate,Quadriceps
+Leg Day,Romanian Deadlifts,Intermediate,Hamstrings
+Leg Day,Seated Calf Raises,Intermediate,Calves
+Leg Day,Sumo Squats,Intermediate,Inner Thighs
+Leg Day,Barbell Squats,Advanced,Quadriceps
+Leg Day,Bulgarian Split Squats,Advanced,Quadriceps
+Leg Day,Romanian Deadlifts,Advanced,Hamstrings
+Leg Day,Seated Calf Raises,Advanced,Calves
+Leg Day,Sumo Squats,Advanced,Inner Thighs
+Leg Day,Deadlifts,Advanced,Hamstrings
+Leg Day,Hack Squats,Advanced,Quadriceps
+Leg Day,Walking Lunges,Advanced,Quadriceps
+Leg Day,Single-Leg Press,Advanced,Quadriceps
+Leg Day,Pistol Squats,Advanced,Quadriceps
+Leg Day,Standing Calf Raises With Weight,Advanced,Calves
+Leg Day,Hip Thrusts,Advanced,Glutes
+Leg Day,Leg Curls,Advanced,Hamstrings
+Leg Day,Box Jumps,Advanced,Full Legs
+Upper Body,Push-Ups,Beginner,Chest
+Upper Body,Bent-Over Rows,Beginner,Back
+Upper Body,Shoulder Press,Beginner,Shoulders
+Upper Body,Bicep Curls,Beginner,Biceps
+Upper Body,Tricep Pushdowns,Beginner,Triceps
+Upper Body,Chest Fly,Beginner,Chest
+Upper Body,Lat Pulldowns,Beginner,Back
+Upper Body,Lateral Raises,Beginner,Shoulders
+Upper Body,Hammer Curls,Beginner,Biceps
+Upper Body,Tricep Dips,Beginner,Triceps
+Upper Body,Push-Ups,Intermediate,Chest
+Upper Body,Bent-Over Rows,Intermediate,Back
+Upper Body,Shoulder Press,Intermediate,Shoulders
+Upper Body,Bicep Curls,Intermediate,Biceps
+Upper Body,Tricep Pushdowns,Intermediate,Triceps
+Upper Body,Chest Fly,Intermediate,Chest
+Upper Body,Lat Pulldowns,Intermediate,Back
+Upper Body,Lateral Raises,Intermediate,Shoulders
+Upper Body,Hammer Curls,Intermediate,Biceps
+Upper Body,Tricep Dips,Intermediate,Triceps
+Upper Body,Bench Press,Intermediate,Chest
+Upper Body,Pull-Ups,Intermediate,Back
+Upper Body,Arnold Press,Intermediate,Shoulders
+Upper Body,Concentration Curls,Intermediate,Biceps
+Upper Body,Overhead Tricep Extensions,Intermediate,Triceps
+Upper Body,Incline Dumbbell Press,Intermediate,Chest
+Upper Body,Single-Arm Dumbbell Rows,Intermediate,Back
+Upper Body,Front Raises,Intermediate,Shoulders
+Upper Body,Preacher Curls,Intermediate,Biceps
+Upper Body,Skull Crushers,Intermediate,Triceps
+Upper Body,Bench Press,Advanced,Chest
+Upper Body,Pull-Ups,Advanced,Back
+Upper Body,Arnold Press,Advanced,Shoulders
+Upper Body,Concentration Curls,Advanced,Biceps
+Upper Body,Overhead Tricep Extensions,Advanced,Triceps
+Upper Body,Incline Dumbbell Press,Advanced,Chest
+Upper Body,Single-Arm Dumbbell Rows,Advanced,Back
+Upper Body,Front Raises,Advanced,Shoulders
+Upper Body,Preacher Curls,Advanced,Biceps
+Upper Body,Skull Crushers,Advanced,Triceps
+Upper Body,Chest Dips,Advanced,Chest
+Upper Body,Deadlifts,Advanced,Back
+Upper Body,Lateral Raises With Dumbbells,Advanced,Shoulders
+Upper Body,Incline Bicep Curls,Advanced,Biceps
+Upper Body,Tricep Kickbacks,Advanced,Triceps
+Upper Body,Military Press,Advanced,Shoulders
+Upper Body,Cable Crossovers,Advanced,Chest
+Upper Body,T-Bar Rows,Advanced,Back
+Lower Body,Bodyweight Squats,Beginner,Quadriceps
+Lower Body,Lunges,Beginner,Quadriceps
+Lower Body,Glute Bridges,Beginner,Glutes
+Lower Body,Calf Raises,Beginner,Calves
+Lower Body,Leg Press,Beginner,Quadriceps
+Lower Body,Hamstring Curls,Beginner,Hamstrings
+Lower Body,Step-Ups,Beginner,Quadriceps
+Lower Body,Leg Extensions,Beginner,Quadriceps
+Lower Body,Bodyweight Squats,Intermediate,Quadriceps
+Lower Body,Lunges,Intermediate,Quadriceps
+Lower Body,Glute Bridges,Intermediate,Glutes
+Lower Body,Calf Raises,Intermediate,Calves
+Lower Body,Leg Press,Intermediate,Quadriceps
+Lower Body,Hamstring Curls,Intermediate,Hamstrings
+Lower Body,Step-Ups,Intermediate,Quadriceps
+Lower Body,Leg Extensions,Intermediate,Quadriceps
+Lower Body,Barbell Squats,Intermediate,Quadriceps
+Lower Body,Bulgarian Split Squats,Intermediate,Quadriceps
+Lower Body,Romanian Deadlifts,Intermediate,Hamstrings
+Lower Body,Seated Calf Raises,Intermediate,Calves
+Lower Body,Sumo Squats,Intermediate,Inner Thighs
+Lower Body,Barbell Squats,Advanced,Quadriceps
+Lower Body,Bulgarian Split Squats,Advanced,Quadriceps
+Lower Body,Romanian Deadlifts,Advanced,Hamstrings
+Lower Body,Seated Calf Raises,Advanced,Calves
+Lower Body,Sumo Squats,Advanced,Inner Thighs
+Lower Body,Deadlifts,Advanced,Hamstrings
+Lower Body,Hack Squats,Advanced,Quadriceps
+Lower Body,Walking Lunges,Advanced,Quadriceps
+Lower Body,Single-Leg Press,Advanced,Quadriceps
+Lower Body,Pistol Squats,Advanced,Quadriceps
+Lower Body,Standing Calf Raises With Weight,Advanced,Calves
+Lower Body,Hip Thrusts,Advanced,Glutes
+Lower Body,Leg Curls,Advanced,Hamstrings
+Lower Body,Box Jumps,Advanced,Full Legs
+Lower Body,Front Squats,Advanced,Quadriceps
+Lower Body,Good Mornings,Advanced,Hamstrings
+Lower Body,Kettlebell Swings,Advanced,Glutes
+Lower Body,Goblet Squats,Advanced,Quadriceps
+Lower Body,Reverse Lunges,Advanced,Quadriceps
+Lower Body,Calf Press On Leg Press Machine,Advanced,Calves
+Cardio,Brisk Walking,Beginner,Full Body
+Cardio,Stationary Bike,Beginner,Legs
+Cardio,Jumping Jacks,Beginner,Full Body
+Cardio,Basic Step Aerobics,Beginner,Legs
+Cardio,Elliptical Trainer,Beginner,Full Body
+Cardio,Jogging,Beginner,Legs
+Cardio,Brisk Walking,Intermediate,Full Body
+Cardio,Stationary Bike,Intermediate,Legs
+Cardio,Jumping Jacks,Intermediate,Full Body
+Cardio,Basic Step Aerobics,Intermediate,Legs
+Cardio,Elliptical Trainer,Intermediate,Full Body
+Cardio,Jogging,Intermediate,Legs
+Cardio,Running,Intermediate,Legs
+Cardio,Rowing Machine,Intermediate,Full Body
+Cardio,Swimming,Intermediate,Full Body
+Cardio,High-Intensity Interval Training (Hiit),Intermediate,Full Body
+Cardio,Stair Climbing,Intermediate,Legs
+Cardio,Treadmill Sprints,Intermediate,Legs
+Cardio,Running,Advanced,Legs
+Cardio,Rowing Machine,Advanced,Full Body
+Cardio,Swimming,Advanced,Full Body
+Cardio,High-Intensity Interval Training (Hiit),Advanced,Full Body
+Cardio,Stair Climbing,Advanced,Legs
+Cardio,Treadmill Sprints,Advanced,Legs
+Cardio,Cycling,Advanced,Legs
+Cardio,Jump Rope,Advanced,Full Body
+Cardio,Kickboxing,Advanced,Full Body
+Cardio,Burpees,Advanced,Full Body
+Cardio,Mountain Climbers,Advanced,Full Body
+Cardio,Agility Ladder Drills,Advanced,Full Body
+Cardio,Sprint Intervals,Advanced,Legs
+Cardio,Rowing Sprints,Advanced,Full Body
+Cardio,Hill Sprints,Advanced,Legs
+Full Body Day,Squats,Beginner,Legs
+Full Body Day,Lunges,Beginner,Legs
+Full Body Day,Calf Raises,Beginner,Legs
+Full Body Day,Push-Ups,Beginner,"Chest, Shoulders, Triceps"
+Full Body Day,Dumbbell Rows,Beginner,"Back, Biceps"
+Full Body Day,Overhead Press,Beginner,Shoulders
+Full Body Day,Bicep Curls,Beginner,Biceps
+Full Body Day,Tricep Extensions,Beginner,Triceps
+Full Body Day,Crunches,Beginner,Abs
+Full Body Day,Squats,Intermediate,Legs
+Full Body Day,Lunges,Intermediate,Legs
+Full Body Day,Calf Raises,Intermediate,Legs
+Full Body Day,Bench Press,Intermediate,Chest
+Full Body Day,Barbell Rows,Intermediate,Back
+Full Body Day,Overhead Press,Intermediate,Shoulders
+Full Body Day,Dumbbell Curls,Intermediate,Biceps
+Full Body Day,Tricep Extensions,Intermediate,Triceps
+Full Body Day,Plank,Intermediate,Core
+Full Body Day,Squats,Advanced,Legs
+Full Body Day,Lunges,Advanced,Legs
+Full Body Day,Calf Raises,Advanced,Legs
+Full Body Day,Incline Bench Press,Advanced,Chest
+Full Body Day,Pull-Ups,Advanced,Back
+Full Body Day,Military Press,Advanced,Shoulders
+Full Body Day,Barbell Curls,Advanced,Biceps
+Full Body Day,Skull Crushers,Advanced,Triceps
+Full Body Day,Weighted Crunches,Advanced,Abs
