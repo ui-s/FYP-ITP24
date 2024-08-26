@@ -7,15 +7,18 @@ class WorkoutModel:
     def __init__(self):
         self.features = ['Gender', 'Age', 'BodyGoal', 'ProblemAreas', 'Height_cm', 'Weight_kg', 'FitnessLevel', 'WorkoutDaysPerWeek']
         self.target_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        self.encoder = OneHotEncoder(sparse=False, drop='first')
+        self.encoder = OneHotEncoder(sparse=False, drop='first', handle_unknown='ignore')
         self.models = {}
 
     def load_data(self):
         self.workout_schedule_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_WorkoutScheduleRecommendationDataset.csv'))
+        print("Unique values in Gender column:", self.workout_schedule_data['Gender'].unique())
         self.workout_days_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_WorkoutDaysDataset.csv'))
 
     def train_models(self):
         self.load_data()
+        print("Shape of workout_schedule_data:", self.workout_schedule_data.shape)
+        print("Columns in workout_schedule_data:", self.workout_schedule_data.columns)
         encoded_features = self.encoder.fit_transform(self.workout_schedule_data[self.features])
         encoded_df = pd.DataFrame(encoded_features, columns=self.encoder.get_feature_names_out())
         
@@ -23,11 +26,21 @@ class WorkoutModel:
             self.models[day] = RandomForestClassifier(random_state=42)
             self.models[day].fit(encoded_df, self.workout_schedule_data[day])
 
+    def normalize_input(self, user_input):
+        user_input['Gender'] = user_input['Gender'].strip().title()
+        user_input['BodyGoal'] = user_input['BodyGoal'].strip().title()
+        user_input['ProblemAreas'] = user_input['ProblemAreas'].strip().title()
+        user_input['FitnessLevel'] = user_input['FitnessLevel'].strip().title()
+        return user_input
+
     def predict_workout(self, user_input):
         if not self.models:
             self.train_models()
 
-        input_df = pd.DataFrame([user_input])
+        normalized_input = self.normalize_input(user_input)
+        print("Normalized user input:", normalized_input)
+        input_df = pd.DataFrame([normalized_input])
+        print("Input DataFrame:", input_df)
         encoded_input = self.encoder.transform(input_df[self.features])
         
         predictions = {}

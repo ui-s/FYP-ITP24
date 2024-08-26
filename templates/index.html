@@ -27,9 +27,8 @@
                 <label for="gender">Select Your Gender:</label>
                 <select id="gender" name="gender" required>
                     <option value="">--Please choose an option--</option>
-                    <option value="male" {% if session.get('gender') == 'male' %}selected{% endif %}>Male</option>
-                    <option value="female" {% if session.get('gender') == 'female' %}selected{% endif %}>Female</option>
-                    <option value="other" {% if session.get('gender') == 'other' %}selected{% endif %}>Other</option>
+                    <option value="Male" {% if session.get('gender') == 'Male' %}selected{% endif %}>Male</option>
+                    <option value="Female" {% if session.get('gender') == 'Female' %}selected{% endif %}>Female</option>
                 </select>
             </div>
             

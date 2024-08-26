@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from data_cleaning import clean_workout_schedule_data, clean_workout_days_data
 from model import WorkoutModel
 import os
@@ -17,6 +17,7 @@ def process_step1():
     session['height'] = float(request.form['height'])
     session['weight'] = float(request.form['weight'])
     return redirect(url_for('body_goal'))
+
 
 @app.route('/body_goal')
 def body_goal():
@@ -60,37 +61,44 @@ def confirmation():
 
 @app.route('/generate_workout_plan', methods=['POST'])
 def generate_workout_plan():
-    # Clean the data
-    clean_workout_schedule_data()
-    clean_workout_days_data()
+    try:
+        # Clean the data
+        clean_workout_schedule_data()
+        clean_workout_days_data()
 
-    # Initialize and train the model
-    workout_model = WorkoutModel()
+        # Initialize and train the model
+        workout_model = WorkoutModel()
 
-    # Prepare user input
-    user_input = {
-        'Gender': session.get('gender'),
-        'Age': int(session.get('age_group').split('-')[0]),  # Take the lower bound of the age range
-        'BodyGoal': session.get('body_goal'),
-        'ProblemAreas': session.get('problem_areas')[0] if session.get('problem_areas') else '',  # Take the first problem area
-        'Height_cm': session.get('height'),
-        'Weight_kg': session.get('weight'),
-        'FitnessLevel': session.get('fitness_level'),
-        'WorkoutDaysPerWeek': session.get('workout_days')
-    }
-    
-    # Generate predictions
-    predicted_days = workout_model.predict_workout(user_input)
-    workout_plan = {}
-    
-    for day, workout_type in predicted_days.items():
-        workouts = workout_model.recommend_workouts(workout_type, user_input['FitnessLevel'])
-        workout_plan[day] = {'type': workout_type, 'exercises': workouts}
-    
-    # Store the workout plan in the session for display
-    session['workout_plan'] = workout_plan
-    
-    return redirect(url_for('display_workout_plan'))
+        # Prepare user input
+        user_input = {
+            'Gender': session.get('gender', ''),
+            'Age': int(session.get('age_group', '0').split('-')[0]),  # Take the lower bound of the age range
+            'BodyGoal': session.get('body_goal', ''),
+            'ProblemAreas': session.get('problem_areas', [''])[0] if session.get('problem_areas') else '',  # Take the first problem area
+            'Height_cm': float(session.get('height', 0)),
+            'Weight_kg': float(session.get('weight', 0)),
+            'FitnessLevel': session.get('fitness_level', ''),
+            'WorkoutDaysPerWeek': int(session.get('workout_days', 0))
+        }
+        
+        print("User input before prediction:", user_input)
+        
+        # Generate predictions
+        predicted_days = workout_model.predict_workout(user_input)
+        workout_plan = {}
+        
+        for day, workout_type in predicted_days.items():
+            workouts = workout_model.recommend_workouts(workout_type, user_input['FitnessLevel'])
+            workout_plan[day] = {'type': workout_type, 'exercises': workouts}
+        
+        # Store the workout plan in the session for display
+        session['workout_plan'] = workout_plan
+        
+        return redirect(url_for('display_workout_plan'))
+    except Exception as e:
+        print(f"Error occurred: {str(e)}")
+        flash(f"An error occurred: {str(e)}", 'error')
+        return redirect(url_for('confirmation'))
 
 @app.route('/workout_plan')
 def display_workout_plan():
