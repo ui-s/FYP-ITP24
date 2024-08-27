@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, f
 from data_cleaning import clean_workout_schedule_data, clean_workout_days_data
 from model import WorkoutModel
 import os
+import random
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -80,22 +81,45 @@ def generate_workout_plan():
         # Prepare user input
         user_input = {
             'Gender': session.get('gender', ''),
-            'Age': int(session.get('age_group', '0').split('-')[0]),  # Take the lower bound of the age range
+            'Age': int(session.get('age_group', '0').split('-')[0]),
             'BodyGoal': session.get('body_goal', ''),
-            'ProblemAreas': session.get('problem_areas', [''])[0] if session.get('problem_areas') else '',  # Take the first problem area
+            'ProblemAreas': session.get('problem_areas', [''])[0] if session.get('problem_areas') else '',
             'Height_cm': float(session.get('height', 0)),
             'Weight_kg': float(session.get('weight', 0)),
             'FitnessLevel': session.get('fitness_level', ''),
             'WorkoutDaysPerWeek': int(session.get('workout_days', 0))
         }
         
-        # Generate predictions
-        predicted_days = workout_model.predict_workout(user_input)
-        workout_plan = {}
+        # Generate initial predictions
+        initial_predictions = workout_model.predict_workout(user_input)
         
-        for day, workout_type in predicted_days.items():
+        # Ensure we have the correct number of workout days
+        workout_days = int(user_input['WorkoutDaysPerWeek'])
+        all_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        
+        # Create a list of unique workout types from initial predictions
+        workout_types = list(set(initial_predictions.values()))
+        workout_types = [wt for wt in workout_types if wt != 'Rest']
+        
+        # If we don't have enough workout types, add some generic ones
+        generic_types = ['Cardio', 'Strength', 'Flexibility', 'HIIT', 'Core']
+        while len(workout_types) < workout_days:
+            workout_types.extend(generic_types)
+        
+        # Randomly select the required number of workout days and types
+        selected_days = random.sample(all_days, workout_days)
+        selected_types = random.sample(workout_types, workout_days)
+        
+        # Create the workout plan
+        workout_plan = {}
+        for day, workout_type in zip(selected_days, selected_types):
             workouts = workout_model.recommend_workouts(workout_type, user_input['FitnessLevel'])
             workout_plan[day] = {'type': workout_type, 'exercises': workouts}
+        
+        # Add rest days for the remaining days
+        for day in all_days:
+            if day not in workout_plan:
+                workout_plan[day] = {'type': 'Rest', 'exercises': ['Rest']}
         
         # Store the workout plan in the session for display
         session['workout_plan'] = workout_plan

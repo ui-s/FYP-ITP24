@@ -17,6 +17,9 @@
         .card:hover {
             transform: scale(1.05);
         }
+        .rest-day {
+            background-color: #e9ecef;
+        }
     </style>
 </head>
 <body>
@@ -25,16 +28,16 @@
         <div class="row">
             {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
                 <div class="col-md-4">
-                    <div class="card text-center">
+                    <div class="card text-center {% if workout_plan.get(day, {}).get('type') == 'Rest' %}rest-day{% endif %}">
                         <div class="card-body">
                             <h5 class="card-title">{{ day }}</h5>
-                            {% if workout_plan.get(day) %}
+                            {% if workout_plan.get(day, {}).get('type') != 'Rest' %}
                                 <p>{{ workout_plan[day]['type'] }}</p>
                                 <a href="{{ url_for('workout', day=day.lower()) }}" class="btn btn-primary">
                                     <i class="fas fa-dumbbell"></i> View Workout
                                 </a>
                             {% else %}
-                                <p>Rest Day</p>
+                                <p><i class="fas fa-bed"></i> Rest Day</p>
                             {% endif %}
                         </div>
                     </div>
