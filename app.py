@@ -141,6 +141,19 @@ def workout(day):
     day_workout = workout_plan.get(day.capitalize(), {})
     return render_template('workout_day.html', day=day, workout=day_workout)
 
+@app.route('/record_workout/<day>', methods=['GET', 'POST'])
+def record_workout(day):
+    workout_plan = session.get('workout_plan', {})
+    day_workout = workout_plan.get(day.capitalize(), {})
+    
+    if request.method == 'POST':
+        # Here you would process the form data and save the recorded workout
+        # For now, we'll just redirect back to the workout plan
+        flash('Workout recorded successfully!', 'success')
+        return redirect(url_for('display_workout_plan'))
+    
+    return render_template('record_workout.html', day=day, workout=day_workout)
+
 
 if __name__ == '__main__':
     app.run(debug=True)
