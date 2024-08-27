@@ -8,16 +8,24 @@ app.config['SECRET_KEY'] = os.urandom(24)
 
 @app.route('/')
 def index():
+    # Initialize session variables with default values
+    session['age_group'] = ''
+    session['gender'] = ''
+    session['height'] = ''
+    session['weight'] = ''
+    session['body_goal'] = ''
+    session['problem_areas'] = []
+    session['fitness_level'] = ''
+    session['workout_days'] = ''
     return render_template('index.html')
 
 @app.route('/process_step1', methods=['POST'])
 def process_step1():
-    session['age_group'] = request.form['age_group']
-    session['gender'] = request.form['gender']
-    session['height'] = float(request.form['height'])
-    session['weight'] = float(request.form['weight'])
+    session['age_group'] = request.form.get('age_group', '')
+    session['gender'] = request.form.get('gender', '')
+    session['height'] = request.form.get('height', '')
+    session['weight'] = request.form.get('weight', '')
     return redirect(url_for('body_goal'))
-
 
 @app.route('/body_goal')
 def body_goal():
@@ -81,8 +89,6 @@ def generate_workout_plan():
             'WorkoutDaysPerWeek': int(session.get('workout_days', 0))
         }
         
-        print("User input before prediction:", user_input)
-        
         # Generate predictions
         predicted_days = workout_model.predict_workout(user_input)
         workout_plan = {}
@@ -103,7 +109,14 @@ def generate_workout_plan():
 @app.route('/workout_plan')
 def display_workout_plan():
     workout_plan = session.get('workout_plan', {})
-    return render_template('workout_plan.html', workout_plan=workout_plan)
+    return render_template('weekly_workout_plan.html', workout_plan=workout_plan)
+
+@app.route('/workout/<day>')
+def workout(day):
+    workout_plan = session.get('workout_plan', {})
+    day_workout = workout_plan.get(day.capitalize(), {})
+    return render_template('workout_day.html', day=day, workout=day_workout)
+
 
 if __name__ == '__main__':
     app.run(debug=True)

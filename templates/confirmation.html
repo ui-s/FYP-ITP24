@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workout Planner - Confirmation</title>
+    <title>Confirmation - Workout Planner</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/confirmation.css') }}">
 </head>
 <body>
@@ -14,28 +14,28 @@
         <div class="summary">
             <h2>Your Information:</h2>
             <ul>
-                <li><strong>Age Group:</strong> {{ session.get('age_group') }}</li>
-                <li><strong>Gender:</strong> {{ session.get('gender').capitalize() }}</li>
-                <li><strong>Height:</strong> {{ session.get('height') }} cm</li>
-                <li><strong>Weight:</strong> {{ session.get('weight') }} kg</li>
+                <li><strong>Age Group:</strong> {{ session.get('age_group', 'Not specified') }}</li>
+                <li><strong>Gender:</strong> {{ session.get('gender', 'Not specified')|capitalize }}</li>
+                <li><strong>Height:</strong> {{ session.get('height', 'Not specified') }} cm</li>
+                <li><strong>Weight:</strong> {{ session.get('weight', 'Not specified') }} kg</li>
             </ul>
 
             <h2>Your Goals:</h2>
             <ul>
-                <li><strong>Body Goal:</strong> {{ session.get('body_goal', '').replace('_', ' ').capitalize() }}</li>
+                <li><strong>Body Goal:</strong> {{ session.get('body_goal', 'Not specified')|replace('_', ' ')|capitalize }}</li>
                 <li><strong>Problem Areas:</strong> 
                     {% if session.get('problem_areas') %}
                         {{ session.get('problem_areas')|map('replace', '_', ' ')|map('capitalize')|join(', ') }}
                     {% else %}
-                        None specified
+                        Not specified
                     {% endif %}
                 </li>
             </ul>
 
             <h2>Your Fitness Profile:</h2>
             <ul>
-                <li><strong>Fitness Level:</strong> {{ session.get('fitness_level', '').capitalize() }}</li>
-                <li><strong>Workout Days Per Week:</strong> {{ session.get('workout_days') }}</li>
+                <li><strong>Fitness Level:</strong> {{ session.get('fitness_level', 'Not specified')|capitalize }}</li>
+                <li><strong>Workout Days Per Week:</strong> {{ session.get('workout_days', 'Not specified') }}</li>
             </ul>
         </div>
         
