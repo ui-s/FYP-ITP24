@@ -1,8 +1,0 @@
-Id,Username,Gender,Age,Height_cm,Weight_kg,Date,Day,Week_no,Bench_pr(kg),Squat_pr(kg),Deadlift_pr(kg),Chest_sets,Back_sets,Legs_sets,Arms_sets,Shoulder_sets,Core_sets,Duration_mins,Total_reps
-BRO0001,Hziqdnel,Male,20,171,75,19/8/2024,Monday,1,100,110,160,9,0,0,6,3,0,90,216
-BRO0001,Hziqdnel,Male,20,171,75,20/8/2024,Tuesday,1,100,110,160,0,12,0,0,3,0,110,180
-BRO0001,Hziqdnel,Male,20,171,75,21/8/2024,Wednesday,1,100,110,160,0,0,0,0,0,0,0,0
-BRO0001,Hziqdnel,Male,20,171,75,22/8/2024,Thursday,1,100,110,160,0,0,12,0,0,0,105,144
-BRO0001,Hziqdnel,Male,20,171,75,23/8/2024,Friday,1,100,110,160,0,0,0,15,6,0,130,252
-BRO0001,Hziqdnel,Male,20,171,75,24/8/2024,Saturday,1,100,110,160,0,0,0,0,0,0,0,0
-BRO0001,Hziqdnel,Male,20,171,75,25/8/2024,Sunday,1,100,110,160,0,0,0,0,0,0,0,0

@@ -4,102 +4,8 @@ from model import WorkoutModel
 import os
 import random
 
-from flask import Flask, render_template, request, redirect, url_for, flash
-from flask_sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
-from werkzeug.security import generate_password_hash, check_password_hash
-from datetime import datetime
-import os
-
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///workout_planner.db'
-db = SQLAlchemy(app)
-login_manager = LoginManager(app)
-login_manager.login_view = 'login'
-
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    password_hash = db.Column(db.String(120), nullable=False)
-    gender = db.Column(db.String(10))
-    age = db.Column(db.Integer)
-    height_cm = db.Column(db.Float)
-    weight_kg = db.Column(db.Float)
-
-class WorkoutData(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-    date = db.Column(db.Date, nullable=False)
-    day = db.Column(db.String(10), nullable=False)
-    week_no = db.Column(db.Integer, nullable=False)
-    bench_pr = db.Column(db.Float)
-    squat_pr = db.Column(db.Float)
-    deadlift_pr = db.Column(db.Float)
-    chest_sets = db.Column(db.Integer)
-    back_sets = db.Column(db.Integer)
-    legs_sets = db.Column(db.Integer)
-    arms_sets = db.Column(db.Integer)
-    shoulder_sets = db.Column(db.Integer)
-    core_sets = db.Column(db.Integer)
-    duration_mins = db.Column(db.Integer)
-    total_reps = db.Column(db.Integer)
-
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.get(int(user_id))
-
-@app.route('/register', methods=['GET', 'POST'])
-def register():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        gender = request.form['gender']
-        age = int(request.form['age'])
-        height_cm = float(request.form['height_cm'])
-        weight_kg = float(request.form['weight_kg'])
-        
-        user = User.query.filter_by(username=username).first()
-        if user:
-            flash('Username already exists')
-            return redirect(url_for('register'))
-        
-        new_user = User(username=username, 
-                        password_hash=generate_password_hash(password),
-                        gender=gender,
-                        age=age,
-                        height_cm=height_cm,
-                        weight_kg=weight_kg)
-        db.session.add(new_user)
-        db.session.commit()
-        
-        flash('Registration successful. Please log in.')
-        return redirect(url_for('login'))
-    
-    return render_template('register.html')
-
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    if request.method == 'POST':
-        username = request.form['username']
-        password = request.form['password']
-        user = User.query.filter_by(username=username).first()
-        
-        if user and check_password_hash(user.password_hash, password):
-            login_user(user)
-            return redirect(url_for('index'))
-        else:
-            flash('Invalid username or password')
-    
-    return render_template('login.html')
-
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('index'))
-
-# ^ END REGSITER/LOGIN CODE
 
 @app.route('/')
 def index():
@@ -270,8 +176,8 @@ def workout(day):
     return render_template('workout_day.html', day=day, workout=day_workout)
 
 @app.route('/record_workout/<day>', methods=['GET', 'POST'])
-@login_required
 def record_workout(day):
+<<<<<<< HEAD
     if request.method == 'POST':
         workout_plan = session.get('workout_plan', {})
         day_workout = workout_plan.get(day.capitalize(), {})
@@ -320,11 +226,19 @@ def record_workout(day):
         flash('Workout recorded successfully!', 'success')
         return redirect(url_for('display_workout_plan'))
     
+=======
+>>>>>>> parent of 67925c0 (login + registration added)
     workout_plan = session.get('workout_plan', {})
     day_workout = workout_plan.get(day.capitalize(), {})
+    
+    if request.method == 'POST':
+        # Here you would process the form data and save the recorded workout
+        # For now, we'll just redirect back to the workout plan
+        flash('Workout recorded successfully!', 'success')
+        return redirect(url_for('display_workout_plan'))
+    
     return render_template('record_workout.html', day=day, workout=day_workout)
 
+
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
