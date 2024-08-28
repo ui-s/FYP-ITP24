@@ -131,9 +131,43 @@ def generate_workout_plan():
         return redirect(url_for('confirmation'))
 
 @app.route('/workout_plan')
+@login_required
 def display_workout_plan():
     workout_plan = session.get('workout_plan', {})
-    return render_template('weekly_workout_plan.html', workout_plan=workout_plan)
+    
+    # Fetch workout data for the current week
+    today = datetime.now().date()
+    start_of_week = today - timedelta(days=today.weekday())
+    end_of_week = start_of_week + timedelta(days=6)
+    
+    workout_data = WorkoutData.query.filter(
+        WorkoutData.user_id == current_user.id,
+        WorkoutData.date >= start_of_week,
+        WorkoutData.date <= end_of_week
+    ).all()
+    
+    # Prepare data for charts
+    muscle_groups = ['Chest', 'Back', 'Legs', 'Arms', 'Shoulders', 'Core']
+    muscle_group_sets = [sum(getattr(wd, f'{mg.lower()}_sets') for wd in workout_data) for mg in muscle_groups]
+    
+    workout_durations = [wd.duration_mins for wd in workout_data]
+    total_reps = [wd.total_reps for wd in workout_data]
+    
+    # Calculate BMI
+    height_m = current_user.height_cm / 100
+    bmi = current_user.weight_kg / (height_m ** 2)
+    
+    chart_data = {
+        'muscle_groups': muscle_groups,
+        'muscle_group_sets': muscle_group_sets,
+        'workout_days': [wd.day for wd in workout_data],
+        'workout_durations': workout_durations,
+        'total_reps': total_reps,
+        'bmi': bmi
+    }
+    
+    return render_template('weekly_workout_plan.html', workout_plan=workout_plan, chart_data=chart_data)
+
 
 @app.route('/workout/<day>')
 def workout(day):
@@ -145,25 +179,51 @@ def workout(day):
 def record_workout(day):
 <<<<<<< HEAD
     if request.method == 'POST':
-        # Process the form data and save to database
+        workout_plan = session.get('workout_plan', {})
+        day_workout = workout_plan.get(day.capitalize(), {})
+
+        chest_sets = back_sets = legs_sets = arms_sets = shoulder_sets = core_sets = total_reps = 0
+
+        for exercise in day_workout.get('exercises', []):
+            exercise_name = exercise['Exercise'].lower()
+            targeted_muscle = exercise['TargetedMuscle'].lower()
+            
+            sets = len(request.form.getlist(f"{exercise_name.replace(' ', '_')}_weight[]"))
+            reps = sum([int(r) for r in request.form.getlist(f"{exercise_name.replace(' ', '_')}_reps[]")])
+            
+            if 'chest' in exercise_name or 'chest' in targeted_muscle:
+                chest_sets += sets
+            elif 'back' in exercise_name or 'back' in targeted_muscle:
+                back_sets += sets
+            elif 'leg' in exercise_name or 'leg' in targeted_muscle:
+                legs_sets += sets
+            elif any(muscle in exercise_name or muscle in targeted_muscle for muscle in ['bicep', 'tricep', 'forearm']):
+                arms_sets += sets
+            elif 'shoulder' in exercise_name or 'shoulder' in targeted_muscle:
+                shoulder_sets += sets
+            elif 'core' in exercise_name or 'abs' in exercise_name or 'core' in targeted_muscle or 'abs' in targeted_muscle:
+                core_sets += sets
+            
+            total_reps += reps
+
         workout_data = WorkoutData(
             user_id=current_user.id,
             date=datetime.now().date(),
             day=day,
             week_no=1,  # You need to implement week number logic
-            chest_sets=sum([int(x) for x in request.form.getlist('chest_sets')]),
-            back_sets=sum([int(x) for x in request.form.getlist('back_sets')]),
-            legs_sets=sum([int(x) for x in request.form.getlist('legs_sets')]),
-            arms_sets=sum([int(x) for x in request.form.getlist('arms_sets')]),
-            shoulder_sets=sum([int(x) for x in request.form.getlist('shoulder_sets')]),
-            core_sets=sum([int(x) for x in request.form.getlist('core_sets')]),
+            chest_sets=chest_sets,
+            back_sets=back_sets,
+            legs_sets=legs_sets,
+            arms_sets=arms_sets,
+            shoulder_sets=shoulder_sets,
+            core_sets=core_sets,
             duration_mins=int(request.form['workout_duration']) // 60,
-            total_reps=sum([int(x) for x in request.form.getlist('total_reps')])
+            total_reps=total_reps
         )
         db.session.add(workout_data)
         db.session.commit()
         
-        flash('Workout recorded successfully!')
+        flash('Workout recorded successfully!', 'success')
         return redirect(url_for('display_workout_plan'))
     
 =======
