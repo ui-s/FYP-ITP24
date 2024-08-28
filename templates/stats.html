@@ -13,25 +13,25 @@
         
         <div class="text-center">
             <h2>Muscle Groups Worked</h2>
-            <img src="{{ url_for('get_radar_chart', week_no=1) }}" alt="Radar Chart" class="img-fluid">
+            <img src="static\images\Figure_1.png" alt="Radar Chart" class="img-fluid">
         </div>
         
         <div class="text-center">
             <h2>BMI Chart</h2>
-            <img src="{{ url_for('get_bmi_chart') }}" alt="BMI Chart" class="img-fluid">
+            <img src="static\images\Figure_2.png" alt="BMI Chart" class="img-fluid">
         </div>
         
         <div class="text-center">
             <h2>Total Reps for the Week</h2>
-            <img src="{{ url_for('get_total_reps_chart') }}" alt="Total Reps Chart" class="img-fluid">
+            <img src="static\images\Figure_3.png" alt="Total Reps Chart" class="img-fluid">
         </div>
         
         <div class="text-center">
             <h2>Workout Duration for the Week</h2>
-            <img src="{{ url_for('get_duration_chart') }}" alt="Duration Chart" class="img-fluid">
+            <img src="static\images\Figure_4.png" alt="Duration Chart" class="img-fluid">
         </div>
         
-        <a href="{{ url_for('workout_plan') }}" class="btn btn-secondary mt-4">Back to Workout Plan</a>
+        <a href="{{ url_for('workout_days') }}" class="btn btn-secondary mt-4">Back to Workout Plan</a>
     </div>
 </body>
 </html>

@@ -84,20 +84,37 @@ def generate_workout_plan():
 
         workout_model = WorkoutModel()
 
+        # Helper function to safely convert to int
+        def safe_int(value, default=0):
+            try:
+                return int(value)
+            except (ValueError, TypeError):
+                return default
+
+        # Helper function to safely get the first item of a list or return a default
+        def safe_first(lst, default=''):
+            return lst[0] if lst else default
+
         user_input = {
             'Gender': session.get('gender', ''),
-            'Age': int(session.get('age_group', '0').split('-')[0]),
+            'Age': safe_int(session.get('age_group', '0').split('-')[0]),
             'BodyGoal': session.get('body_goal', ''),
-            'ProblemAreas': session.get('problem_areas', [''])[0] if session.get('problem_areas') else '',
-            'Height_cm': float(session.get('height', 0)),
-            'Weight_kg': float(session.get('weight', 0)),
+            'ProblemAreas': safe_first(session.get('problem_areas', [])),
+            'Height_cm': float(session.get('height', 0) or 0),
+            'Weight_kg': float(session.get('weight', 0) or 0),
             'FitnessLevel': session.get('fitness_level', ''),
-            'WorkoutDaysPerWeek': int(session.get('workout_days', 0))
+            'WorkoutDaysPerWeek': safe_int(session.get('workout_days', 0))
         }
+
+        # Validate that essential fields are not empty or zero
+        if not all([user_input['Gender'], user_input['Age'], user_input['BodyGoal'], 
+                    user_input['FitnessLevel'], user_input['WorkoutDaysPerWeek']]):
+            flash('Please fill in all required fields.', 'error')
+            return redirect(url_for('confirmation'))
 
         initial_predictions = workout_model.predict_workout(user_input)
 
-        workout_days = int(user_input['WorkoutDaysPerWeek'])
+        workout_days = user_input['WorkoutDaysPerWeek']
         all_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
         workout_types = list(set(initial_predictions.values()))

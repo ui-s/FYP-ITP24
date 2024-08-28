@@ -47,8 +47,8 @@ def record_workout():
 @app.route('/problem_area', methods=['GET', 'POST'])
 def problem_area():
     if request.method == 'POST':
-        selected_areas = request.form.getlist('problem_areas')  # Get list of selected areas
-        session['problem_areas'] = selected_areas  # Store in session or process as needed
+        selected_areas = request.form.getlist('problem_area')  # Get list of selected areas
+        session['problem_area'] = selected_areas  # Store in session or process as needed
         return redirect(url_for('workout_plan'))  # Redirect to the workout plan page
     return render_template('problem_area.html')
 
