@@ -1,66 +1,52 @@
-{% extends "layout.html" %}
-
-{% block title %}Weekly Workout Plan{% endblock %}
-
-{% block extra_css %}
-<style>
-    .chart-container {
-        width: 100%;
-        max-width: 600px;
-        margin: 20px auto;
-    }
-</style>
-{% endblock %}
-
-{% block content %}
-<h1 class="mt-5 text-center text-primary">Your Weekly Workout Plan</h1>
-
-<div class="row">
-    {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
-        <div class="col-md-4 mb-4">
-            <div class="card text-center">
-                <div class="card-body">
-                    <h5 class="card-title">{{ day }}</h5>
-                    {% if workout_plan.get(day) %}
-                        <p>{{ workout_plan[day]['type'] }}</p>
-                        <a href="{{ url_for('workout', day=day.lower()) }}" class="btn btn-primary">
-                            <i class="fas fa-dumbbell"></i> View Workout
-                        </a>
-                    {% else %}
-                        <p>Rest Day</p>
-                    {% endif %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weekly Workout Plan</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .card {
+            margin: 10px 0;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        .rest-day {
+            background-color: #e9ecef;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 text-center text-primary">Your Weekly Workout Plan</h1>
+        <div class="row">
+            {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
+                <div class="col-md-4">
+                    <div class="card text-center {% if workout_plan.get(day, {}).get('type') == 'Rest' %}rest-day{% endif %}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ day }}</h5>
+                            {% if workout_plan.get(day, {}).get('type') != 'Rest' %}
+                                <p>{{ workout_plan[day]['type'] }}</p>
+                                <a href="{{ url_for('workout', day=day.lower()) }}" class="btn btn-primary">
+                                    <i class="fas fa-dumbbell"></i> View Workout
+                                </a>
+                            {% else %}
+                                <p><i class="fas fa-bed"></i> Rest Day</p>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
         </div>
-    {% endfor %}
-</div>
-
-<h2 class="mt-5 text-center">Workout Analytics</h2>
-
-<div class="chart-container">
-    <canvas id="muscleGroupChart"></canvas>
-</div>
-
-<div class="chart-container">
-    <canvas id="workoutDurationChart"></canvas>
-</div>
-
-<div class="chart-container">
-    <canvas id="totalRepsChart"></canvas>
-</div>
-
-<div class="chart-container">
-    <canvas id="bmiChart"></canvas>
-</div>
-
-{% endblock %}
-
-{% block extra_js %}
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{{ url_for('static', filename='js/workout_charts.js') }}"></script>
-<script>
-    // Pass the chart data to the createCharts function
-    const chartData = /* {{ chart_data | tojson | safe }} */ {};
-    createCharts(chartData);
-</script>
-{% endblock %}
+    </div>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
