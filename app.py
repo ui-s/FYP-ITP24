@@ -164,7 +164,6 @@ def record_workout(day):
         db.session.commit()
         
         flash('Workout recorded successfully!')
-<<<<<<< HEAD
         return redirect(url_for('display_workout_plan'))
     
 =======
@@ -176,8 +175,6 @@ def record_workout(day):
         # Here you would process the form data and save the recorded workout
         # For now, we'll just redirect back to the workout plan
         flash('Workout recorded successfully!', 'success')
-=======
->>>>>>> parent of a18ab97 (login registration and workout visualization added)
         return redirect(url_for('display_workout_plan'))
     
     return render_template('record_workout.html', day=day, workout=day_workout)
