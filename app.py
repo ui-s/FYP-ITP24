@@ -144,6 +144,7 @@ def workout(day):
 @app.route('/record_workout/<day>', methods=['GET', 'POST'])
 def record_workout(day):
 <<<<<<< HEAD
+<<<<<<< HEAD
     if request.method == 'POST':
         # Process the form data and save to database
         workout_data = WorkoutData(
@@ -166,6 +167,8 @@ def record_workout(day):
         flash('Workout recorded successfully!')
         return redirect(url_for('display_workout_plan'))
     
+=======
+>>>>>>> parent of 67925c0 (login + registration added)
 =======
 >>>>>>> parent of 67925c0 (login + registration added)
     workout_plan = session.get('workout_plan', {})
