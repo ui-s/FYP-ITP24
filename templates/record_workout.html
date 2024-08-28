@@ -1,57 +1,178 @@
-{% extends "layout.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Record {{ day.capitalize() }} Workout</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .workout-input {
+            margin-top: 15px;
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+        }
+        .timer {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        .remove-set-btn {
+            display: none;
+        }
+        .completed {
+            background-color: #d4edda;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5 text-center text-primary">Record Your {{ day.capitalize() }} Workout</h1>
+        
+        <div class="text-center mb-4">
+            <h3>Total Workout Time: <span id="total-time">00:00:00</span></h3>
+        </div>
 
-{% block title %}Record {{ day.capitalize() }} Workout{% endblock %}
+        <div class="text-center mb-4">
+            <label for="current_weight">Current Weight (lbs):</label>
+            <input type="number" id="current_weight" name="current_weight" placeholder="Weight (lbs)" required>
+        </div>
 
-{% block content %}
-<h1 class="mt-5 text-center text-primary">Record Your {{ day.capitalize() }} Workout</h1>
+        <form id="workout-form" method="POST" action="{{ url_for('record_workout', day=day) }}">
+            {% for exercise in workout['exercises'] %}
+                <div class="workout-input" id="exercise-{{ loop.index }}">
+                    <h4>{{ exercise['Exercise'] }} ({{ exercise['TargetedMuscle'] }})</h4>
+                    <div class="timer">
+                        <span class="timer-display">00:00:00</span>
+                        <button type="button" class="btn btn-success btn-sm start-timer">Start</button>
+                        <button type="button" class="btn btn-danger btn-sm stop-timer" disabled>Stop</button>
+                    </div>
+                    <div id="{{ exercise['Exercise']|lower|replace(' ', '-') }}-workouts">
+                        <div class="workout-set">
+                            <label>
+                                <input type="checkbox" class="set-completed"> 
+                                {{ exercise['Exercise'] }} - Set 1:
+                            </label>
+                            <input type="number" name="{{ exercise['Exercise']|lower|replace(' ', '_') }}_weight[]" placeholder="Weight (lbs)" required>
+                            <input type="number" name="{{ exercise['Exercise']|lower|replace(' ', '_') }}_reps[]" placeholder="Reps" required>
+                            <button type="button" class="btn btn-danger btn-sm remove-set-btn">Remove Set</button>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-info btn-sm add-set" data-exercise="{{ exercise['Exercise']|lower|replace(' ', '-') }}">Add Set</button>
+                    <button type="button" class="btn btn-warning btn-sm toggle-remove-set">Toggle Remove Set</button>
+                </div>
+            {% endfor %}
 
-<div class="text-center mb-4">
-    <h3>Total Workout Time: <span id="total-time">00:00:00</span></h3>
-</div>
+            <input type="hidden" name="workout_duration" id="workout_duration">
 
-<form id="workout-form" method="POST" action="{{ url_for('record_workout', day=day) }}">
-    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-    
-    <div class="text-center mb-4">
-        <label for="current_weight">Current Weight (kg):</label>
-        <input type="number" id="current_weight" name="current_weight" step="0.1" placeholder="Weight (kg)" required>
+            <button type="submit" class="btn btn-primary mt-4">Save Workout</button>
+        </form>
+        
+        <br>
+        <a href="{{ url_for('workout', day=day) }}" class="btn btn-secondary">Back to Workout Details</a>
     </div>
 
-    {% for exercise in workout['exercises'] %}
-        <div class="workout-input" id="exercise-{{ loop.index }}">
-            <h4>{{ exercise['Exercise'] }} ({{ exercise['TargetedMuscle'] }})</h4>
-            <div class="timer">
-                <span class="timer-display">00:00:00</span>
-                <button type="button" class="btn btn-success btn-sm start-timer">Start</button>
-                <button type="button" class="btn btn-danger btn-sm stop-timer" disabled>Stop</button>
-            </div>
-            <div id="{{ exercise['Exercise']|lower|replace(' ', '-') }}-workouts">
-                <div class="workout-set">
+    <script>
+        let totalSeconds = 0;
+
+        function updateTotalTime() {
+            const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+            const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+            const seconds = String(totalSeconds % 60).padStart(2, '0');
+            document.getElementById("total-time").textContent = `${hours}:${minutes}:${seconds}`;
+        }
+
+        document.querySelectorAll('.workout-input').forEach((workoutInput, index) => {
+            let timer;
+            let isRunning = false;
+            let seconds = 0;
+            const timerDisplay = workoutInput.querySelector('.timer-display');
+            const startButton = workoutInput.querySelector('.start-timer');
+            const stopButton = workoutInput.querySelector('.stop-timer');
+
+            startButton.onclick = function() {
+                if (!isRunning) {
+                    isRunning = true;
+                    timer = setInterval(function() {
+                        seconds++;
+                        totalSeconds++;
+                        updateTotalTime();
+                        const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
+                        const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
+                        const secondsDisplay = String(seconds % 60).padStart(2, '0');
+                        timerDisplay.textContent = `${hours}:${minutes}:${secondsDisplay}`;
+                    }, 1000);
+                    this.disabled = true;
+                    stopButton.disabled = false;
+                }
+            };
+
+            stopButton.onclick = function() {
+                if (isRunning) {
+                    clearInterval(timer);
+                    isRunning = false;
+                    this.disabled = true;
+                    startButton.disabled = false;
+                }
+            };
+
+            // Toggle Remove Set buttons
+            const toggleRemoveSetButton = workoutInput.querySelector('.toggle-remove-set');
+            toggleRemoveSetButton.onclick = function() {
+                const removeSetButtons = workoutInput.querySelectorAll('.remove-set-btn');
+                removeSetButtons.forEach(btn => {
+                    btn.style.display = btn.style.display === 'none' ? 'inline-block' : 'none';
+                });
+            };
+
+            // Add New Sets Functionality
+            const addSetButton = workoutInput.querySelector('.add-set');
+            addSetButton.addEventListener('click', function() {
+                const exerciseType = this.dataset.exercise;
+                const workoutSection = workoutInput.querySelector(`#${exerciseType}-workouts`);
+                const newSet = document.createElement('div');
+                newSet.className = 'workout-set';
+                newSet.innerHTML = `
                     <label>
                         <input type="checkbox" class="set-completed"> 
-                        {{ exercise['Exercise'] }} - Set 1:
+                        ${exerciseType.replace('-', ' ')} - Set ${workoutSection.querySelectorAll('.workout-set').length + 1}:
                     </label>
-                    <input type="number" name="{{ exercise['Exercise']|lower|replace(' ', '_') }}_weight[]" placeholder="Weight (kg)" step="0.5" required>
-                    <input type="number" name="{{ exercise['Exercise']|lower|replace(' ', '_') }}_reps[]" placeholder="Reps" required>
-                    <button type="button" class="btn btn-danger btn-sm remove-set-btn">Remove Set</button>
-                </div>
-            </div>
-            <button type="button" class="btn btn-info btn-sm add-set" data-exercise="{{ exercise['Exercise']|lower|replace(' ', '-') }}">Add Set</button>
-            <button type="button" class="btn btn-warning btn-sm toggle-remove-set">Toggle Remove Set</button>
-        </div>
-    {% endfor %}
+                    <input type="number" name="${exerciseType.replace('-', '_')}_weight[]" placeholder="Weight (lbs)" required>
+                    <input type="number" name="${exerciseType.replace('-', '_')}_reps[]" placeholder="Reps" required>
+                    <button type="button" class="btn btn-danger btn-sm remove-set-btn" style="display:none;">Remove Set</button>
+                `;
+                workoutSection.appendChild(newSet);
+            });
+        });
 
-    <input type="hidden" name="workout_duration" id="workout_duration">
+        // Remove Sets Functionality
+        document.body.addEventListener('click', function(event) {
+            if (event.target.classList.contains('remove-set-btn')) {
+                event.target.closest('.workout-set').remove();
+            }
+        });
 
-    <button type="submit" class="btn btn-primary mt-4">Save Workout</button>
-</form>
+        // Set Completed Functionality
+        document.body.addEventListener('change', function(event) {
+            if (event.target.classList.contains('set-completed')) {
+                const workoutSet = event.target.closest('.workout-set');
+                if (event.target.checked) {
+                    workoutSet.classList.add('completed');
+                } else {
+                    workoutSet.classList.remove('completed');
+                }
+            }
+        });
 
-<a href="{{ url_for('workout', day=day) }}" class="btn btn-secondary mt-3">Back to Workout Details</a>
-{% endblock %}
-
-{% block extra_js %}
+        // Save total duration before form submission
+        document.getElementById('workout-form').addEventListener('submit', function() {
+            document.getElementById('workout_duration').value = totalSeconds;
+        });
     </script>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-{% endblock %}
+</body>
+</html>
