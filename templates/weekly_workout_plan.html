@@ -1,3 +1,6 @@
+#weekly_workout_plan.html
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -43,6 +46,11 @@
                     </div>
                 </div>
             {% endfor %}
+        </div>
+
+        <!-- Button to navigate to stats page -->
+        <div class="text-center mt-4">
+            <a href="{{ url_for('stats') }}" class="btn btn-info">View Workout Statistics</a>
         </div>
     </div>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
