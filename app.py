@@ -1,7 +1,7 @@
 #app.py
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
 from data_cleaning import clean_workout_schedule_data, clean_workout_days_data
-from model import WorkoutModel
+from model_improved import WorkoutModel
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
@@ -79,9 +79,23 @@ def confirmation():
 @app.route('/generate_workout_plan', methods=['POST'])
 def generate_workout_plan():
     try:
+        # Store original session data
+        original_session_data = {
+            'age_group': session.get('age_group', ''),
+            'gender': session.get('gender', ''),
+            'height': session.get('height', ''),
+            'weight': session.get('weight', ''),
+            'body_goal': session.get('body_goal', ''),
+            'problem_areas': session.get('problem_areas', []),
+            'fitness_level': session.get('fitness_level', ''),
+            'workout_days': session.get('workout_days', '')
+        }
+
+        # Data Cleaning
         clean_workout_schedule_data()
         clean_workout_days_data()
 
+        # Initialize the workout model
         workout_model = WorkoutModel()
 
         # Helper function to safely convert to int
@@ -91,19 +105,16 @@ def generate_workout_plan():
             except (ValueError, TypeError):
                 return default
 
-        # Helper function to safely get the first item of a list or return a default
-        def safe_first(lst, default=''):
-            return lst[0] if lst else default
-
+        # Prepare user input
         user_input = {
-            'Gender': session.get('gender', ''),
-            'Age': safe_int(session.get('age_group', '0').split('-')[0]),
-            'BodyGoal': session.get('body_goal', ''),
-            'ProblemAreas': safe_first(session.get('problem_areas', [])),
-            'Height_cm': float(session.get('height', 0) or 0),
-            'Weight_kg': float(session.get('weight', 0) or 0),
-            'FitnessLevel': session.get('fitness_level', ''),
-            'WorkoutDaysPerWeek': safe_int(session.get('workout_days', 0))
+            'Gender': original_session_data['gender'],
+            'Age': safe_int(original_session_data['age_group'].split('-')[0]),
+            'BodyGoal': original_session_data['body_goal'],
+            'ProblemAreas': ', '.join(original_session_data['problem_areas']),
+            'Height_cm': float(original_session_data['height'] or 0),
+            'Weight_kg': float(original_session_data['weight'] or 0),
+            'FitnessLevel': original_session_data['fitness_level'],
+            'WorkoutDaysPerWeek': safe_int(original_session_data['workout_days'])
         }
 
         # Validate that essential fields are not empty or zero
@@ -112,37 +123,39 @@ def generate_workout_plan():
             flash('Please fill in all required fields.', 'error')
             return redirect(url_for('confirmation'))
 
-        initial_predictions = workout_model.predict_workout(user_input)
+        # Generate workout plan
+        workout_plan_raw = workout_model.generate_workout_plan(user_input)
 
-        workout_days = user_input['WorkoutDaysPerWeek']
-        all_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
-        workout_types = list(set(initial_predictions.values()))
-        workout_types = [wt for wt in workout_types if wt != 'Rest']
-
-        # Add generic types if not enough unique workout types
-        generic_types = ['Cardio', 'Strength', 'Flexibility', 'HIIT', 'Core']
-        while len(workout_types) < workout_days:
-            workout_types.extend(generic_types)
-        
-        selected_days = random.sample(all_days, workout_days)
-        selected_types = random.sample(workout_types, workout_days)
-        
+        # Format the workout plan for the session
         workout_plan = {}
-        for day, workout_type in zip(selected_days, selected_types):
-            workouts = workout_model.recommend_workouts(workout_type, user_input['FitnessLevel'])
-            workout_plan[day] = {'type': workout_type, 'exercises': workouts}
+        all_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         
         for day in all_days:
-            if day not in workout_plan:
-                workout_plan[day] = {'type': 'Rest', 'exercises': ['Rest']}
+            day_plan = next((plan for plan in workout_plan_raw if plan['Day'] == day), None)
+            if day_plan:
+                workout_plan[day] = {
+                    'type': day_plan['WorkoutType'],
+                    'exercises': day_plan['Exercises']
+                }
+            else:
+                workout_plan[day] = {'type': 'Rest', 'exercises': []}
 
+        # Store the workout plan in the session
         session['workout_plan'] = workout_plan
         
+        # Restore original session data
+        session.update(original_session_data)
+
+        print("Workout plan generated:", workout_plan)  # Debugging line
+
         return redirect(url_for('display_workout_plan'))
     except Exception as e:
         print(f"Error occurred: {str(e)}")
-        flash(f"An error occurred: {str(e)}", 'error')
+        flash(f"An error occurred while generating the workout plan: {str(e)}", 'error')
+        
+        # Restore original session data in case of error
+        session.update(original_session_data)
+        
         return redirect(url_for('confirmation'))
 
 @app.route('/workout_plan')
