@@ -3,27 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Record {{ day.capitalize() }} Workout</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Record Workout - {{ day.capitalize() }}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
+        .timer-display {
+            font-size: 2rem;
+            font-weight: bold;
         }
-        .workout-input {
-            margin-top: 15px;
-            border: 1px solid #ddd;
-            padding: 15px;
-            border-radius: 5px;
+        .exercise-card {
+            margin-bottom: 1rem;
+            transition: opacity 0.3s ease;
         }
-        .timer {
-            font-size: 1.2rem;
-            margin-bottom: 10px;
+        .exercise-card.disabled {
+            opacity: 0.5;
+            pointer-events: none;
         }
-        .remove-set-btn {
+        .exercise-card.active {
+            border: 2px solid #007bff;
+            box-shadow: 0 0 10px rgba(0, 123, 255, 0.5);
+        }
+        .exercise-card.dragging {
+            opacity: 0.5;
+        }
+        .exercise-card .drag-handle {
+            cursor: move;
             display: none;
+            margin-right: 10px;
         }
-        .completed {
-            background-color: #d4edda;
+        .exercise-card.draggable .drag-handle {
+            display: inline-block;
+        }
+        .input-group-text {
+            min-width: 100px;
         }
     </style>
 </head>
@@ -35,144 +46,264 @@
             <h3>Total Workout Time: <span id="total-time">00:00:00</span></h3>
         </div>
 
-        <div class="text-center mb-4">
-            <label for="current_weight">Current Weight (lbs):</label>
-            <input type="number" id="current_weight" name="current_weight" placeholder="Weight (lbs)" required>
+        <div class="row align-items-end mb-4">
+            <div class="col-md-6">
+                <div class="input-group">
+                    <span class="input-group-text">Current Weight (lbs):</span>
+                    <input type="number" id="current-weight" class="form-control" placeholder="Enter weight">
+                </div>
+            </div>
+            <div class="col-md-6 text-md-end mt-3 mt-md-0">
+                <button id="toggle-drag" class="btn btn-outline-primary">Enable Reordering</button>
+            </div>
         </div>
 
-        <form id="workout-form" method="POST" action="{{ url_for('record_workout', day=day) }}">
+        <div id="exercise-list">
             {% for exercise in workout['exercises'] %}
-                <div class="workout-input" id="exercise-{{ loop.index }}">
-                    <h4>{{ exercise['Exercise'] }} ({{ exercise['TargetedMuscle'] }})</h4>
-                    <div class="timer">
+            <div class="card exercise-card">
+                <div class="card-body">
+                    <span class="drag-handle">&#9776;</span>
+                    <h4 class="card-title d-inline-block">{{ exercise['Exercise'] }} ({{ exercise['TargetedMuscle'] }})</h4>
+                    <div class="timer mb-3">
                         <span class="timer-display">00:00:00</span>
-                        <button type="button" class="btn btn-success btn-sm start-timer">Start</button>
-                        <button type="button" class="btn btn-danger btn-sm stop-timer" disabled>Stop</button>
+                        <button class="btn btn-primary start-timer">Start</button>
+                        <button class="btn btn-danger stop-timer" style="display: none;">Stop</button>
                     </div>
-                    <div id="{{ exercise['Exercise']|lower|replace(' ', '-') }}-workouts">
-                        <div class="workout-set">
-                            <label>
-                                <input type="checkbox" class="set-completed"> 
-                                {{ exercise['Exercise'] }} - Set 1:
-                            </label>
-                            <input type="number" name="{{ exercise['Exercise']|lower|replace(' ', '_') }}_weight[]" placeholder="Weight (lbs)" required>
-                            <input type="number" name="{{ exercise['Exercise']|lower|replace(' ', '_') }}_reps[]" placeholder="Reps" required>
-                            <button type="button" class="btn btn-danger btn-sm remove-set-btn">Remove Set</button>
+                    <div class="sets-container">
+                        <div class="input-group mb-3">
+                            <span class="input-group-text">Set 1:</span>
+                            <input type="number" class="form-control" placeholder="Reps">
+                            <input type="number" class="form-control" placeholder="Weight (lbs)">
+                            <button class="btn btn-outline-secondary remove-set" type="button">Remove</button>
                         </div>
                     </div>
-                    <button type="button" class="btn btn-info btn-sm add-set" data-exercise="{{ exercise['Exercise']|lower|replace(' ', '-') }}">Add Set</button>
-                    <button type="button" class="btn btn-warning btn-sm toggle-remove-set">Toggle Remove Set</button>
+                    <button class="btn btn-secondary add-set">Add Set</button>
                 </div>
+            </div>
             {% endfor %}
+        </div>
 
-            <input type="hidden" name="workout_duration" id="workout_duration">
-
-            <button type="submit" class="btn btn-primary mt-4">Save Workout</button>
-        </form>
+        <div class="text-center mt-4">
+            <button id="save-workout" class="btn btn-success">Save Workout</button>
+        </div>
         
-        <br>
-        <a href="{{ url_for('workout', day=day) }}" class="btn btn-secondary">Back to Workout Details</a>
+        <div class="text-center mt-3">
+            <a href="{{ url_for('workout', day=day) }}" class="btn btn-secondary">Back to Workout Details</a>
+        </div>
     </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script>
-        let totalSeconds = 0;
+        document.addEventListener('DOMContentLoaded', function() {
+            let totalWorkoutSeconds = 0;
+            let totalWorkoutInterval = null;
+            let activeTimer = null;
+            let exerciseTimers = {};
 
-        function updateTotalTime() {
-            const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
-            const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
-            const seconds = String(totalSeconds % 60).padStart(2, '0');
-            document.getElementById("total-time").textContent = `${hours}:${minutes}:${seconds}`;
-        }
+            function updateTimer(timerDisplay, seconds) {
+                const hours = Math.floor(seconds / 3600);
+                const minutes = Math.floor((seconds % 3600) / 60);
+                const remainingSeconds = seconds % 60;
+                timerDisplay.textContent = 
+                    `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+            }
 
-        document.querySelectorAll('.workout-input').forEach((workoutInput, index) => {
-            let timer;
-            let isRunning = false;
-            let seconds = 0;
-            const timerDisplay = workoutInput.querySelector('.timer-display');
-            const startButton = workoutInput.querySelector('.start-timer');
-            const stopButton = workoutInput.querySelector('.stop-timer');
-
-            startButton.onclick = function() {
-                if (!isRunning) {
-                    isRunning = true;
-                    timer = setInterval(function() {
-                        seconds++;
-                        totalSeconds++;
-                        updateTotalTime();
-                        const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
-                        const minutes = String(Math.floor((seconds % 3600) / 60)).padStart(2, '0');
-                        const secondsDisplay = String(seconds % 60).padStart(2, '0');
-                        timerDisplay.textContent = `${hours}:${minutes}:${secondsDisplay}`;
+            function startTotalWorkoutTimer() {
+                if (!totalWorkoutInterval) {
+                    totalWorkoutInterval = setInterval(() => {
+                        totalWorkoutSeconds++;
+                        updateTimer(document.getElementById('total-time'), totalWorkoutSeconds);
                     }, 1000);
-                    this.disabled = true;
-                    stopButton.disabled = false;
                 }
-            };
+            }
 
-            stopButton.onclick = function() {
-                if (isRunning) {
-                    clearInterval(timer);
-                    isRunning = false;
-                    this.disabled = true;
-                    startButton.disabled = false;
+            function stopTotalWorkoutTimer() {
+                if (totalWorkoutInterval) {
+                    clearInterval(totalWorkoutInterval);
+                    totalWorkoutInterval = null;
                 }
-            };
+            }
 
-            // Toggle Remove Set buttons
-            const toggleRemoveSetButton = workoutInput.querySelector('.toggle-remove-set');
-            toggleRemoveSetButton.onclick = function() {
-                const removeSetButtons = workoutInput.querySelectorAll('.remove-set-btn');
-                removeSetButtons.forEach(btn => {
-                    btn.style.display = btn.style.display === 'none' ? 'inline-block' : 'none';
+            function startTimer(timerDisplay, startBtn, stopBtn) {
+                const card = startBtn.closest('.exercise-card');
+                const exerciseId = card.dataset.exerciseId;
+
+                if (activeTimer && activeTimer.exerciseId !== exerciseId) {
+                    // If starting a different exercise, pause the current one
+                    pauseTimer();
+                }
+
+                if (!exerciseTimers[exerciseId]) {
+                    // Initialize timer for this exercise if it doesn't exist
+                    exerciseTimers[exerciseId] = {
+                        seconds: 0,
+                        intervalId: null
+                    };
+                }
+
+                let timer = exerciseTimers[exerciseId];
+
+                // Start or resume the timer
+                timer.intervalId = setInterval(() => {
+                    timer.seconds++;
+                    updateTimer(timerDisplay, timer.seconds);
+                }, 1000);
+
+                activeTimer = { 
+                    timerDisplay, 
+                    startBtn, 
+                    stopBtn, 
+                    card,
+                    exerciseId,
+                    timer
+                };
+
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'inline-block';
+                card.classList.add('active');
+
+                // Disable other exercise cards
+                document.querySelectorAll('.exercise-card').forEach(el => {
+                    if (el !== card) {
+                        el.classList.add('disabled');
+                    }
                 });
-            };
 
-            // Add New Sets Functionality
-            const addSetButton = workoutInput.querySelector('.add-set');
-            addSetButton.addEventListener('click', function() {
-                const exerciseType = this.dataset.exercise;
-                const workoutSection = workoutInput.querySelector(`#${exerciseType}-workouts`);
-                const newSet = document.createElement('div');
-                newSet.className = 'workout-set';
-                newSet.innerHTML = `
-                    <label>
-                        <input type="checkbox" class="set-completed"> 
-                        ${exerciseType.replace('-', ' ')} - Set ${workoutSection.querySelectorAll('.workout-set').length + 1}:
-                    </label>
-                    <input type="number" name="${exerciseType.replace('-', '_')}_weight[]" placeholder="Weight (lbs)" required>
-                    <input type="number" name="${exerciseType.replace('-', '_')}_reps[]" placeholder="Reps" required>
-                    <button type="button" class="btn btn-danger btn-sm remove-set-btn" style="display:none;">Remove Set</button>
-                `;
-                workoutSection.appendChild(newSet);
-            });
-        });
-
-        // Remove Sets Functionality
-        document.body.addEventListener('click', function(event) {
-            if (event.target.classList.contains('remove-set-btn')) {
-                event.target.closest('.workout-set').remove();
+                // Start the total workout timer if it's not already running
+                startTotalWorkoutTimer();
             }
-        });
 
-        // Set Completed Functionality
-        document.body.addEventListener('change', function(event) {
-            if (event.target.classList.contains('set-completed')) {
-                const workoutSet = event.target.closest('.workout-set');
-                if (event.target.checked) {
-                    workoutSet.classList.add('completed');
-                } else {
-                    workoutSet.classList.remove('completed');
+            function pauseTimer() {
+                if (activeTimer) {
+                    clearInterval(activeTimer.timer.intervalId);
+                    activeTimer.startBtn.style.display = 'inline-block';
+                    activeTimer.stopBtn.style.display = 'none';
+                    activeTimer.card.classList.remove('active');
+                    
+                    // Enable all exercise cards
+                    document.querySelectorAll('.exercise-card').forEach(el => {
+                        el.classList.remove('disabled');
+                    });
+
+                    activeTimer.timer.intervalId = null;
+                    activeTimer = null;
+
+                    // Stop the total workout timer if no exercise is active
+                    if (Object.values(exerciseTimers).every(timer => timer.intervalId === null)) {
+                        stopTotalWorkoutTimer();
+                    }
                 }
             }
+
+            document.querySelectorAll('.exercise-card').forEach((card, index) => {
+                card.dataset.exerciseId = `exercise-${index}`;
+            });
+
+            document.querySelectorAll('.start-timer').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const card = this.closest('.card');
+                    const timerDisplay = card.querySelector('.timer-display');
+                    const stopBtn = card.querySelector('.stop-timer');
+                    startTimer(timerDisplay, this, stopBtn);
+                });
+            });
+
+            document.querySelectorAll('.stop-timer').forEach(btn => {
+                btn.addEventListener('click', pauseTimer);
+            });
+
+            document.querySelectorAll('.add-set').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const setsContainer = this.parentElement.querySelector('.sets-container');
+                    const newSet = setsContainer.children[0].cloneNode(true);
+                    const setNumber = setsContainer.children.length + 1;
+                    newSet.querySelector('.input-group-text').textContent = `Set ${setNumber}:`;
+                    newSet.querySelectorAll('input').forEach(input => input.value = '');
+                    setsContainer.appendChild(newSet);
+                });
+            });
+
+            document.getElementById('exercise-list').addEventListener('click', function(e) {
+                if (e.target.classList.contains('remove-set')) {
+                    const setsContainer = e.target.closest('.sets-container');
+                    if (setsContainer.children.length > 1) {
+                        e.target.closest('.input-group').remove();
+                        // Update set numbers
+                        setsContainer.querySelectorAll('.input-group-text').forEach((el, index) => {
+                            el.textContent = `Set ${index + 1}:`;
+                        });
+                    }
+                }
+            });
+
+            document.getElementById('save-workout').addEventListener('click', function() {
+                // Here you would implement the logic to save the workout data
+                alert('Workout saved successfully!');
+                // You might want to redirect to another page or update the UI here
+            });
+
+            // DRAG N DROP
+            const exerciseList = document.getElementById('exercise-list');
+            let sortable = null;
+
+            document.getElementById('toggle-drag').addEventListener('click', function() {
+                const isEnabled = exerciseList.classList.toggle('draggable');
+                this.textContent = isEnabled ? 'Disable Reordering' : 'Enable Reordering';
+                
+                document.querySelectorAll('.exercise-card').forEach(card => {
+                    card.classList.toggle('draggable');
+                });
+
+                if (isEnabled) {
+                    sortable = new Sortable(exerciseList, {
+                        animation: 150,
+                        handle: '.drag-handle',
+                        onEnd: function(evt) {
+                            // Here you can add logic to update the order in your data structure
+                            console.log('New order:', sortable.toArray());
+                        }
+                    });
+                } else {
+                    sortable.destroy();
+                    sortable = null;
+                }
+            });
+
+              // Function to set the workout as modified
+              function setWorkoutModified() {
+                isWorkoutModified = true;
+            }
+
+            // Add event listeners to detect changes
+            document.getElementById('current-weight').addEventListener('input', setWorkoutModified);
+            document.querySelectorAll('.start-timer, .stop-timer, .add-set, .remove-set').forEach(btn => {
+                btn.addEventListener('click', setWorkoutModified);
+            });
+            document.getElementById('exercise-list').addEventListener('input', function(e) {
+                if (e.target.matches('input[type="number"]')) {
+                    setWorkoutModified();
+                }
+            });
+
+            // Add warning before page unload
+            window.addEventListener('beforeunload', function (e) {
+                if (isWorkoutModified) {
+                    // The message set here isn't actually displayed in modern browsers,
+                    // but we need to set it to trigger the warning dialog
+                    e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                }
+            });
+
+            // Reset the modified flag when saving the workout
+            document.getElementById('save-workout').addEventListener('click', function() {
+                // Implement your save logic here
+                alert('Workout saved successfully!');
+                isWorkoutModified = false;
+            });
+
         });
 
-        // Save total duration before form submission
-        document.getElementById('workout-form').addEventListener('submit', function() {
-            document.getElementById('workout_duration').value = totalSeconds;
-        });
     </script>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>

@@ -175,7 +175,7 @@ def record_workout(day):
     day_workout = workout_plan.get(day.capitalize(), {})
     
     if request.method == 'POST':
-        # Logic to save the recorded workout data
+        # Implement logic to save the recorded workout data
         flash('Workout recorded successfully!', 'success')
         return redirect(url_for('display_workout_plan'))
     
