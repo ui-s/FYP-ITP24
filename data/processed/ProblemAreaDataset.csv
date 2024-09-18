@@ -1,0 +1,91 @@
+,ProblemArea,Workout,FitnessLevel
+0,weak chest,knee push-ups,beginner
+1,weak chest,push-ups,beginner
+2,weak chest,incline push-ups,beginner
+3,weak chest,decline push-ups,beginner
+4,weak chest,dumbbell bench press,beginner
+5,weak chest,incline dumbbell press,beginner
+6,weak chest,diamond push-ups,intermediate
+7,weak chest,elevated push-ups,intermediate
+8,weak chest,decline push-ups with weight,intermediate
+9,weak chest,chest dips,intermediate
+10,weak chest,dumbbell bench press,intermediate
+11,weak chest,incline dumbbell press,intermediate
+12,weak chest,explosive push-ups,advanced
+13,weak chest,one-arm push-ups,advanced
+14,weak chest,weighted decline push-ups,advanced
+15,weak chest,chest dips with weights,advanced
+16,weak chest,barbell bench press,advanced
+17,weak chest,incline barbell bench press,advanced
+18,weak back,bodyweight rows,beginner
+19,weak back,supermans,beginner
+20,weak back,bent-over dumbbell rows,beginner
+21,weak back,lat pulldowns,beginner
+22,weak back,seated cable rows,beginner
+23,weak back,bird-dogs,beginner
+24,weak back,dumbbell rows,intermediate
+25,weak back,single-arm dumbbell rows,intermediate
+26,weak back,T-bar rows,intermediate
+27,weak back,face pulls,intermediate
+28,weak back,wide-grip pull-ups,intermediate
+29,weak back,cable rows,intermediate
+30,weak back,barbell deadlifts,advanced
+31,weak back,weighted pull-ups,advanced
+32,weak back,barbell rows,advanced
+33,weak back,renegade rows,advanced
+34,weak back,rack pulls,advanced
+35,weak back,hyperextensions with weights,advanced
+36,small arms,bicep curls,beginner
+37,small arms,tricep dips on bench,beginner
+38,small arms,hammer curls,beginner
+39,small arms,overhead tricep extensions,beginner
+40,small arms,concentration curls,beginner
+41,small arms,tricep kickbacks,beginner
+42,small arms,bicep curls,intermediate
+43,small arms,tricep dips,intermediate
+44,small arms,incline hammer curls,intermediate
+45,small arms,skull crushers,intermediate
+46,small arms,preacher curls,intermediate
+47,small arms,overhead tricep extensions,intermediate
+48,small arms,alternating dumbbell curls,advanced
+49,small arms,close-grip bench press,advanced
+50,small arms,cable bicep curls,advanced
+51,small arms,tricep pushdowns,advanced
+52,small arms,spider curls,advanced
+53,small arms,dips,advanced
+54,small legs,bodyweight squats,beginner
+55,small legs,lunges (bodyweight),beginner
+56,small legs,wall sits,beginner
+57,small legs,calf raises,beginner
+58,small legs,step-ups (bodyweight),beginner
+59,small legs,glute bridges,beginner
+60,small legs,goblet squats,intermediate
+61,small legs,walking lunges,intermediate
+62,small legs,Bulgarian split squats,intermediate
+63,small legs,single-leg Romanian deadlifts,intermediate
+64,small legs,seated calf raises,intermediate
+65,small legs,leg press,intermediate
+66,small legs,front squats,advanced
+67,small legs,walking lunges (heavy dumbbell),advanced
+68,small legs,bulgarian split squats,advanced
+69,small legs,romanian deadlifts,advanced
+70,small legs,standing calf raises,advanced
+71,small legs,leg press,advanced
+72,big belly,basic crunches,beginner
+73,big belly,leg raises,beginner
+74,big belly,plank,beginner
+75,big belly,bicycle crunches,beginner
+76,big belly,mountain climbers,beginner
+77,big belly,seated russian twists,beginner
+78,big belly,hanging leg raises,intermediate
+79,big belly,side planks,intermediate
+80,big belly,V-ups,intermediate
+81,big belly,flutter kicks,intermediate
+82,big belly,decline crunches,intermediate
+83,big belly,cable woodchoppers,intermediate
+84,big belly,ab wheel rollouts,advanced
+85,big belly,weighted sit-ups,advanced
+86,big belly,toes-to-bar,advanced
+87,big belly,dragon flags,advanced
+88,big belly,medicine ball slams,advanced
+89,big belly,hanging knee raises,advanced

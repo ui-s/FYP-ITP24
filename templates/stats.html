@@ -3,35 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Workout Stats</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <title>Workout Statistics</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1 class="mt-5">Workout Statistics</h1>
-        <p>Visualizations of workout data by week number.</p>
-        
-        <div class="text-center">
-            <h2>Muscle Groups Worked</h2>
-            <img src="static\images\Figure_1.png" alt="Radar Chart" class="img-fluid">
+        <h1 class="mt-5 text-center">Workout Statistics</h1>
+        <p class="text-center">Visualizations of workout data for the week</p>
+
+        <div class="row">
+            <div class="col-md-6 text-center">
+                <h2>Muscle Groups Worked</h2>
+                <canvas id="muscleGroupChart"></canvas>
+            </div>
+            <div class="col-md-6 text-center">
+                <h2>BMI Chart</h2>
+                <canvas id="bmiChart"></canvas>
+            </div>
         </div>
-        
-        <div class="text-center">
-            <h2>BMI Chart</h2>
-            <img src="static\images\Figure_2.png" alt="BMI Chart" class="img-fluid">
+
+        <div class="row mt-4">
+            <div class="col-md-6 text-center">
+                <h2>Total Reps for the Week</h2>
+                <canvas id="totalRepsChart"></canvas>
+            </div>
+            <div class="col-md-6 text-center">
+                <h2>Workout Duration for the Week</h2>
+                <canvas id="workoutDurationChart"></canvas>
+            </div>
         </div>
-        
-        <div class="text-center">
-            <h2>Total Reps for the Week</h2>
-            <img src="static\images\Figure_3.png" alt="Total Reps Chart" class="img-fluid">
+
+        <div class="text-center mt-4">
+            <a href="{{ url_for('display_workout_plan') }}" class="btn btn-secondary">Back to Workout Plan</a>
         </div>
-        
-        <div class="text-center">
-            <h2>Workout Duration for the Week</h2>
-            <img src="static\images\Figure_4.png" alt="Duration Chart" class="img-fluid">
-        </div>
-        
-        <a href="{{ url_for('workout_days') }}" class="btn btn-secondary mt-4">Back to Workout Plan</a>
     </div>
+
+    <script src="{{ url_for('static', filename='js/workout_charts.js') }}"></script>
+    <script>
+        // Fetch chart data from the server
+        fetch('/get_chart_data')
+            .then(response => response.json())
+            .then(data => {
+                console.log('Received data:', data);  // Add this line for debugging
+                // Create charts using the fetched data
+                createCharts(data);
+            })
+            .catch(error => console.error('Error fetching chart data:', error));
+    </script>
 </body>
 </html>

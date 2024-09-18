@@ -8,6 +8,7 @@ import numpy as np
 import seaborn as sns
 import os
 import random
+from flask import jsonify
 
 
 app = Flask(__name__)
@@ -181,96 +182,62 @@ def record_workout(day):
     
     return render_template('record_workout.html', day=day, workout=day_workout)
 
-# Statistics routes
 @app.route('/stats')
 def stats():
     return render_template('stats.html')
 
-@app.route('/get_radar_chart/<int:week_no>')
-def get_radar_chart(week_no):
-    # Group by 'Week_no' and sum the sets for each muscle group
-    weekly_data = USERS_DF.groupby('Week_no')[['Chest_sets', 'Back_sets', 'Legs_sets', 'Arms_sets', 'Shoulder_sets', 'Core_sets']].sum()
-    
-    # Ensure week_no exists in the data
-    if week_no not in weekly_data.index:
-        return "Week number not available", 404
+@app.route('/get_chart_data')
+def get_chart_data():
+    try:
+        # Load the GymAppUsersDataset
+        df = pd.read_csv('GymAppUsersDataset.csv')
+        print("DataFrame loaded:", df.head())  # Print first few rows
 
-    values = weekly_data.loc[week_no].values.flatten().tolist()
-    categories = ['Chest_sets', 'Back_sets', 'Legs_sets', 'Arms_sets', 'Shoulder_sets', 'Core_sets']
-    N = len(categories)
+        # Process data for Muscle Group Chart
+        muscle_groups = ['Chest', 'Back', 'Legs', 'Arms', 'Shoulder', 'Core']
+        muscle_group_sets = [
+            int(df['Chest_sets'].sum()),
+            int(df['Back_sets'].sum()),
+            int(df['Legs_sets'].sum()),
+            int(df['Arms_sets'].sum()),
+            int(df['Shoulder_sets'].sum()),
+            int(df['Core_sets'].sum())
+        ]
+        print("Muscle group sets:", muscle_group_sets)
 
-    angles = np.linspace(0, 2 * np.pi, N, endpoint=False).tolist()
-    values += values[:1]  # Repeat the first value to close the circle
-    angles += angles[:1]  # Repeat the first angle to close the circle
+        # Process data for Workout Duration Chart
+        workout_days = df['Day'].tolist()
+        workout_durations = df['Duration_mins'].tolist()
+        workout_durations = [int(d) for d in workout_durations]  # Convert to regular Python int
+        print("Workout days:", workout_days)
+        print("Workout durations:", workout_durations)
 
-    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
-    ax.fill(angles, values, color='blue', alpha=0.25)
-    ax.set_yticklabels([])
-    ax.set_xticks(angles[:-1])
-    ax.set_xticklabels(categories)
-    ax.set_title('Muscle Group Worked this week', fontsize=14)
+        # Process data for Total Reps Chart
+        total_reps = df['Total_reps'].tolist()
+        total_reps = [int(r) for r in total_reps]  # Convert to regular Python int
+        print("Total reps:", total_reps)
 
-    chart_path = f'static/charts/radar_chart_week_{week_no}.png'
-    plt.savefig(chart_path)
-    plt.close(fig)
-    return send_file(chart_path)
+        # Calculate BMI (using the last row of data)
+        last_record = df.iloc[-1]
+        height_m = float(last_record['Height_cm']) / 100
+        weight_kg = float(last_record['Weight_kg'])
+        bmi = weight_kg / (height_m ** 2)
+        print("Calculated BMI:", bmi)
 
-@app.route('/get_bmi_chart')
-def get_bmi_chart():
-    # Make sure data isn't empty
-    if USERS_DF.empty:
-        return "Dataset is empty", 404
+        chart_data = {
+            'muscle_groups': muscle_groups,
+            'muscle_group_sets': muscle_group_sets,
+            'workout_days': workout_days,
+            'workout_durations': workout_durations,
+            'total_reps': total_reps,
+            'bmi': float(bmi)  # Ensure BMI is a regular float
+        }
 
-    height_m = USERS_DF['Height_cm'].iloc[-1] / 100  # Convert height to meters
-    weight_kg = USERS_DF['Weight_kg'].iloc[-1]  # Weight in kg
-    bmi = weight_kg / (height_m ** 2)
-
-    plt.figure(figsize=(6, 4))
-    sns.barplot(x=['BMI'], y=[bmi])
-    plt.ylabel('BMI')
-    plt.title('BMI Chart')
-    plt.axhline(25, color='red', linestyle='--', label='Overweight Threshold (25)')
-    plt.axhline(30, color='orange', linestyle='--', label='Obesity Threshold (30)')
-    plt.legend()
-
-    chart_path = 'static/charts/bmi_chart.png'
-    plt.savefig(chart_path)
-    plt.close()
-    return send_file(chart_path)
-
-@app.route('/get_total_reps_chart')
-def get_total_reps_chart():
-    days = USERS_DF['Day'].values
-    total_reps = USERS_DF['Total_reps'].values
-
-    plt.figure(figsize=(8, 4))
-    sns.barplot(x=days, y=total_reps, palette='viridis')
-    plt.title('Total Reps for the Week')
-    plt.xlabel('Days of the Week')
-    plt.ylabel('Total Reps')
-    plt.xticks(rotation=45)
-
-    chart_path = 'static/charts/total_reps_chart.png'
-    plt.savefig(chart_path)
-    plt.close()
-    return send_file(chart_path)
-
-@app.route('/get_duration_chart')
-def get_duration_chart():
-    duration = USERS_DF['Duration_mins'].values
-    days = USERS_DF['Day'].values
-
-    plt.figure(figsize=(8, 4))
-    sns.barplot(x=days, y=duration, palette='mako')
-    plt.title('Workout Duration for the Week')
-    plt.xlabel('Days of the Week')
-    plt.ylabel('Duration (minutes)')
-    plt.xticks(rotation=45)
-
-    chart_path = 'static/charts/duration_chart.png'
-    plt.savefig(chart_path)
-    plt.close()
-    return send_file(chart_path)
+        print("Returning chart data:", chart_data)
+        return jsonify(chart_data)
+    except Exception as e:
+        print(f"Error in get_chart_data: {str(e)}")
+        return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True)
