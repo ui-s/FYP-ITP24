@@ -19,6 +19,7 @@ class WorkoutModel:
         # Load and preprocess data
         self.workout_schedule_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_WorkoutScheduleRecommendationDataset.csv'))
         self.workout_exercises_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_WorkoutDaysDataset.csv'))
+        self.problem_area_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_ProblemAreaDataset.csv'))
         
         # Ensure data is cleaned and formatted correctly
         self.workout_schedule_data = self.workout_schedule_data.dropna()
@@ -82,11 +83,19 @@ class WorkoutModel:
         optimized_schedule = self.optimize_workout_schedule(user_input['WorkoutDaysPerWeek'], predictions)
         return optimized_schedule
 
-    def get_exercises_for_workout(self, workout_type, fitness_level):
+    def get_exercises_for_workout(self, workout_type, fitness_level, problem_areas):
         suitable_exercises = self.workout_exercises_data[
             (self.workout_exercises_data['WorkoutDay'].str.lower() == workout_type.lower()) &
             (self.workout_exercises_data['FitnessLevel'].str.lower() == fitness_level.lower())
         ]
+        
+        # Add exercises from ProblemAreaDataset based on user's problem areas
+        for area in problem_areas.split(', '):
+            problem_area_exercises = self.problem_area_data[
+                (self.problem_area_data['ProblemArea'].str.lower() == area.lower()) &
+                (self.problem_area_data['FitnessLevel'].str.lower() == fitness_level.lower())
+            ]
+            suitable_exercises = pd.concat([suitable_exercises, problem_area_exercises])
         
         if len(suitable_exercises) < 5:
             # If not enough exercises, include exercises from adjacent fitness levels
@@ -111,7 +120,7 @@ class WorkoutModel:
         
         for day, workout_type in workout_schedule.items():
             if workout_type != 'Rest':
-                exercises = self.get_exercises_for_workout(workout_type, user_input['FitnessLevel'])
+                exercises = self.get_exercises_for_workout(workout_type, user_input['FitnessLevel'], user_input['ProblemAreas'])
                 workout_plan.append({
                     'Day': day,
                     'WorkoutType': workout_type,

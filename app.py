@@ -1,6 +1,6 @@
 #app.py
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
-from data_cleaning import clean_workout_schedule_data, clean_workout_days_data
+from data_cleaning import clean_workout_schedule_data, clean_workout_days_data, clean_problem_area_data
 from model_improved import WorkoutModel
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -92,9 +92,10 @@ def generate_workout_plan():
             'workout_days': session.get('workout_days', '')
         }
 
-        # Data Cleaning
+        # Perform data cleaning
         clean_workout_schedule_data()
         clean_workout_days_data()
+        clean_problem_area_data()
 
         # Initialize the workout model
         workout_model = WorkoutModel()
