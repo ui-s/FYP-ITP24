@@ -165,24 +165,52 @@ def display_workout_plan():
     workout_plan = session.get('workout_plan', {})
     return render_template('weekly_workout_plan.html', workout_plan=workout_plan)
 
+
 @app.route('/workout/<day>')
 def workout(day):
     workout_plan = session.get('workout_plan', {})
     day_workout = workout_plan.get(day.capitalize(), {})
-    return render_template('workout_day.html', day=day, workout=day_workout)
+    
+    # Load the WorkoutDaysDataset
+    df = pd.read_csv('data/processed/Cleaned_WorkoutDaysDataset.csv')
+    
+    # Filter exercises based on the workout type
+    workout_type = day_workout.get('type', '')
+    available_exercises = df[df['WorkoutDay'] == workout_type]['Exercise'].tolist()
+    
+    return render_template('workout_day.html', day=day, workout=day_workout, available_exercises=available_exercises)
 
-@app.route('/record_workout/<day>', methods=['GET', 'POST'])
-def record_workout(day):
+@app.route('/update_workout/<day>', methods=['POST'])
+def update_workout(day):
+    data = request.json
+    exercises = data.get('exercises', [])
+    
     workout_plan = session.get('workout_plan', {})
     day_workout = workout_plan.get(day.capitalize(), {})
     
-    if request.method == 'POST':
-        # Implement logic to save the recorded workout data
-        flash('Workout recorded successfully!', 'success')
-        return redirect(url_for('display_workout_plan'))
+    # Load the WorkoutDaysDataset to get exercise details
+    df = pd.read_csv('data/processed/Cleaned_WorkoutDaysDataset.csv')
     
-    return render_template('record_workout.html', day=day, workout=day_workout)
+    # Update the exercises for the day
+    updated_exercises = []
+    for exercise_name in exercises:
+        exercise_data = df[df['Exercise'] == exercise_name].to_dict('records')
+        if exercise_data:
+            updated_exercises.append(exercise_data[0])
+        else:
+            updated_exercises.append({'Exercise': exercise_name, 'TargetedMuscle': 'To be determined'})
+    
+    day_workout['exercises'] = updated_exercises
+    workout_plan[day.capitalize()] = day_workout
+    session['workout_plan'] = workout_plan
+    
+    return jsonify({'success': True})
 
+@app.route('/record_workout/<day>')
+def record_workout(day):
+    workout_plan = session.get('workout_plan', {})
+    day_workout = workout_plan.get(day.capitalize(), {})
+    return render_template('record_workout.html', day=day, workout=day_workout)
 @app.route('/stats')
 def stats():
     return render_template('stats.html')
