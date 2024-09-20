@@ -9,7 +9,8 @@ import seaborn as sns
 import os
 import random
 from flask import jsonify
-
+from datetime import datetime, timedelta
+import traceback
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -220,38 +221,49 @@ def get_chart_data():
     try:
         # Load the GymAppUsersDataset
         df = pd.read_csv('GymAppUsersDataset.csv')
-        print("DataFrame loaded:", df.head())  # Print first few rows
+        
+        # Convert 'Date' column to datetime
+        df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+        
+        # Get the time period from the request
+        time_period = request.args.get('time_period', 'week')
+        
+        # Calculate the start date based on the time period
+        end_date = df['Date'].max()
+        if time_period == 'week':
+            start_date = end_date - timedelta(days=7)
+        elif time_period == '2weeks':
+            start_date = end_date - timedelta(days=14)
+        elif time_period == 'month':
+            start_date = end_date - timedelta(days=30)
+        else:  # 'all_time'
+            start_date = df['Date'].min()
+        
+        # Filter the dataframe based on the date range
+        df_filtered = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 
         # Process data for Muscle Group Chart
         muscle_groups = ['Chest', 'Back', 'Legs', 'Arms', 'Shoulder', 'Core']
         muscle_group_sets = [
-            int(df['Chest_sets'].sum()),
-            int(df['Back_sets'].sum()),
-            int(df['Legs_sets'].sum()),
-            int(df['Arms_sets'].sum()),
-            int(df['Shoulder_sets'].sum()),
-            int(df['Core_sets'].sum())
+            int(df_filtered['Chest_sets'].sum()),
+            int(df_filtered['Back_sets'].sum()),
+            int(df_filtered['Legs_sets'].sum()),
+            int(df_filtered['Arms_sets'].sum()),
+            int(df_filtered['Shoulder_sets'].sum()),
+            int(df_filtered['Core_sets'].sum())
         ]
-        print("Muscle group sets:", muscle_group_sets)
-
         # Process data for Workout Duration Chart
-        workout_days = df['Day'].tolist()
-        workout_durations = df['Duration_mins'].tolist()
-        workout_durations = [int(d) for d in workout_durations]  # Convert to regular Python int
-        print("Workout days:", workout_days)
-        print("Workout durations:", workout_durations)
+        workout_days = df_filtered['Day'].tolist()
+        workout_durations = df_filtered['Duration_mins'].tolist()
 
         # Process data for Total Reps Chart
-        total_reps = df['Total_reps'].tolist()
-        total_reps = [int(r) for r in total_reps]  # Convert to regular Python int
-        print("Total reps:", total_reps)
+        total_reps = df_filtered['Total_reps'].tolist()
 
         # Calculate BMI (using the last row of data)
-        last_record = df.iloc[-1]
+        last_record = df_filtered.iloc[-1]
         height_m = float(last_record['Height_cm']) / 100
         weight_kg = float(last_record['Weight_kg'])
         bmi = weight_kg / (height_m ** 2)
-        print("Calculated BMI:", bmi)
 
         chart_data = {
             'muscle_groups': muscle_groups,
@@ -259,10 +271,9 @@ def get_chart_data():
             'workout_days': workout_days,
             'workout_durations': workout_durations,
             'total_reps': total_reps,
-            'bmi': float(bmi)  # Ensure BMI is a regular float
+            'bmi': float(bmi)
         }
 
-        print("Returning chart data:", chart_data)
         return jsonify(chart_data)
     except Exception as e:
         print(f"Error in get_chart_data: {str(e)}")

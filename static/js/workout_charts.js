@@ -1,6 +1,16 @@
-// Muscle Group Chart
+// Global variables to store chart instances
+let muscleGroupChart, bmiChart, totalRepsChart, workoutDurationChart;
+
+// Common chart options
+const commonOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+};
+
+// Function to create Muscle Group Chart
 function createMuscleGroupChart(chartData) {
-    new Chart(document.getElementById('muscleGroupChart'), {
+    const ctx = document.getElementById('muscleGroupChart').getContext('2d');
+    muscleGroupChart = new Chart(ctx, {
         type: 'radar',
         data: {
             labels: chartData.muscle_groups,
@@ -17,77 +27,21 @@ function createMuscleGroupChart(chartData) {
             }]
         },
         options: {
+            ...commonOptions,
             plugins: {
                 title: {
                     display: true,
-                    text: 'Muscle Groups Worked This Week'
+                    text: 'Muscle Groups Worked'
                 }
             }
         }
     });
 }
 
-// Workout Duration Chart
-function createWorkoutDurationChart(chartData) {
-    new Chart(document.getElementById('workoutDurationChart'), {
-        type: 'bar',
-        data: {
-            labels: chartData.workout_days,
-            datasets: [{
-                label: 'Workout Duration (minutes)',
-                data: chartData.workout_durations,
-                backgroundColor: 'rgba(75, 192, 192, 0.6)'
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Workout Duration by Day'
-                }
-            }
-        }
-    });
-}
-
-// Total Reps Chart
-function createTotalRepsChart(chartData) {
-    new Chart(document.getElementById('totalRepsChart'), {
-        type: 'line',
-        data: {
-            labels: chartData.workout_days,
-            datasets: [{
-                label: 'Total Reps',
-                data: chartData.total_reps,
-                fill: false,
-                borderColor: 'rgb(255, 99, 132)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
-                }
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Total Reps by Day'
-                }
-            }
-        }
-    });
-}
-
-// BMI Chart
+// Function to create BMI Chart
 function createBMIChart(chartData) {
-    new Chart(document.getElementById('bmiChart'), {
+    const ctx = document.getElementById('bmiChart').getContext('2d');
+    bmiChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Your BMI'],
@@ -98,6 +52,7 @@ function createBMIChart(chartData) {
             }]
         },
         options: {
+            ...commonOptions,
             scales: {
                 y: {
                     beginAtZero: true,
@@ -114,10 +69,106 @@ function createBMIChart(chartData) {
     });
 }
 
+// Function to create Total Reps Chart
+function createTotalRepsChart(chartData) {
+    const ctx = document.getElementById('totalRepsChart').getContext('2d');
+    totalRepsChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.workout_days,
+            datasets: [{
+                label: 'Total Reps',
+                data: chartData.total_reps,
+                fill: false,
+                borderColor: 'rgb(255, 99, 132)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            ...commonOptions,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Total Reps by Day'
+                }
+            }
+        }
+    });
+}
+
+// Function to create Workout Duration Chart
+function createWorkoutDurationChart(chartData) {
+    const ctx = document.getElementById('workoutDurationChart').getContext('2d');
+    workoutDurationChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: chartData.workout_days,
+            datasets: [{
+                label: 'Workout Duration (minutes)',
+                data: chartData.workout_durations,
+                backgroundColor: 'rgba(75, 192, 192, 0.6)'
+            }]
+        },
+        options: {
+            ...commonOptions,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Workout Duration by Day'
+                }
+            }
+        }
+    });
+}
+
+// Function to update Muscle Group Chart
+function updateMuscleGroupChart(chartData) {
+    muscleGroupChart.data.datasets[0].data = chartData.muscle_group_sets;
+    muscleGroupChart.update();
+}
+
+// Function to fetch data and update chart
+function fetchDataAndUpdateChart(timePeriod) {
+    fetch(`/get_chart_data?time_period=${timePeriod}`)
+        .then(response => response.json())
+        .then(data => {
+            updateMuscleGroupChart(data);
+        })
+        .catch(error => console.error('Error:', error));
+}
+
 // Function to create all charts
 function createCharts(chartData) {
     createMuscleGroupChart(chartData);
-    createWorkoutDurationChart(chartData);
-    createTotalRepsChart(chartData);
     createBMIChart(chartData);
+    createTotalRepsChart(chartData);
+    createWorkoutDurationChart(chartData);
 }
+
+// Event listeners for time period buttons
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.btn-group button').forEach(button => {
+        button.addEventListener('click', function() {
+            const period = this.getAttribute('data-period');
+            fetchDataAndUpdateChart(period);
+        });
+    });
+
+    // Initial chart creation
+    fetch('/get_chart_data')
+        .then(response => response.json())
+        .then(data => {
+            createCharts(data);
+        })
+        .catch(error => console.error('Error:', error));
+});
