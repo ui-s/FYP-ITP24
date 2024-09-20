@@ -9,11 +9,12 @@
         .chart-container {
             position: relative;
             height: 40vh;
-            width: 80%;
+            width: 100%;
             margin: 20px auto;
         }
-        .btn-group {
-            margin-bottom: 15px;
+        #filterModal .modal-body {
+            max-height: 300px;
+            overflow-y: auto;
         }
     </style>
 </head>
@@ -21,16 +22,31 @@
     <div class="container-fluid">
         <h1 class="mt-5 mb-4 text-center">Workout Statistics</h1>
         
-        <div class="row">
-            <div class="col-md-6">
-                <div class="text-center">
-                    <div class="btn-group" role="group" aria-label="Time period selection">
-                        <button type="button" class="btn btn-secondary" data-period="week">This Week</button>
-                        <button type="button" class="btn btn-secondary" data-period="2weeks">2 Weeks</button>
-                        <button type="button" class="btn btn-secondary" data-period="month">1 Month</button>
-                        <button type="button" class="btn btn-secondary" data-period="all_time">All Time</button>
+        <!-- Filter Section -->
+        <div class="row mb-4">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">Filters</h5>
+                        <div class="form-inline">
+                            <select id="timePeriodSelect" class="form-control mr-2">
+                                <option value="week">This Week</option>
+                                <option value="2weeks">2 Weeks</option>
+                                <option value="month">1 Month</option>
+                                <option value="all_time">All Time</option>
+                            </select>
+                            <button id="applyFilterBtn" class="btn btn-primary mr-2">Apply Filter</button>
+                            <button id="selectChartsBtn" class="btn btn-secondary mr-2" data-toggle="modal" data-target="#filterModal">Select Charts</button>
+                            <button id="resetFilterBtn" class="btn btn-outline-secondary">Reset</button>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="row">
+            <div class="col-md-6">
                 <div class="chart-container">
                     <canvas id="muscleGroupChart"></canvas>
                 </div>
@@ -60,6 +76,53 @@
         </div>
     </div>
 
+    <!-- Modal for selecting charts -->
+    <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="filterModalLabel">Select Charts to Filter</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="muscleGroupChart" id="muscleGroupChartCheck" checked>
+                        <label class="form-check-label" for="muscleGroupChartCheck">
+                            Muscle Groups Worked
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="bmiChart" id="bmiChartCheck" checked>
+                        <label class="form-check-label" for="bmiChartCheck">
+                            BMI Chart
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="totalRepsChart" id="totalRepsChartCheck" checked>
+                        <label class="form-check-label" for="totalRepsChartCheck">
+                            Total Reps Chart
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="workoutDurationChart" id="workoutDurationChartCheck" checked>
+                        <label class="form-check-label" for="workoutDurationChartCheck">
+                            Workout Duration Chart
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="applyChartSelection" data-dismiss="modal">Apply</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="{{ url_for('static', filename='js/workout_charts.js') }}"></script>
 </body>

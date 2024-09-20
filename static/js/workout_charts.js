@@ -1,5 +1,6 @@
 // Global variables to store chart instances
 let muscleGroupChart, bmiChart, totalRepsChart, workoutDurationChart;
+let selectedCharts = ['muscleGroupChart', 'bmiChart', 'totalRepsChart', 'workoutDurationChart'];
 
 // Common chart options
 const commonOptions = {
@@ -131,18 +132,34 @@ function createWorkoutDurationChart(chartData) {
     });
 }
 
-// Function to update Muscle Group Chart
-function updateMuscleGroupChart(chartData) {
-    muscleGroupChart.data.datasets[0].data = chartData.muscle_group_sets;
-    muscleGroupChart.update();
+// Function to update charts
+function updateCharts(chartData) {
+    if (selectedCharts.includes('muscleGroupChart')) {
+        muscleGroupChart.data.datasets[0].data = chartData.muscle_group_sets;
+        muscleGroupChart.update();
+    }
+    if (selectedCharts.includes('bmiChart')) {
+        bmiChart.data.datasets[0].data = [chartData.bmi];
+        bmiChart.update();
+    }
+    if (selectedCharts.includes('totalRepsChart')) {
+        totalRepsChart.data.labels = chartData.workout_days;
+        totalRepsChart.data.datasets[0].data = chartData.total_reps;
+        totalRepsChart.update();
+    }
+    if (selectedCharts.includes('workoutDurationChart')) {
+        workoutDurationChart.data.labels = chartData.workout_days;
+        workoutDurationChart.data.datasets[0].data = chartData.workout_durations;
+        workoutDurationChart.update();
+    }
 }
 
-// Function to fetch data and update chart
-function fetchDataAndUpdateChart(timePeriod) {
+// Function to fetch data and update charts
+function fetchDataAndUpdateCharts(timePeriod) {
     fetch(`/get_chart_data?time_period=${timePeriod}`)
         .then(response => response.json())
         .then(data => {
-            updateMuscleGroupChart(data);
+            updateCharts(data);
         })
         .catch(error => console.error('Error:', error));
 }
@@ -155,13 +172,29 @@ function createCharts(chartData) {
     createWorkoutDurationChart(chartData);
 }
 
-// Event listeners for time period buttons
+// Event listeners
 document.addEventListener('DOMContentLoaded', function() {
-    document.querySelectorAll('.btn-group button').forEach(button => {
-        button.addEventListener('click', function() {
-            const period = this.getAttribute('data-period');
-            fetchDataAndUpdateChart(period);
+    const applyFilterBtn = document.getElementById('applyFilterBtn');
+    const resetFilterBtn = document.getElementById('resetFilterBtn');
+    const timePeriodSelect = document.getElementById('timePeriodSelect');
+    const applyChartSelection = document.getElementById('applyChartSelection');
+
+    applyFilterBtn.addEventListener('click', function() {
+        const timePeriod = timePeriodSelect.value;
+        fetchDataAndUpdateCharts(timePeriod);
+    });
+
+    resetFilterBtn.addEventListener('click', function() {
+        timePeriodSelect.value = 'week';
+        selectedCharts = ['muscleGroupChart', 'bmiChart', 'totalRepsChart', 'workoutDurationChart'];
+        document.querySelectorAll('#filterModal input[type="checkbox"]').forEach(checkbox => {
+            checkbox.checked = true;
         });
+        fetchDataAndUpdateCharts('week');
+    });
+
+    applyChartSelection.addEventListener('click', function() {
+        selectedCharts = Array.from(document.querySelectorAll('#filterModal input[type="checkbox"]:checked')).map(checkbox => checkbox.value);
     });
 
     // Initial chart creation
