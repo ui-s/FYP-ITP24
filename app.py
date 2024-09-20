@@ -11,6 +11,7 @@ import random
 from flask import jsonify
 from datetime import datetime, timedelta
 import traceback
+import csv
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -212,6 +213,52 @@ def record_workout(day):
     workout_plan = session.get('workout_plan', {})
     day_workout = workout_plan.get(day.capitalize(), {})
     return render_template('record_workout.html', day=day, workout=day_workout)
+
+@app.route('/save_workout', methods=['POST'])
+def save_workout():
+    try:
+        data = request.json
+        
+        # Get current date and derive day and week number
+        current_date = datetime.now()
+        day = current_date.strftime('%A')
+        week_no = current_date.isocalendar()[1]
+        
+        # Prepare the row to be written to CSV
+        row = [
+            data['userId'],
+            '',  # Username (leave blank for now)
+            '',  # Gender (leave blank for now)
+            0,   # Age (default to 0)
+            0,   # Height_cm (default to 0)
+            0,   # Weight_kg (default to 0)
+            current_date.strftime('%d/%m/%Y'),
+            day,
+            week_no,
+            0,   # Bench_pr(kg) (default to 0)
+            0,   # Squat_pr(kg) (default to 0)
+            0,   # Deadlift_pr(kg) (default to 0)
+            data['chestSets'],
+            data['backSets'],
+            data['legsSets'],
+            data['armsSets'],
+            data['shoulderSets'],
+            data['coreSets'],
+            data['durationMins'],
+            0,   # Total_reps (default to 0)
+            data['aftworkoutWeight']
+        ]
+        
+        # Append the new row to the CSV file
+        with open('GymAppUsersDataset.csv', 'a', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(row)
+        
+        return jsonify({'message': 'Workout saved successfully'}), 200
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
 @app.route('/stats')
 def stats():
     return render_template('stats.html')

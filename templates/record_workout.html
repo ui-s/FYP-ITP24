@@ -84,8 +84,105 @@
         </div>
 
         <div class="text-center mt-4">
-            <button id="save-workout" class="btn btn-success">Save Workout</button>
+            <button id="saveWorkoutBtn" class="btn btn-primary">Save Workout</button>
         </div>
+
+          <!-- Modal for entering workout data -->
+    <div class="modal fade" id="workoutDataModal" tabindex="-1" role="dialog" aria-labelledby="workoutDataModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="workoutDataModalLabel">Enter Workout Data</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="workoutDataForm">
+                        <div class="form-group">
+                            <label for="userId">User ID:</label>
+                            <input type="text" class="form-control" id="userId" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="chestSets">Chest Sets:</label>
+                            <input type="number" class="form-control" id="chestSets" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="backSets">Back Sets:</label>
+                            <input type="number" class="form-control" id="backSets" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="legsSets">Legs Sets:</label>
+                            <input type="number" class="form-control" id="legsSets" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="armsSets">Arms Sets:</label>
+                            <input type="number" class="form-control" id="armsSets" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="shoulderSets">Shoulder Sets:</label>
+                            <input type="number" class="form-control" id="shoulderSets" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="coreSets">Core Sets:</label>
+                            <input type="number" class="form-control" id="coreSets" min="0" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label for="durationMins">Duration (minutes):</label>
+                            <input type="number" class="form-control" id="durationMins" min="0" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="aftworkoutWeight">Weight after workout (kg):</label>
+                            <input type="number" class="form-control" id="aftworkoutWeight" step="0.1" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="submitWorkoutData">Done</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+$(document).ready(function() {
+    $('#saveWorkoutBtn').click(function() {
+        $('#workoutDataModal').modal('show');
+    });
+
+    $('#submitWorkoutData').click(function() {
+        var formData = {
+            userId: $('#userId').val(),
+            chestSets: $('#chestSets').val() || 0,
+            backSets: $('#backSets').val() || 0,
+            legsSets: $('#legsSets').val() || 0,
+            armsSets: $('#armsSets').val() || 0,
+            shoulderSets: $('#shoulderSets').val() || 0,
+            coreSets: $('#coreSets').val() || 0,
+            durationMins: $('#durationMins').val(),
+            aftworkoutWeight: $('#aftworkoutWeight').val()
+        };
+
+        $.ajax({
+            url: '/save_workout',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                alert('Workout saved successfully!');
+                $('#workoutDataModal').modal('hide');
+            },
+            error: function(error) {
+                alert('Error saving workout: ' + error.responseText);
+            }
+        });
+    });
+});
+</script>
         
         <div class="text-center mt-3">
             <a href="{{ url_for('workout', day=day) }}" class="btn btn-secondary">Back to Workout Details</a>
@@ -96,6 +193,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            let isWorkoutModified = false;
             let totalWorkoutSeconds = 0;
             let totalWorkoutInterval = null;
             let activeTimer = null;
