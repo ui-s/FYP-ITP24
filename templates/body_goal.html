@@ -15,16 +15,19 @@
                 <div class="form-check">
                     <input type="radio" id="lose-weight" name="body_goal" value="lose_weight" required {% if session.get('body_goal') == 'lose_weight' %}checked{% endif %}>
                     <label for="lose-weight"><strong>Lose Weight</strong></label>
+                    <p>(Aim to reduce body weight through a cardio, improving health and physique.)</p>
                 </div>
                 
                 <div class="form-check">
                     <input type="radio" id="gain-muscle" name="body_goal" value="gain_muscle" required {% if session.get('body_goal') == 'gain_muscle' %}checked{% endif %}>
                     <label for="gain-muscle"><strong>Gain Muscle</strong></label>
+                    <p>Focus on increasing muscle mass and strength through resistance training.</p>
                 </div>
                 
                 <div class="form-check">
                     <input type="radio" id="increase-strength" name="body_goal" value="increase_strength" required {% if session.get('body_goal') == 'increase_strength' %}checked{% endif %}>
                     <label for="increase-strength"><strong>Increase Strength</strong></label>
+                    <p>Enhance overall strength and power, beneficial for sports and daily activities.</p>
                 </div>
             </div>
             

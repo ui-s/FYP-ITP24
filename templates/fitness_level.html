@@ -15,16 +15,19 @@
                 <div class="form-check">
                     <input type="radio" id="beginner" name="fitness_level" value="beginner" required {% if session.get('fitness_level') == 'beginner' %}checked{% endif %}>
                     <label for="beginner"><strong>Beginner</strong></label>
+                    <p>Just started going to the gym, learning the basics of fitness.</p>
                 </div>
                 
                 <div class="form-check">
                     <input type="radio" id="intermediate" name="fitness_level" value="intermediate" required {% if session.get('fitness_level') == 'intermediate' %}checked{% endif %}>
                     <label for="intermediate"><strong>Intermediate</strong></label>
+                    <p>Have some experience but still looking to improve knowledge and skills.</p>
                 </div>
                 
                 <div class="form-check">
                     <input type="radio" id="advanced" name="fitness_level" value="advanced" required {% if session.get('fitness_level') == 'advanced' %}checked{% endif %}>
                     <label for="advanced"><strong>Advanced</strong></label>
+                    <p>Extensive knowledge and experience in fitness and workouts.</p>
                 </div>
             </div>
             

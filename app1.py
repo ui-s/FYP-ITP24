@@ -1,6 +1,6 @@
-# app.py
+#app.py
 from flask import Flask, render_template, request, redirect, url_for, session, flash, send_file
-from data_cleaning import clean_workout_schedule_data, clean_workout_days_data
+from data_cleaning import clean_workout_schedule_data, clean_workout_days_data, clean_problem_area_data
 from model_improved import WorkoutModel
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -9,13 +9,14 @@ import seaborn as sns
 import os
 import random
 from flask import jsonify
+from datetime import datetime, timedelta
+import traceback
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 
 # Load dataset globally to avoid reloading for each request
 USERS_DF = pd.read_csv('GymAppUsersDataset.csv')
-WORKOUT_DAYS_DF = pd.read_csv('WorkoutDaysDataset.csv')  # Load workout dataset
 
 @app.route('/')
 def index():
@@ -92,9 +93,10 @@ def generate_workout_plan():
             'workout_days': session.get('workout_days', '')
         }
 
-        # Data Cleaning
+        # Perform data cleaning
         clean_workout_schedule_data()
         clean_workout_days_data()
+        clean_problem_area_data()
 
         # Initialize the workout model
         workout_model = WorkoutModel()
@@ -164,28 +166,52 @@ def display_workout_plan():
     workout_plan = session.get('workout_plan', {})
     return render_template('weekly_workout_plan.html', workout_plan=workout_plan)
 
+
 @app.route('/workout/<day>')
 def workout(day):
     workout_plan = session.get('workout_plan', {})
     day_workout = workout_plan.get(day.capitalize(), {})
-    return render_template('workout_day.html', day=day, workout=day_workout)
+    
+    # Load the WorkoutDaysDataset
+    df = pd.read_csv('data/processed/Cleaned_WorkoutDaysDataset.csv')
+    
+    # Filter exercises based on the workout type
+    workout_type = day_workout.get('type', '')
+    available_exercises = df[df['WorkoutDay'] == workout_type]['Exercise'].tolist()
+    
+    return render_template('workout_day.html', day=day, workout=day_workout, available_exercises=available_exercises)
 
-@app.route('/record_workout/<day>', methods=['GET', 'POST'])
-def record_workout(day):
+@app.route('/update_workout/<day>', methods=['POST'])
+def update_workout(day):
+    data = request.json
+    exercises = data.get('exercises', [])
+    
     workout_plan = session.get('workout_plan', {})
     day_workout = workout_plan.get(day.capitalize(), {})
     
-    if request.method == 'POST':
-        # Logic to save the recorded workout data
-        exercises = request.form.getlist('exercise_name[]')
-        weights = request.form.getlist('weight[]')
-        reps = request.form.getlist('reps[]')
-        # Implement any database save logic here
-        flash('Workout recorded successfully!', 'success')
-        return redirect(url_for('display_workout_plan'))
+    # Load the WorkoutDaysDataset to get exercise details
+    df = pd.read_csv('data/processed/Cleaned_WorkoutDaysDataset.csv')
     
-    return render_template('record_workout.html', day=day, workout=day_workout)
+    # Update the exercises for the day
+    updated_exercises = []
+    for exercise_name in exercises:
+        exercise_data = df[df['Exercise'] == exercise_name].to_dict('records')
+        if exercise_data:
+            updated_exercises.append(exercise_data[0])
+        else:
+            updated_exercises.append({'Exercise': exercise_name, 'TargetedMuscle': 'To be determined'})
+    
+    day_workout['exercises'] = updated_exercises
+    workout_plan[day.capitalize()] = day_workout
+    session['workout_plan'] = workout_plan
+    
+    return jsonify({'success': True})
 
+@app.route('/record_workout/<day>')
+def record_workout(day):
+    workout_plan = session.get('workout_plan', {})
+    day_workout = workout_plan.get(day.capitalize(), {})
+    return render_template('record_workout.html', day=day, workout=day_workout)
 @app.route('/stats')
 def stats():
     return render_template('stats.html')
@@ -195,38 +221,49 @@ def get_chart_data():
     try:
         # Load the GymAppUsersDataset
         df = pd.read_csv('GymAppUsersDataset.csv')
-        print("DataFrame loaded:", df.head())  # Print first few rows
+        
+        # Convert 'Date' column to datetime
+        df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+        
+        # Get the time period from the request
+        time_period = request.args.get('time_period', 'week')
+        
+        # Calculate the start date based on the time period
+        end_date = df['Date'].max()
+        if time_period == 'week':
+            start_date = end_date - timedelta(days=7)
+        elif time_period == '2weeks':
+            start_date = end_date - timedelta(days=14)
+        elif time_period == 'month':
+            start_date = end_date - timedelta(days=30)
+        else:  # 'all_time'
+            start_date = df['Date'].min()
+        
+        # Filter the dataframe based on the date range
+        df_filtered = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 
         # Process data for Muscle Group Chart
         muscle_groups = ['Chest', 'Back', 'Legs', 'Arms', 'Shoulder', 'Core']
         muscle_group_sets = [
-            int(df['Chest_sets'].sum()),
-            int(df['Back_sets'].sum()),
-            int(df['Legs_sets'].sum()),
-            int(df['Arms_sets'].sum()),
-            int(df['Shoulder_sets'].sum()),
-            int(df['Core_sets'].sum())
+            int(df_filtered['Chest_sets'].sum()),
+            int(df_filtered['Back_sets'].sum()),
+            int(df_filtered['Legs_sets'].sum()),
+            int(df_filtered['Arms_sets'].sum()),
+            int(df_filtered['Shoulder_sets'].sum()),
+            int(df_filtered['Core_sets'].sum())
         ]
-        print("Muscle group sets:", muscle_group_sets)
-
         # Process data for Workout Duration Chart
-        workout_days = df['Day'].tolist()
-        workout_durations = df['Duration_mins'].tolist()
-        workout_durations = [int(d) for d in workout_durations]  # Convert to regular Python int
-        print("Workout days:", workout_days)
-        print("Workout durations:", workout_durations)
+        workout_days = df_filtered['Day'].tolist()
+        workout_durations = df_filtered['Duration_mins'].tolist()
 
         # Process data for Total Reps Chart
-        total_reps = df['Total_reps'].tolist()
-        total_reps = [int(r) for r in total_reps]  # Convert to regular Python int
-        print("Total reps:", total_reps)
+        total_reps = df_filtered['Total_reps'].tolist()
 
         # Calculate BMI (using the last row of data)
-        last_record = df.iloc[-1]
+        last_record = df_filtered.iloc[-1]
         height_m = float(last_record['Height_cm']) / 100
         weight_kg = float(last_record['Weight_kg'])
         bmi = weight_kg / (height_m ** 2)
-        print("Calculated BMI:", bmi)
 
         chart_data = {
             'muscle_groups': muscle_groups,
@@ -234,20 +271,13 @@ def get_chart_data():
             'workout_days': workout_days,
             'workout_durations': workout_durations,
             'total_reps': total_reps,
-            'bmi': float(bmi)  # Ensure BMI is a regular float
+            'bmi': float(bmi)
         }
 
-        print("Returning chart data:", chart_data)
         return jsonify(chart_data)
     except Exception as e:
         print(f"Error in get_chart_data: {str(e)}")
         return jsonify({"error": str(e)}), 500
-
-# Endpoint to get the list of workouts
-@app.route('/get_workouts')
-def get_workouts():
-    exercises = WORKOUT_DAYS_DF['Exercise'].unique().tolist()  # Get unique exercises from dataset
-    return jsonify(exercises)
 
 if __name__ == '__main__':
     app.run(debug=True)
