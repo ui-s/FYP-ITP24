@@ -299,6 +299,7 @@ def get_chart_data():
             int(df_filtered['Shoulder_sets'].sum()),
             int(df_filtered['Core_sets'].sum())
         ]
+        
         # Process data for Workout Duration Chart
         workout_days = df_filtered['Day'].tolist()
         workout_durations = df_filtered['Duration_mins'].tolist()
@@ -306,11 +307,15 @@ def get_chart_data():
         # Process data for Total Reps Chart
         total_reps = df_filtered['Total_reps'].tolist()
 
-        # Calculate BMI (using the last row of data)
-        last_record = df_filtered.iloc[-1]
-        height_m = float(last_record['Height_cm']) / 100
-        weight_kg = float(last_record['Weight_kg'])
-        bmi = weight_kg / (height_m ** 2)
+        # Since we don't have Height_cm and Weight_kg, we'll skip the BMI calculation
+        # Instead, we'll use the average aftworkout_weight as a placeholder
+        avg_weight = df_filtered['aftworkout_weight'].mean()
+
+        # New chart data processing
+        bodyweight_data = df_filtered[['Date', 'aftworkout_weight']].sort_values('Date').to_dict('records')
+        bench_pr_data = df_filtered[['Date', 'Bench_pr(kg)']].sort_values('Date').to_dict('records')
+        squat_pr_data = df_filtered[['Date', 'Squat_pr(kg)']].sort_values('Date').to_dict('records')
+        deadlift_pr_data = df_filtered[['Date', 'Deadlift_pr(kg)']].sort_values('Date').to_dict('records')
 
         chart_data = {
             'muscle_groups': muscle_groups,
@@ -318,12 +323,18 @@ def get_chart_data():
             'workout_days': workout_days,
             'workout_durations': workout_durations,
             'total_reps': total_reps,
-            'bmi': float(bmi)
+            'avg_weight': float(avg_weight),  # Use average weight instead of BMI
+            'bodyweight_data': bodyweight_data,
+            'bench_pr_data': bench_pr_data,
+            'squat_pr_data': squat_pr_data,
+            'deadlift_pr_data': deadlift_pr_data
+
         }
 
         return jsonify(chart_data)
     except Exception as e:
         print(f"Error in get_chart_data: {str(e)}")
+        print(f"Traceback: {traceback.format_exc()}")
         return jsonify({"error": str(e)}), 500
 
 if __name__ == '__main__':
