@@ -227,23 +227,18 @@ def save_workout():
         # Prepare the row to be written to CSV
         row = [
             data['userId'],
-            '',  # Username (leave blank for now)
-            '',  # Gender (leave blank for now)
-            0,   # Age (default to 0)
-            0,   # Height_cm (default to 0)
-            0,   # Weight_kg (default to 0)
             current_date.strftime('%d/%m/%Y'),
             day,
             week_no,
             0,   # Bench_pr(kg) (default to 0)
             0,   # Squat_pr(kg) (default to 0)
             0,   # Deadlift_pr(kg) (default to 0)
-            data['chestSets'],
-            data['backSets'],
-            data['legsSets'],
-            data['armsSets'],
-            data['shoulderSets'],
-            data['coreSets'],
+            data.get('chestSets', 0),
+            data.get('backSets', 0),
+            data.get('legsSets', 0),
+            data.get('armsSets', 0),
+            data.get('shoulderSets', 0),
+            data.get('coreSets', 0),
             data['durationMins'],
             0,   # Total_reps (default to 0)
             data['aftworkoutWeight']
@@ -256,8 +251,8 @@ def save_workout():
         
         return jsonify({'message': 'Workout saved successfully'}), 200
     except Exception as e:
+        print(f"Error saving workout: {str(e)}")  # Log the error
         return jsonify({'error': str(e)}), 500
-
 
 @app.route('/stats')
 def stats():
