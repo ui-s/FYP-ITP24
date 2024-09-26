@@ -97,8 +97,8 @@
         <div class="row align-items-end mb-4">
             <div class="col-md-6">
                 <div class="input-group">
-                    <span class="input-group-text">Current Weight (lbs):</span>
-                    <input type="number" id="current-weight" class="form-control" placeholder="Enter weight">
+                    <span class="input-group-text">Current Weight (kg):</span>
+                    <input type="number" id="current-weight" class="form-control" placeholder="Enter weight in kg" step="0.1">
                 </div>
             </div>
             <div class="col-md-6 text-md-end mt-3 mt-md-0">
@@ -121,8 +121,8 @@
                     <div class="sets-container">
                         <div class="input-group mb-3">
                             <span class="input-group-text">Set 1:</span>
-                            <input type="number" class="form-control" placeholder="Reps">
-                            <input type="number" class="form-control" placeholder="Weight (lbs)">
+                            <input type="number" class="form-control" placeholder="Reps" min="0">
+                            <input type="number" class="form-control" placeholder="Weight (kg)" step="0.1" min="0">
                             <button class="btn btn-outline-secondary remove-set" type="button">Remove</button>
                         </div>
                     </div>
@@ -137,21 +137,21 @@
         </div>
 
           <!-- Modal for entering workout data -->
-    <div class="modal fade" id="workoutDataModal" tabindex="-1" role="dialog" aria-labelledby="workoutDataModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="workoutDataModalLabel">Enter Workout Data</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form id="workoutDataForm">
-                        <div class="form-group">
-                            <label for="userId">User ID:</label>
-                            <input type="text" class="form-control" id="userId" required>
-                        </div>
+          <div class="modal fade" id="workoutDataModal" tabindex="-1" role="dialog" aria-labelledby="workoutDataModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="workoutDataModalLabel">Enter Workout Data</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="workoutDataForm">
+                            <div class="form-group">
+                                <label for="userId">User ID:</label>
+                                <input type="text" class="form-control" id="userId" required>
+                            </div>
                         <div class="form-group">
                             <label for="chestSets">Chest Sets:</label>
                             <input type="number" class="form-control" id="chestSets" readonly>
@@ -181,13 +181,20 @@
                             <input type="number" class="form-control" id="durationMins" required>
                         </div>
                         <div class="form-group">
+                            <label for="totalReps">Total Reps:</label>
+                            <input type="number" class="form-control" id="totalReps" readonly>
+                        </div>
+                        <div class="form-group">
+                            <label for="totalWeight">Total Weight (kg):</label>
+                            <input type="number" class="form-control" id="totalWeight" step="0.1" readonly>
+                        </div>
+                        <div class="form-group">
                             <label for="aftworkoutWeight">Weight after workout (kg):</label>
                             <input type="number" class="form-control" id="aftworkoutWeight" step="0.1" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                     <button type="button" class="btn btn-primary" id="submitWorkoutData">Done</button>
                 </div>
             </div>
@@ -387,163 +394,188 @@
         });
 
         </script>
-
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        let isWorkoutModified = false;
-        const saveWorkoutBtn = document.getElementById('saveWorkoutBtn');
-    
-        saveWorkoutBtn.addEventListener('click', function(e) {
-            e.preventDefault();
-            if (validateWorkoutForm()) {
-                // All fields are filled, proceed with saving
-                let workoutData = processWorkoutData();
-                populateModal(workoutData);
-                $('#workoutDataModal').modal('show');
-                isWorkoutModified = false; // Reset the modified flag
-            } else {
-                alert('Please fill out all fields for each exercise before saving.');
-                // Do not open the modal
-            }
-        });
-    
-        function validateWorkoutForm() {
-            let isValid = true;
-            const exerciseCards = document.querySelectorAll('.exercise-card');
-    
-            exerciseCards.forEach(card => {
-                const setInputs = card.querySelectorAll('.input-group input[type="number"]');
-                setInputs.forEach(input => {
-                    if (input.value.trim() === '') {
-                        isValid = false;
-                        input.classList.add('is-invalid');
-                    } else {
-                        input.classList.remove('is-invalid');
-                    }
-                });
-            });
-    
-            // Check if current weight is filled
-            const currentWeightInput = document.getElementById('current-weight');
-            if (currentWeightInput && currentWeightInput.value.trim() === '') {
-                isValid = false;
-                currentWeightInput.classList.add('is-invalid');
-            } else if (currentWeightInput) {
-                currentWeightInput.classList.remove('is-invalid');
-            }
-    
-            return isValid;
-        }
-    
-        function processWorkoutData() {
-            let workoutData = {
-                chestSets: 0,
-                backSets: 0,
-                legsSets: 0,
-                armsSets: 0,
-                shoulderSets: 0,
-                coreSets: 0
-            };
-    
-            $('.exercise-card').each(function() {
-                let muscle = $(this).data('muscle').toLowerCase();
-                let sets = $(this).find('.input-group').length;
-    
-                if (muscle.includes('chest')) workoutData.chestSets += sets;
-                if (muscle.includes('back')) workoutData.backSets += sets;
-                if (muscle.includes('leg') || muscle.includes('glute') || muscle.includes('calf') || muscle.includes('thigh')) workoutData.legsSets += sets;
-                if (muscle.includes('bicep') || muscle.includes('tricep') || muscle.includes('forearm')) workoutData.armsSets += sets;
-                if (muscle.includes('shoulder')) workoutData.shoulderSets += sets;
-                if (muscle.includes('core') || muscle.includes('abs')) workoutData.coreSets += sets;
-            });
-    
-            return workoutData;
-        }
-    
-        function populateModal(workoutData) {
-            $('#chestSets').val(workoutData.chestSets);
-            $('#backSets').val(workoutData.backSets);
-            $('#legsSets').val(workoutData.legsSets);
-            $('#armsSets').val(workoutData.armsSets);
-            $('#shoulderSets').val(workoutData.shoulderSets);
-            $('#coreSets').val(workoutData.coreSets);
-            
-            // Calculate duration based on total workout time
-            let totalTimeArray = $('#total-time').text().split(':');
-            let hours = parseInt(totalTimeArray[0]);
-            let minutes = parseInt(totalTimeArray[1]);
-            let seconds = parseInt(totalTimeArray[2]);
-            
-            let totalMinutes = hours * 60 + minutes + Math.ceil(seconds / 60);
-            $('#durationMins').val(totalMinutes);
-            
-            // Set weight after workout (you might want to adjust this)
-            $('#aftworkoutWeight').val($('#current-weight').val());
-        }
-    
-        // Add event listeners to remove 'is-invalid' class when user starts typing
-        document.querySelectorAll('input[type="number"]').forEach(input => {
-            input.addEventListener('input', function() {
-                this.classList.remove('is-invalid');
-                setWorkoutModified();
-            });
-        });
-    
-        function setWorkoutModified() {
-            isWorkoutModified = true;
-        }
-    
-        // Add event listeners to detect changes
-        if (document.getElementById('current-weight')) {
-            document.getElementById('current-weight').addEventListener('input', setWorkoutModified);
-        }
-        document.querySelectorAll('.start-timer, .stop-timer, .add-set, .remove-set').forEach(btn => {
-            btn.addEventListener('click', setWorkoutModified);
-        });
-        document.getElementById('exercise-list').addEventListener('input', function(e) {
-            if (e.target.matches('input[type="number"]')) {
-                setWorkoutModified();
-            }
-        });
-    
-        // Add warning before page unload
-        window.addEventListener('beforeunload', function (e) {
-            if (isWorkoutModified) {
-                e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
-            }
-        });
-    
-        // Handle form submission
-        $('#submitWorkoutData').click(function() {
-            var formData = {
-                userId: $('#userId').val(),
-                chestSets: $('#chestSets').val() || 0,
-                backSets: $('#backSets').val() || 0,
-                legsSets: $('#legsSets').val() || 0,
-                armsSets: $('#armsSets').val() || 0,
-                shoulderSets: $('#shoulderSets').val() || 0,
-                coreSets: $('#coreSets').val() || 0,
-                durationMins: $('#durationMins').val(),
-                aftworkoutWeight: $('#aftworkoutWeight').val()
-            };
-    
-            $.ajax({
-                url: '/save_workout',
-                type: 'POST',
-                contentType: 'application/json',
-                data: JSON.stringify(formData),
-                success: function(response) {
-                    alert('Workout saved successfully!');
-                    $('#workoutDataModal').modal('hide');
-                    isWorkoutModified = false;
-                },
-                error: function(error) {
-                    alert('Error saving workout: ' + error.responseText);
+document.addEventListener('DOMContentLoaded', function() {
+    let isWorkoutModified = false;
+    const saveWorkoutBtn = document.getElementById('saveWorkoutBtn');
+    const workoutDataModal = new bootstrap.Modal(document.getElementById('workoutDataModal'));
+
+    function validateWorkoutForm() {
+        let isValid = true;
+        const exerciseCards = document.querySelectorAll('.exercise-card');
+
+        exerciseCards.forEach(card => {
+            const setInputs = card.querySelectorAll('.input-group input[type="number"]');
+            setInputs.forEach(input => {
+                if (input.value.trim() === '') {
+                    isValid = false;
+                    input.classList.add('is-invalid');
+                } else {
+                    input.classList.remove('is-invalid');
                 }
             });
         });
+
+        const currentWeightInput = document.getElementById('current-weight');
+        if (currentWeightInput && currentWeightInput.value.trim() === '') {
+            isValid = false;
+            currentWeightInput.classList.add('is-invalid');
+        } else if (currentWeightInput) {
+            currentWeightInput.classList.remove('is-invalid');
+        }
+
+        return isValid;
+    }
+
+    function processWorkoutData() {
+        let workoutData = {
+            chestSets: 0,
+            backSets: 0,
+            legsSets: 0,
+            armsSets: 0,
+            shoulderSets: 0,
+            coreSets: 0,
+            totalReps: 0,
+            totalWeight: 0,
+            exerciseData: []
+        };
+
+        $('.exercise-card').each(function() {
+            let muscle = $(this).data('muscle').toLowerCase();
+            let sets = $(this).find('.input-group').length;
+            let exerciseName = $(this).find('.card-title').text().split('(')[0].trim();
+            let exerciseSets = [];
+
+            if (muscle.includes('chest') || muscle.includes('upper chest') || muscle.includes('middle chest') || muscle.includes('lower chest')) workoutData.chestSets += sets;
+            if (muscle.includes('back') || muscle.includes('upper back') || muscle.includes('middle back') || muscle.includes('lower back')) workoutData.backSets += sets;
+            if (muscle.includes('leg') || muscle.includes('quadriceps') || muscle.includes('glute') || muscle.includes('calves') || muscle.includes('hamstrings') || muscle.includes('inner thighs')) workoutData.legsSets += sets;
+            if (muscle.includes('bicep') || muscle.includes('tricep') || muscle.includes('forearm') || muscle.includes('biceps') || muscle.includes('triceps') || muscle.includes('forearms')) workoutData.armsSets += sets;
+            if (muscle.includes('shoulder') || muscle.includes('shoulders')) workoutData.shoulderSets += sets;
+            if (muscle.includes('core') || muscle.includes('abs') || muscle.includes('full body')) workoutData.coreSets += sets;
+
+            $(this).find('.input-group').each(function() {
+                let reps = parseInt($(this).find('input').eq(0).val()) || 0;
+                let weight = parseFloat($(this).find('input').eq(1).val()) || 0;
+                workoutData.totalReps += reps;
+                workoutData.totalWeight += reps * weight;
+                exerciseSets.push({ reps: reps, weight: weight });
+            });
+
+            workoutData.exerciseData.push({
+                exerciseName: exerciseName,
+                sets: exerciseSets
+            });
+        });
+
+        return workoutData;
+    }
+
+    function populateModal(workoutData) {
+        $('#chestSets').val(workoutData.chestSets);
+        $('#backSets').val(workoutData.backSets);
+        $('#legsSets').val(workoutData.legsSets);
+        $('#armsSets').val(workoutData.armsSets);
+        $('#shoulderSets').val(workoutData.shoulderSets);
+        $('#coreSets').val(workoutData.coreSets);
+        
+        let totalTimeArray = $('#total-time').text().split(':');
+        let hours = parseInt(totalTimeArray[0]);
+        let minutes = parseInt(totalTimeArray[1]);
+        let seconds = parseInt(totalTimeArray[2]);
+        
+        let totalMinutes = hours * 60 + minutes + Math.ceil(seconds / 60);
+        $('#durationMins').val(totalMinutes);
+        
+        $('#aftworkoutWeight').val($('#current-weight').val());
+        $('#totalReps').val(workoutData.totalReps);
+        $('#totalWeight').val(workoutData.totalWeight.toFixed(1));
+    }
+
+    saveWorkoutBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        if (validateWorkoutForm()) {
+            let workoutData = processWorkoutData();
+            populateModal(workoutData);
+            workoutDataModal.show();
+            isWorkoutModified = false;
+        } else {
+            alert('Please fill out all fields for each exercise before saving.');
+        }
     });
-    </script>
+
+    $('#submitWorkoutData').click(function() {
+        if (!$('#userId').val().trim()) {
+            alert('Please enter a User ID.');
+            return;
+        }
+
+        var formData = {
+            userId: $('#userId').val(),
+            chestSets: $('#chestSets').val() || 0,
+            backSets: $('#backSets').val() || 0,
+            legsSets: $('#legsSets').val() || 0,
+            armsSets: $('#armsSets').val() || 0,
+            shoulderSets: $('#shoulderSets').val() || 0,
+            coreSets: $('#coreSets').val() || 0,
+            durationMins: $('#durationMins').val(),
+            totalReps: $('#totalReps').val(),
+            totalWeight: $('#totalWeight').val(),
+            aftworkoutWeight: $('#aftworkoutWeight').val(),
+            exerciseData: processWorkoutData().exerciseData
+        };
+
+        $.ajax({
+            url: '/save_workout',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(formData),
+            success: function(response) {
+                alert('Workout saved successfully!');
+                workoutDataModal.hide();
+                isWorkoutModified = false;
+                window.location.href = '/workout_plan';
+            },
+            error: function(error) {
+                alert('Error saving workout: ' + error.responseText);
+            }
+        });
+    });
+
+    // Handle modal close button (X)
+    document.querySelector('.modal .close').addEventListener('click', function() {
+        workoutDataModal.hide();
+    });
+
+
+    // Add event listeners to remove 'is-invalid' class when user starts typing
+    document.querySelectorAll('input[type="number"]').forEach(input => {
+        input.addEventListener('input', function() {
+            this.classList.remove('is-invalid');
+            isWorkoutModified = true;
+        });
+    });
+
+    // Add event listeners to detect changes
+    if (document.getElementById('current-weight')) {
+        document.getElementById('current-weight').addEventListener('input', () => isWorkoutModified = true);
+    }
+    document.querySelectorAll('.start-timer, .stop-timer, .add-set, .remove-set').forEach(btn => {
+        btn.addEventListener('click', () => isWorkoutModified = true);
+    });
+    document.getElementById('exercise-list').addEventListener('input', function(e) {
+        if (e.target.matches('input[type="number"]')) {
+            isWorkoutModified = true;
+        }
+    });
+
+    // Add warning before page unload
+    window.addEventListener('beforeunload', function (e) {
+        if (isWorkoutModified) {
+            e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+        }
+    });
+});
+</script>
 
 
 <script>

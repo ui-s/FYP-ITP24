@@ -16,8 +16,28 @@ import csv
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 
-# Load dataset globally to avoid reloading for each request
-USERS_DF = pd.read_csv('GymAppUsersDataset.csv')
+def load_users_df():
+    try:
+        # Try reading the CSV file normally
+        return pd.read_csv('GymAppUsersDataset.csv')
+    except pd.errors.ParserError:
+        # If there's an error, try to clean the file
+        with open('GymAppUsersDataset.csv', 'r') as f:
+            lines = f.readlines()
+        
+        # Remove any lines that don't have the correct number of fields
+        correct_field_count = len(lines[0].strip().split(','))
+        cleaned_lines = [line for line in lines if len(line.strip().split(',')) == correct_field_count]
+        
+        # Write the cleaned lines back to the file
+        with open('GymAppUsersDataset.csv', 'w') as f:
+            f.writelines(cleaned_lines)
+        
+        # Try reading the cleaned file
+        return pd.read_csv('GymAppUsersDataset.csv')
+
+# Use this function instead of directly reading the CSV
+USERS_DF = load_users_df()
 
 @app.route('/')
 def index():
@@ -214,46 +234,87 @@ def record_workout(day):
     day_workout = workout_plan.get(day.capitalize(), {})
     return render_template('record_workout.html', day=day, workout=day_workout)
 
+def ensure_file_termination():
+    filename = 'GymAppUsersDataset.csv'
+    with open(filename, 'ab+') as f:  # Open in binary append mode
+        f.seek(-1, os.SEEK_END)
+        last_char = f.read(1)
+        if last_char != b'\n':
+            f.write(b'\n')
+
+
 @app.route('/save_workout', methods=['POST'])
 def save_workout():
     try:
         data = request.json
+        user_id = data['userId']
         
-        # Get current date and derive day and week number
+        # Get current date and derive day
         current_date = datetime.now()
         day = current_date.strftime('%A')
-        week_no = current_date.isocalendar()[1]
+        
+        # Load WorkoutDaysDataset to check for PR exercises
+        workout_days_df = pd.read_csv('data/raw/WorkoutDaysDataset.csv')
+        pr_exercises = {
+            'Bench_pr(kg)': ['Barbell Bench Press'],
+            'Squat_pr(kg)': ['Barbell Squats'],
+            'Deadlift_pr(kg)': ['Deadlifts']
+        }
+        
+        # Load existing user data
+        user_data_df = pd.read_csv('GymAppUsersDataset.csv')
+        user_previous_data = user_data_df[user_data_df['Id'] == user_id].sort_values('Date').tail(1)
+        
+        # Initialize PR values
+        bench_pr = float(user_previous_data['Bench_pr(kg)'].values[0]) if not user_previous_data.empty else 0
+        squat_pr = float(user_previous_data['Squat_pr(kg)'].values[0]) if not user_previous_data.empty else 0
+        deadlift_pr = float(user_previous_data['Deadlift_pr(kg)'].values[0]) if not user_previous_data.empty else 0
+        
+        # Check for new PRs
+        for exercise_card in data['exerciseData']:
+            exercise_name = exercise_card['exerciseName']
+            max_weight = max([float(set_data['weight']) for set_data in exercise_card['sets']], default=0)
+            
+            if exercise_name in pr_exercises['Bench_pr(kg)']:
+                bench_pr = max(bench_pr, max_weight)
+            elif exercise_name in pr_exercises['Squat_pr(kg)']:
+                squat_pr = max(squat_pr, max_weight)
+            elif exercise_name in pr_exercises['Deadlift_pr(kg)']:
+                deadlift_pr = max(deadlift_pr, max_weight)
         
         # Prepare the row to be written to CSV
         row = [
-            data['userId'],
+            user_id,
             current_date.strftime('%d/%m/%Y'),
             day,
-            week_no,
-            0,   # Bench_pr(kg) (default to 0)
-            0,   # Squat_pr(kg) (default to 0)
-            0,   # Deadlift_pr(kg) (default to 0)
-            data.get('chestSets', 0),
-            data.get('backSets', 0),
-            data.get('legsSets', 0),
-            data.get('armsSets', 0),
-            data.get('shoulderSets', 0),
-            data.get('coreSets', 0),
-            data['durationMins'],
-            0,   # Total_reps (default to 0)
-            data['aftworkoutWeight']
+            str(bench_pr),
+            str(squat_pr),
+            str(deadlift_pr),
+            str(data.get('chestSets', 0)),
+            str(data.get('backSets', 0)),
+            str(data.get('legsSets', 0)),
+            str(data.get('armsSets', 0)),
+            str(data.get('shoulderSets', 0)),
+            str(data.get('coreSets', 0)),
+            str(data['durationMins']),
+            str(data['totalReps']),
+            str(data['totalWeight']),
+            str(data['aftworkoutWeight'])
         ]
         
+        # Join the row with commas and add a newline character
+        row_string = ','.join(row) + '\n'
+        
+        ensure_file_termination()
+        
         # Append the new row to the CSV file
-        with open('GymAppUsersDataset.csv', 'a', newline='') as f:
-            writer = csv.writer(f)
-            writer.writerow(row)
+        with open('GymAppUsersDataset.csv', 'a') as f:
+            f.write(row_string)
         
         return jsonify({'message': 'Workout saved successfully'}), 200
     except Exception as e:
-        print(f"Error saving workout: {str(e)}")  # Log the error
         return jsonify({'error': str(e)}), 500
-
+    
 @app.route('/stats')
 def stats():
     return render_template('stats.html')
@@ -261,76 +322,80 @@ def stats():
 @app.route('/get_chart_data')
 def get_chart_data():
     try:
-        # Load the GymAppUsersDataset
-        df = pd.read_csv('GymAppUsersDataset.csv')
+        user_id = request.args.get('user_id', '')
+        time_period = request.args.get('time_period', '7days')
         
-        # Convert 'Date' column to datetime
-        df['Date'] = pd.to_datetime(df['Date'], format='%d/%m/%Y')
+        app.logger.info(f"Received request with user_id: {user_id}, time_period: {time_period}")
+
+        columns_to_use = ['Id', 'Date', 'Day', 'Bench_pr(kg)', 'Squat_pr(kg)', 'Deadlift_pr(kg)',
+                          'Chest_sets', 'Back_sets', 'Legs_sets', 'Arms_sets', 'Shoulder_sets',
+                          'Core_sets', 'Duration_mins', 'Total_reps', 'Total_weight(kg)', 'aftworkout_weight']
         
-        # Get the time period from the request
-        time_period = request.args.get('time_period', 'week')
+        # Specify dtypes explicitly for problematic columns
+        dtype_dict = {'Duration_mins': float, 'Total_reps': float, 'Total_weight(kg)': float}
         
-        # Calculate the start date based on the time period
+        df = pd.read_csv('GymAppUsersDataset.csv', usecols=columns_to_use, parse_dates=['Date'], 
+                         dayfirst=True, dtype=dtype_dict)
+        
+        app.logger.info(f"Raw Duration_mins data: {df['Duration_mins'].tolist()}")
+        
+        if user_id:
+            df = df[df['Id'] == user_id]
+        
         end_date = df['Date'].max()
-        if time_period == 'week':
+        if time_period == '7days':
             start_date = end_date - timedelta(days=7)
-        elif time_period == '2weeks':
-            start_date = end_date - timedelta(days=14)
-        elif time_period == 'month':
+        elif time_period == '30days':
             start_date = end_date - timedelta(days=30)
-        else:  # 'all_time'
+        elif time_period == '2months':
+            start_date = end_date - timedelta(days=60)
+        else:
             start_date = df['Date'].min()
         
-        # Filter the dataframe based on the date range
         df_filtered = df[(df['Date'] >= start_date) & (df['Date'] <= end_date)]
 
-        # Process data for Muscle Group Chart
-        muscle_groups = ['Chest', 'Back', 'Legs', 'Arms', 'Shoulder', 'Core']
-        muscle_group_sets = [
-            int(df_filtered['Chest_sets'].sum()),
-            int(df_filtered['Back_sets'].sum()),
-            int(df_filtered['Legs_sets'].sum()),
-            int(df_filtered['Arms_sets'].sum()),
-            int(df_filtered['Shoulder_sets'].sum()),
-            int(df_filtered['Core_sets'].sum())
-        ]
-        
-        # Process data for Workout Duration Chart
-        workout_days = df_filtered['Day'].tolist()
-        workout_durations = df_filtered['Duration_mins'].tolist()
+        app.logger.info(f"Filtered Duration_mins data: {df_filtered['Duration_mins'].tolist()}")
 
-        # Process data for Total Reps Chart
-        total_reps = df_filtered['Total_reps'].tolist()
-
-        # Since we don't have Height_cm and Weight_kg, we'll skip the BMI calculation
-        # Instead, we'll use the average aftworkout_weight as a placeholder
-        avg_weight = df_filtered['aftworkout_weight'].mean()
-
-        # New chart data processing
-        bodyweight_data = df_filtered[['Date', 'aftworkout_weight']].sort_values('Date').to_dict('records')
-        bench_pr_data = df_filtered[['Date', 'Bench_pr(kg)']].sort_values('Date').to_dict('records')
-        squat_pr_data = df_filtered[['Date', 'Squat_pr(kg)']].sort_values('Date').to_dict('records')
-        deadlift_pr_data = df_filtered[['Date', 'Deadlift_pr(kg)']].sort_values('Date').to_dict('records')
+        def safe_float(value):
+            try:
+                return float(value) if pd.notna(value) else None
+            except ValueError:
+                return None
 
         chart_data = {
-            'muscle_groups': muscle_groups,
-            'muscle_group_sets': muscle_group_sets,
-            'workout_days': workout_days,
-            'workout_durations': workout_durations,
-            'total_reps': total_reps,
-            'avg_weight': float(avg_weight),  # Use average weight instead of BMI
-            'bodyweight_data': bodyweight_data,
-            'bench_pr_data': bench_pr_data,
-            'squat_pr_data': squat_pr_data,
-            'deadlift_pr_data': deadlift_pr_data
-
+            'muscle_groups': ['Chest', 'Back', 'Legs', 'Arms', 'Shoulder', 'Core'],
+            'muscle_group_sets': [
+                int(df_filtered['Chest_sets'].sum()),
+                int(df_filtered['Back_sets'].sum()),
+                int(df_filtered['Legs_sets'].sum()),
+                int(df_filtered['Arms_sets'].sum()),
+                int(df_filtered['Shoulder_sets'].sum()),
+                int(df_filtered['Core_sets'].sum())
+            ],
+            'workout_days': df_filtered['Date'].dt.strftime('%Y-%m-%d').tolist(),
+            'workout_durations': [safe_float(x) for x in df_filtered['Duration_mins']],
+            'total_reps': [safe_float(x) for x in df_filtered['Total_reps']],
+            'avg_weight': safe_float(df_filtered['aftworkout_weight'].mean()),
+            'bodyweight_data': df_filtered[['Date', 'aftworkout_weight']].to_dict('records'),
+            'bench_pr_data': df_filtered[['Date', 'Bench_pr(kg)']].to_dict('records'),
+            'squat_pr_data': df_filtered[['Date', 'Squat_pr(kg)']].to_dict('records'),
+            'deadlift_pr_data': df_filtered[['Date', 'Deadlift_pr(kg)']].to_dict('records'),
+            'after_workout_weight_data': df_filtered[['Date', 'aftworkout_weight']].to_dict('records'),
+            'total_weights': [safe_float(x) for x in df_filtered['Total_weight(kg)']]
         }
 
-        return jsonify(chart_data)
-    except Exception as e:
-        print(f"Error in get_chart_data: {str(e)}")
-        print(f"Traceback: {traceback.format_exc()}")
-        return jsonify({"error": str(e)}), 500
+        # Ensure all dates are formatted as strings
+        for key in ['bodyweight_data', 'bench_pr_data', 'squat_pr_data', 'deadlift_pr_data', 'after_workout_weight_data']:
+            for item in chart_data[key]:
+                item['Date'] = item['Date'].strftime('%Y-%m-%d') if isinstance(item['Date'], datetime) else item['Date']
 
+        return jsonify(chart_data)
+
+
+    except Exception as e:
+        app.logger.error(f"Error in get_chart_data: {str(e)}")
+        app.logger.error(traceback.format_exc())
+        return jsonify({"error": str(e)}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)

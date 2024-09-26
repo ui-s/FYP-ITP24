@@ -29,11 +29,11 @@
                     <div class="card-body">
                         <h5 class="card-title">Filters</h5>
                         <div class="form-inline">
+                            <input type="text" id="userIdInput" class="form-control mr-2" placeholder="Enter User ID">
                             <select id="timePeriodSelect" class="form-control mr-2">
-                                <option value="week">This Week</option>
-                                <option value="2weeks">2 Weeks</option>
-                                <option value="month">1 Month</option>
-                                <option value="all_time">All Time</option>
+                                <option value="7days">Past 7 days</option>
+                                <option value="30days">Past 30 days</option>
+                                <option value="2months">Past 2 Months</option>
                             </select>
                             <button id="applyFilterBtn" class="btn btn-primary mr-2">Apply Filter</button>
                             <button id="selectChartsBtn" class="btn btn-secondary mr-2" data-toggle="modal" data-target="#filterModal">Select Charts</button>
@@ -92,6 +92,19 @@
             <div class="col-md-6">
                 <div class="chart-container">
                     <canvas id="deadliftPRChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="row"></div>
+            <div class="col-md-6">
+                <div class="chart-container">
+                    <canvas id="afterWorkoutWeightChart"></canvas>
+                </div>
+            </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="chart-container">
+                     <canvas id="totalWeightChart"></canvas>
                 </div>
             </div>
         </div>
@@ -160,6 +173,18 @@
                             Deadlift PR Progression
                         </label>
                     </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="afterWorkoutWeightChart" id="afterWorkoutWeightChartCheck" checked>
+                        <label class="form-check-label" for="afterWorkoutWeightChartCheck">
+                            After-Workout Weight Progression
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="totalWeightChart" id="totalWeightChartCheck" checked>
+                        <label class="form-check-label" for="totalWeightChartCheck">
+                            Total Weight Chart
+                        </label>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -169,6 +194,9 @@
         </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/index.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
