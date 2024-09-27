@@ -172,41 +172,6 @@ function createWorkoutDurationChart(chartData) {
     });
 }
 
-// Function to create Bodyweight Line Chart
-function createBodyweightChart(chartData) {
-    const ctx = document.getElementById('bodyweightChart').getContext('2d');
-    if (chartInstances.bodyweightChart) {
-        chartInstances.bodyweightChart.destroy();
-    }
-    chartInstances.bodyweightChart = new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: chartData.bodyweight_data.map(d => d.Date),
-            datasets: [{
-                label: 'Bodyweight (kg)',
-                data: chartData.bodyweight_data.map(d => d.aftworkout_weight),
-                borderColor: 'rgb(75, 192, 192)',
-                tension: 0.1
-            }]
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: false
-                }
-            },
-            plugins: {
-                title: {
-                    display: true,
-                    text: 'Bodyweight Progression'
-                }
-            }
-        }
-    });
-}
-
 // Function to create Bench Press PR Chart
 function createBenchPRChart(chartData) {
     const ctx = document.getElementById('benchPRChart').getContext('2d');
@@ -392,7 +357,6 @@ function createCharts(chartData) {
     createAverageWeightChart(chartData);
     createTotalRepsChart(chartData);
     createWorkoutDurationChart(chartData);
-    createBodyweightChart(chartData);
     createBenchPRChart(chartData);
     createSquatPRChart(chartData);
     createDeadliftPRChart(chartData);
@@ -413,23 +377,28 @@ console.log("JavaScript is loaded!");
         const userIdInput = document.getElementById('userIdInput');
         const chartSelect = document.getElementById('chartSelect');
         const applyChartSelection = document.getElementById('applyChartSelection');
-        
+        const chartsContainer = document.getElementById('chartsContainer');
     
         if (applyFilterBtn) {
             applyFilterBtn.addEventListener('click', function() {
-                const userId = document.getElementById('userIdInput').value;
-                const timePeriod = document.getElementById('timePeriodSelect').value;
+                const userId = userIdInput.value.trim();
+                const timePeriod = timePeriodSelect.value;
                 
-                console.log(`User ID: ${userId}, Time Period: ${timePeriod}, Selected Charts: ${selectedCharts.join(', ')}`);
-                
-                fetchDataAndUpdateCharts(userId, timePeriod);
+                if (userId) {
+                    console.log(`User ID: ${userId}, Time Period: ${timePeriod}, Selected Charts: ${selectedCharts.join(', ')}`);
+                    fetchDataAndUpdateCharts(userId, timePeriod);
+                    chartsContainer.style.display = 'block';
+                } else {
+                    alert('Please enter a User ID');
+                    chartsContainer.style.display = 'none';
+                }
             });
         }
     
         if (resetFilterBtn) {
             resetFilterBtn.addEventListener('click', function() {
-                document.getElementById('userIdInput').value = '';
-                document.getElementById('timePeriodSelect').value = '7days';
+                userIdInput.value = '';
+                timePeriodSelect.value = '7days';
                 selectedCharts = [
                     'muscleGroupChart', 'averageWeightChart', 'totalRepsChart', 'workoutDurationChart',
                     'bodyweightChart', 'benchPRChart', 'squatPRChart', 'deadliftPRChart',
@@ -438,7 +407,7 @@ console.log("JavaScript is loaded!");
                 document.querySelectorAll('#filterModal input[type="checkbox"]').forEach(checkbox => {
                     checkbox.checked = true;
                 });
-                fetchDataAndUpdateCharts('', '7days');
+                chartsContainer.style.display = 'none';
             });
         }
     
@@ -511,14 +480,6 @@ console.log("JavaScript is loaded!");
             }
         });
     
-        updateChart('bodyweightChart', () => {
-            if (chartData.bodyweight_data && chartInstances.bodyweightChart) {
-                chartInstances.bodyweightChart.data.labels = chartData.bodyweight_data.map(d => formatDate(d.Date));
-                chartInstances.bodyweightChart.data.datasets[0].data = chartData.bodyweight_data.map(d => d.aftworkout_weight);
-                chartInstances.bodyweightChart.update();
-            }
-        });
-    
         updateChart('benchPRChart', () => {
             if (chartData.bench_pr_data && chartInstances.benchPRChart) {
                 chartInstances.benchPRChart.data.labels = chartData.bench_pr_data.map(d => formatDate(d.Date));
@@ -569,7 +530,6 @@ console.log("JavaScript is loaded!");
         });
     }
     
-// Update the fetchDataAndUpdateCharts function
 function fetchDataAndUpdateCharts(userId, timePeriod) {
     console.log(`Fetching data for user ${userId} and time period ${timePeriod}`);
     fetch(`/get_chart_data?user_id=${userId}&time_period=${timePeriod}`)
@@ -584,11 +544,13 @@ function fetchDataAndUpdateCharts(userId, timePeriod) {
             if (data.error) {
                 throw new Error(data.error);
             }
-            updateCharts(data);  // Remove selectedChart parameter
+            updateCharts(data);
+            document.getElementById('chartsContainer').style.display = 'block';
         })
         .catch(error => {
             console.error('Error:', error);
             alert('An error occurred while fetching data. Please try again.');
+            document.getElementById('chartsContainer').style.display = 'none';
         });
 }
 

@@ -342,6 +342,9 @@ def get_chart_data():
         if user_id:
             df = df[df['Id'] == user_id]
         
+        if df.empty:
+            return jsonify({"error": "No data found for the given user ID"}), 404
+        
         end_date = df['Date'].max()
         if time_period == '7days':
             start_date = end_date - timedelta(days=7)

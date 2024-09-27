@@ -16,6 +16,9 @@
             max-height: 300px;
             overflow-y: auto;
         }
+        #chartsContainer {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -44,75 +47,78 @@
             </div>
         </div>
 
-        <!-- Charts -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="muscleGroupChart"></canvas>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="averageWeightChart"></canvas>
-                </div>
+    <!-- Charts -->
+<div id="chartsContainer">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="muscleGroupChart"></canvas>
             </div>
         </div>
-        
-        <div class="row">
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="totalRepsChart"></canvas>
-                </div>
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="averageWeightChart"></canvas>
             </div>
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="workoutDurationChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="bodyweightChart"></canvas>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="benchPRChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="squatPRChart"></canvas>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="deadliftPRChart"></canvas>
-                </div>
-            </div>
-        </div>
-        <div class="row"></div>
-            <div class="col-md-6">
-                <div class="chart-container">
-                    <canvas id="afterWorkoutWeightChart"></canvas>
-                </div>
-            </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="chart-container">
-                     <canvas id="totalWeightChart"></canvas>
-                </div>
-            </div>
-        </div>
-
-        <div class="text-center mt-4 mb-5">
-            <a href="{{ url_for('display_workout_plan') }}" class="btn btn-secondary">Back to Workout Plan</a>
         </div>
     </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="totalRepsChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="workoutDurationChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="benchPRChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="squatPRChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="deadliftPRChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="afterWorkoutWeightChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-3">
+            <!-- Empty column for spacing -->
+        </div>
+        <div class="col-md-6">
+            <div class="chart-container">
+                <canvas id="totalWeightChart"></canvas>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <!-- Empty column for spacing -->
+        </div>
+    </div>
+</div>
+<div class="text-center mt-4 mb-5">
+    <a href="{{ url_for('display_workout_plan') }}" class="btn btn-secondary">Back to Workout Plan</a>
+</div>
+</div>
 
     <!-- Modal for selecting charts -->
     <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -147,12 +153,6 @@
                         <input class="form-check-input" type="checkbox" value="workoutDurationChart" id="workoutDurationChartCheck" checked>
                         <label class="form-check-label" for="workoutDurationChartCheck">
                             Workout Duration Chart
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="bodyweightChart" id="bodyweightChartCheck" checked>
-                        <label class="form-check-label" for="bodyweightChartCheck">
-                            Bodyweight Progression
                         </label>
                     </div>
                     <div class="form-check">
@@ -194,9 +194,6 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/index.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
