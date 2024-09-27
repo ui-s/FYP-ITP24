@@ -2,19 +2,16 @@
 
 console.log("JavaScript is loaded!");
 
+function formatDate(dateString) {
+    const date = new Date(dateString);
+    return date.toISOString().split('T')[0]; // Returns 'YYYY-MM-DD'
+}
+
 let muscleGroupChart, averageWeightChart, totalRepsChart, workoutDurationChart, bodyweightChart, benchPRChart, squatPRChart, deadliftPRChart, afterWorkoutWeightChart, totalWeightChart;
 let selectedCharts = [
-    'muscleGroupChart',
-    'averageWeightChart', 
-    'totalRepsChart', 
-    'workoutDurationChart',
-    'bodyweightChart',
-    'benchPRChart',
-    'squatPRChart',
-    'deadliftPRChart',
-    'afterWorkoutWeightChart',
-    'totalWeightChart'
-    
+    'muscleGroupChart', 'averageWeightChart', 'totalRepsChart', 'workoutDurationChart',
+    'bodyweightChart', 'benchPRChart', 'squatPRChart', 'deadliftPRChart',
+    'afterWorkoutWeightChart', 'totalWeightChart'
 ];
 
 // Common chart options
@@ -23,10 +20,15 @@ const commonOptions = {
     maintainAspectRatio: false,
 };
 
+const chartInstances = {};
+
 // Function to create Muscle Group Chart
 function createMuscleGroupChart(chartData) {
     const ctx = document.getElementById('muscleGroupChart').getContext('2d');
-    muscleGroupChart = new Chart(ctx, {
+    if (chartInstances.muscleGroupChart) {
+        chartInstances.muscleGroupChart.destroy();
+    }
+    chartInstances.muscleGroupChart = new Chart(ctx, {
         type: 'radar',
         data: {
             labels: chartData.muscle_groups,
@@ -54,10 +56,15 @@ function createMuscleGroupChart(chartData) {
     });
 }
 
+
 // Function to create Average Weight Chart 
 function createAverageWeightChart(chartData) {
     const ctx = document.getElementById('averageWeightChart').getContext('2d');
-    new Chart(ctx, {
+    if (chartInstances.averageWeightChart) {
+        chartInstances.averageWeightChart.destroy();
+    }
+
+    chartInstances.averageWeightChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: ['Average Weight'],
@@ -89,7 +96,10 @@ function createAverageWeightChart(chartData) {
 // Function to create Total Reps Chart
 function createTotalRepsChart(chartData) {
     const ctx = document.getElementById('totalRepsChart').getContext('2d');
-    totalRepsChart = new Chart(ctx, {
+    if (chartInstances.totalRepsChart) {
+        chartInstances.totalRepsChart.destroy();
+    }
+    chartInstances.totalRepsChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: chartData.workout_days,
@@ -126,8 +136,11 @@ function createWorkoutDurationChart(chartData) {
         return;
     }
 
-    const ctx = document.getElementById('workoutDurationChart').getContext('2d');
-    workoutDurationChart = new Chart(ctx, {
+        const ctx = document.getElementById('workoutDurationChart').getContext('2d');
+        if (chartInstances.workoutDurationChart) {
+            chartInstances.workoutDurationChart.destroy();
+        }
+        chartInstances.workoutDurationChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: chartData.workout_days,
@@ -162,7 +175,10 @@ function createWorkoutDurationChart(chartData) {
 // Function to create Bodyweight Line Chart
 function createBodyweightChart(chartData) {
     const ctx = document.getElementById('bodyweightChart').getContext('2d');
-    new Chart(ctx, {
+    if (chartInstances.bodyweightChart) {
+        chartInstances.bodyweightChart.destroy();
+    }
+    chartInstances.bodyweightChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: chartData.bodyweight_data.map(d => d.Date),
@@ -194,7 +210,10 @@ function createBodyweightChart(chartData) {
 // Function to create Bench Press PR Chart
 function createBenchPRChart(chartData) {
     const ctx = document.getElementById('benchPRChart').getContext('2d');
-    new Chart(ctx, {
+    if (chartInstances.benchPRChart) {
+        chartInstances.benchPRChart.destroy();
+    }
+    chartInstances.benchPRChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: chartData.bench_pr_data.map(d => d.Date),
@@ -226,7 +245,10 @@ function createBenchPRChart(chartData) {
 // Function to create Squat PR Chart
 function createSquatPRChart(chartData) {
     const ctx = document.getElementById('squatPRChart').getContext('2d');
-    new Chart(ctx, {
+    if (chartInstances.squatPRChart) {
+        chartInstances.squatPRChart.destroy();
+    }
+    chartInstances.squatPRChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: chartData.squat_pr_data.map(d => d.Date),
@@ -258,7 +280,10 @@ function createSquatPRChart(chartData) {
 // Function to create Deadlift PR Chart
 function createDeadliftPRChart(chartData) {
     const ctx = document.getElementById('deadliftPRChart').getContext('2d');
-    new Chart(ctx, {
+    if (chartInstances.deadliftPRChart) {
+        chartInstances.deadliftPRChart.destroy();
+    }
+    chartInstances.deadliftPRChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: chartData.deadlift_pr_data.map(d => d.Date),
@@ -292,8 +317,11 @@ function createAfterWorkoutWeightChart(chartData) {
         console.warn('No after workout weight data available');
         return;
     }
-    const ctx = document.getElementById('afterWorkoutWeightChart').getContext('2d');
-    afterWorkoutWeightChart = new Chart(ctx, {
+        const ctx = document.getElementById('afterWorkoutWeightChart').getContext('2d');
+        if (chartInstances.afterWorkoutWeightChart) {
+            chartInstances.afterWorkoutWeightChart.destroy();
+        }
+        chartInstances.afterWorkoutWeightChart = new Chart(ctx, {
         type: 'line',
         data: {
             labels: chartData.after_workout_weight_data.map(d => d.Date),
@@ -327,8 +355,11 @@ function createTotalWeightChart(chartData) {
         console.warn('No total weight data available');
         return;
     }
-    const ctx = document.getElementById('totalWeightChart').getContext('2d');
-    totalWeightChart = new Chart(ctx, {
+        const ctx = document.getElementById('totalWeightChart').getContext('2d');
+        if (chartInstances.totalWeightChart) {
+            chartInstances.totalWeightChart.destroy();
+        }
+        chartInstances.totalWeightChart = new Chart(ctx, {
         type: 'bar',
         data: {
             labels: chartData.workout_days,
@@ -372,27 +403,6 @@ function createCharts(chartData) {
 console.log("JavaScript is loaded!");
 console.log("JavaScript is loaded!");
 
-function fetchDataAndUpdateCharts(userId, timePeriod) {
-    console.log(`Fetching data for user ${userId} and time period ${timePeriod}`);
-    fetch(`/get_chart_data?user_id=${userId}&time_period=${timePeriod}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Received data:', data);
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            updateCharts(data);
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while fetching data. Please try again.');
-        });
-}
 
     console.log("JavaScript is loaded!");
 
@@ -403,65 +413,41 @@ function fetchDataAndUpdateCharts(userId, timePeriod) {
         const userIdInput = document.getElementById('userIdInput');
         const chartSelect = document.getElementById('chartSelect');
         const applyChartSelection = document.getElementById('applyChartSelection');
+        
     
-        // Check if 'applyFilterBtn' exists before adding the event listener
         if (applyFilterBtn) {
             applyFilterBtn.addEventListener('click', function() {
-                console.log('Apply Filter button clicked!'); // Debug log
-    
-                const userId = userIdInput ? userIdInput.value : null;
-                const timePeriod = timePeriodSelect ? timePeriodSelect.value : '7days';
-                const selectedChart = chartSelect ? chartSelect.value : 'all';
-    
-                console.log(`User ID: ${userId}, Time Period: ${timePeriod}, Selected Chart: ${selectedChart}`);
-    
-                // Call to update charts
+                const userId = document.getElementById('userIdInput').value;
+                const timePeriod = document.getElementById('timePeriodSelect').value;
+                
+                console.log(`User ID: ${userId}, Time Period: ${timePeriod}, Selected Charts: ${selectedCharts.join(', ')}`);
+                
                 fetchDataAndUpdateCharts(userId, timePeriod);
-    
-                // Show/hide charts based on selection
-                document.querySelectorAll('.chart-container').forEach(container => {
-                    const chartId = container.querySelector('canvas').id;
-                    if (selectedChart === 'all') {
-                        container.style.display = 'block';
-                    } else {
-                        container.style.display = chartId === selectedChart ? 'block' : 'none';
-                    }
-                });
             });
-        } else {
-            console.error('Apply Filter button not found');
         }
     
-        // Add the reset button logic
         if (resetFilterBtn) {
             resetFilterBtn.addEventListener('click', function() {
-                console.log('Reset Filter button clicked!');
-                if (userIdInput) userIdInput.value = '';
-                if (timePeriodSelect) timePeriodSelect.value = '7days';
-                if (chartSelect) chartSelect.value = 'all';
-    
-                fetchDataAndUpdateCharts('', '7days');
-    
-                document.querySelectorAll('.chart-container').forEach(container => {
-                    container.style.display = 'block';
+                document.getElementById('userIdInput').value = '';
+                document.getElementById('timePeriodSelect').value = '7days';
+                selectedCharts = [
+                    'muscleGroupChart', 'averageWeightChart', 'totalRepsChart', 'workoutDurationChart',
+                    'bodyweightChart', 'benchPRChart', 'squatPRChart', 'deadliftPRChart',
+                    'afterWorkoutWeightChart', 'totalWeightChart'
+                ];
+                document.querySelectorAll('#filterModal input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = true;
                 });
+                fetchDataAndUpdateCharts('', '7days');
             });
-        } else {
-            console.error('Reset Filter button not found');
         }
     
-        // Chart selection logic
         if (applyChartSelection) {
             applyChartSelection.addEventListener('click', function() {
                 selectedCharts = Array.from(document.querySelectorAll('#filterModal input[type="checkbox"]:checked'))
                                      .map(checkbox => checkbox.value);
-                document.querySelectorAll('.chart-container').forEach(container => {
-                    const chartId = container.querySelector('canvas').id;
-                    container.style.display = selectedCharts.includes(chartId) ? 'block' : 'none';
-                });
+                updateChartVisibility();
             });
-        } else {
-            console.error('Apply Chart Selection button not found');
         }
     
         // Fetch initial chart data on load
@@ -487,137 +473,122 @@ function fetchDataAndUpdateCharts(userId, timePeriod) {
     });
     
     function updateCharts(chartData) {
-    console.log("Updating charts with data:", chartData);
-
-    if (selectedCharts.includes('muscleGroupChart') && chartData.muscle_group_sets) {
-        if (muscleGroupChart) {
-            muscleGroupChart.data.datasets[0].data = chartData.muscle_group_sets;
-            muscleGroupChart.update();
-        } else {
-            console.log("Creating muscleGroupChart as it doesn't exist");
-            createMuscleGroupChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('averageWeightChart') && chartData.avg_weight !== undefined) {
-        if (averageWeightChart) {
-            averageWeightChart.data.datasets[0].data = [chartData.avg_weight];
-            averageWeightChart.update();
-        } else {
-            console.log("Creating averageWeightChart as it doesn't exist");
-            createAverageWeightChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('totalRepsChart') && chartData.workout_days && chartData.total_reps) {
-        if (totalRepsChart) {
-            totalRepsChart.data.labels = chartData.workout_days.map(formatDate);
-            totalRepsChart.data.datasets[0].data = chartData.total_reps;
-            totalRepsChart.update();
-        } else {
-            console.log("Creating totalRepsChart as it doesn't exist");
-            createTotalRepsChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('workoutDurationChart') && chartData.workout_days && chartData.workout_durations) {
-        if (workoutDurationChart) {
-            workoutDurationChart.data.labels = chartData.workout_days.map(formatDate);
-            workoutDurationChart.data.datasets[0].data = chartData.workout_durations;
-            workoutDurationChart.update();
-        } else {
-            console.log("Creating workoutDurationChart as it doesn't exist");
-            createWorkoutDurationChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('bodyweightChart') && chartData.bodyweight_data) {
-        if (bodyweightChart) {
-            bodyweightChart.data.labels = chartData.bodyweight_data.map(d => formatDate(d.Date));
-            bodyweightChart.data.datasets[0].data = chartData.bodyweight_data.map(d => d.aftworkout_weight);
-            bodyweightChart.update();
-        } else {
-            console.log("Creating bodyweightChart as it doesn't exist");
-            createBodyweightChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('benchPRChart') && chartData.bench_pr_data) {
-        if (benchPRChart) {
-            benchPRChart.data.labels = chartData.bench_pr_data.map(d => formatDate(d.Date));
-            benchPRChart.data.datasets[0].data = chartData.bench_pr_data.map(d => d['Bench_pr(kg)']);
-            benchPRChart.update();
-        } else {
-            console.log("Creating benchPRChart as it doesn't exist");
-            createBenchPRChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('squatPRChart') && chartData.squat_pr_data) {
-        if (squatPRChart) {
-            squatPRChart.data.labels = chartData.squat_pr_data.map(d => formatDate(d.Date));
-            squatPRChart.data.datasets[0].data = chartData.squat_pr_data.map(d => d['Squat_pr(kg)']);
-            squatPRChart.update();
-        } else {
-            console.log("Creating squatPRChart as it doesn't exist");
-            createSquatPRChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('deadliftPRChart') && chartData.deadlift_pr_data) {
-        if (deadliftPRChart) {
-            deadliftPRChart.data.labels = chartData.deadlift_pr_data.map(d => formatDate(d.Date));
-            deadliftPRChart.data.datasets[0].data = chartData.deadlift_pr_data.map(d => d['Deadlift_pr(kg)']);
-            deadliftPRChart.update();
-        } else {
-            console.log("Creating deadliftPRChart as it doesn't exist");
-            createDeadliftPRChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('afterWorkoutWeightChart') && chartData.after_workout_weight_data) {
-        if (afterWorkoutWeightChart) {
-            afterWorkoutWeightChart.data.labels = chartData.after_workout_weight_data.map(d => formatDate(d.Date));
-            afterWorkoutWeightChart.data.datasets[0].data = chartData.after_workout_weight_data.map(d => d.aftworkout_weight);
-            afterWorkoutWeightChart.update();
-        } else {
-            console.log("Creating afterWorkoutWeightChart as it doesn't exist");
-            createAfterWorkoutWeightChart(chartData);
-        }
-    }
-
-    if (selectedCharts.includes('totalWeightChart') && chartData.workout_days && chartData.total_weights) {
-        if (totalWeightChart) {
-            totalWeightChart.data.labels = chartData.workout_days.map(formatDate);
-            totalWeightChart.data.datasets[0].data = chartData.total_weights;
-            totalWeightChart.update();
-        } else {
-            console.log("Creating totalWeightChart as it doesn't exist");
-            createTotalWeightChart(chartData);
-        }
-    }
-}
+        console.log("Updating charts with data:", chartData);
     
-    function fetchDataAndUpdateCharts(userId, timePeriod) {
-        console.log(`Fetching data for user ${userId} and time period ${timePeriod}`);
-        fetch(`/get_chart_data?user_id=${userId}&time_period=${timePeriod}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log('Received data:', data);
-                if (data.error) {
-                    throw new Error(data.error);
-                }
-                updateCharts(data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while fetching data. Please try again.');
-            });
+        const updateChart = (chartName, updateFunction) => {
+            if (selectedCharts.includes(chartName)) {
+                updateFunction();
+            }
+        };
+    
+        updateChart('muscleGroupChart', () => {
+            if (chartData.muscle_group_sets && chartInstances.muscleGroupChart) {
+                chartInstances.muscleGroupChart.data.datasets[0].data = chartData.muscle_group_sets;
+                chartInstances.muscleGroupChart.update();
+            }
+        });
+    
+        updateChart('averageWeightChart', () => {
+            if (chartData.avg_weight !== undefined && chartInstances.averageWeightChart) {
+                chartInstances.averageWeightChart.data.datasets[0].data = [chartData.avg_weight];
+                chartInstances.averageWeightChart.update();
+            }
+        });
+    
+        updateChart('totalRepsChart', () => {
+            if (chartData.workout_days && chartData.total_reps && chartInstances.totalRepsChart) {
+                chartInstances.totalRepsChart.data.labels = chartData.workout_days.map(formatDate);
+                chartInstances.totalRepsChart.data.datasets[0].data = chartData.total_reps;
+                chartInstances.totalRepsChart.update();
+            }
+        });
+    
+        updateChart('workoutDurationChart', () => {
+            if (chartData.workout_days && chartData.workout_durations && chartInstances.workoutDurationChart) {
+                chartInstances.workoutDurationChart.data.labels = chartData.workout_days.map(formatDate);
+                chartInstances.workoutDurationChart.data.datasets[0].data = chartData.workout_durations;
+                chartInstances.workoutDurationChart.update();
+            }
+        });
+    
+        updateChart('bodyweightChart', () => {
+            if (chartData.bodyweight_data && chartInstances.bodyweightChart) {
+                chartInstances.bodyweightChart.data.labels = chartData.bodyweight_data.map(d => formatDate(d.Date));
+                chartInstances.bodyweightChart.data.datasets[0].data = chartData.bodyweight_data.map(d => d.aftworkout_weight);
+                chartInstances.bodyweightChart.update();
+            }
+        });
+    
+        updateChart('benchPRChart', () => {
+            if (chartData.bench_pr_data && chartInstances.benchPRChart) {
+                chartInstances.benchPRChart.data.labels = chartData.bench_pr_data.map(d => formatDate(d.Date));
+                chartInstances.benchPRChart.data.datasets[0].data = chartData.bench_pr_data.map(d => d['Bench_pr(kg)']);
+                chartInstances.benchPRChart.update();
+            }
+        });
+    
+        updateChart('squatPRChart', () => {
+            if (chartData.squat_pr_data && chartInstances.squatPRChart) {
+                chartInstances.squatPRChart.data.labels = chartData.squat_pr_data.map(d => formatDate(d.Date));
+                chartInstances.squatPRChart.data.datasets[0].data = chartData.squat_pr_data.map(d => d['Squat_pr(kg)']);
+                chartInstances.squatPRChart.update();
+            }
+        });
+    
+        updateChart('deadliftPRChart', () => {
+            if (chartData.deadlift_pr_data && chartInstances.deadliftPRChart) {
+                chartInstances.deadliftPRChart.data.labels = chartData.deadlift_pr_data.map(d => formatDate(d.Date));
+                chartInstances.deadliftPRChart.data.datasets[0].data = chartData.deadlift_pr_data.map(d => d['Deadlift_pr(kg)']);
+                chartInstances.deadliftPRChart.update();
+            }
+        });
+    
+        updateChart('afterWorkoutWeightChart', () => {
+            if (chartData.after_workout_weight_data && chartInstances.afterWorkoutWeightChart) {
+                chartInstances.afterWorkoutWeightChart.data.labels = chartData.after_workout_weight_data.map(d => formatDate(d.Date));
+                chartInstances.afterWorkoutWeightChart.data.datasets[0].data = chartData.after_workout_weight_data.map(d => d.aftworkout_weight);
+                chartInstances.afterWorkoutWeightChart.update();
+            }
+        });
+    
+        updateChart('totalWeightChart', () => {
+            if (chartData.workout_days && chartData.total_weights && chartInstances.totalWeightChart) {
+                chartInstances.totalWeightChart.data.labels = chartData.workout_days.map(formatDate);
+                chartInstances.totalWeightChart.data.datasets[0].data = chartData.total_weights;
+                chartInstances.totalWeightChart.update();
+            }
+        });
+    
+        updateChartVisibility();
     }
-
+    
+    function updateChartVisibility() {
+        document.querySelectorAll('.chart-container').forEach(container => {
+            const chartId = container.querySelector('canvas').id;
+            container.style.display = selectedCharts.includes(chartId) ? 'block' : 'none';
+        });
+    }
+    
+// Update the fetchDataAndUpdateCharts function
+function fetchDataAndUpdateCharts(userId, timePeriod) {
+    console.log(`Fetching data for user ${userId} and time period ${timePeriod}`);
+    fetch(`/get_chart_data?user_id=${userId}&time_period=${timePeriod}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Received data:', data);
+            if (data.error) {
+                throw new Error(data.error);
+            }
+            updateCharts(data);  // Remove selectedChart parameter
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('An error occurred while fetching data. Please try again.');
+        });
+}
 
