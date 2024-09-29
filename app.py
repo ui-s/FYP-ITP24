@@ -40,6 +40,10 @@ def load_users_df():
 USERS_DF = load_users_df()
 
 @app.route('/')
+def intro():
+    return render_template('intro.html')
+
+@app.route('/get-started')
 def index():
     session['age_group'] = ''
     session['gender'] = ''
@@ -181,7 +185,7 @@ def generate_workout_plan():
         session.update(original_session_data)
         
         return redirect(url_for('confirmation'))
-
+    
 @app.route('/workout_plan')
 def display_workout_plan():
     workout_plan = session.get('workout_plan', {})

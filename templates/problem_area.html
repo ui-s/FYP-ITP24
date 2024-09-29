@@ -4,49 +4,60 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Planner - Problem Areas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/problem_area.css') }}">
 </head>
 <body>
     <main class="container">
-        <h1 id="focus-on-problem-areas">Focus on Problem Areas</h1>
+        <h1>Focus on Problem Areas</h1>
         
         <form action="{{ url_for('process_problem_areas') }}" method="post">
             <div class="problem-areas">
-                <div class="form-check">
+                <div class="area-card">
                     <input type="checkbox" id="weak-chest" name="problem_areas" value="weak_chest" {% if 'weak_chest' in session.get('problem_areas', []) %}checked{% endif %}>
-                    <label for="weak-chest"><strong>Weak Chest</strong></label>
-                    <p>Focus on enhancing upper body strength and muscle development.</p>
+                    <label for="weak-chest">
+                        <h2>Weak Chest</h2>
+                        <p>Focus on enhancing upper body strength and muscle development.</p>
+                    </label>
                 </div>
                 
-                <div class="form-check">
+                <div class="area-card">
                     <input type="checkbox" id="weak-back" name="problem_areas" value="weak_back" {% if 'weak_back' in session.get('problem_areas', []) %}checked{% endif %}>
-                    <label for="weak-back"><strong>Weak Back</strong></label>
-                    <p>Strengthening back muscles for better posture and overall fitness.</p>
+                    <label for="weak-back">
+                        <h2>Weak Back</h2>
+                        <p>Strengthening back muscles for better posture and overall fitness.</p>
+                    </label>
                 </div>
                 
-                <div class="form-check">
+                <div class="area-card">
                     <input type="checkbox" id="big-belly" name="problem_areas" value="big_belly" {% if 'big_belly' in session.get('problem_areas', []) %}checked{% endif %}>
-                    <label for="big-belly"><strong>Big Belly</strong></label>
-                    <p>Aiming to reduce abdominal fat for better health and aesthetics.</p>
+                    <label for="big-belly">
+                        <h2>Big Belly</h2>
+                        <p>Aiming to reduce abdominal fat for better health and aesthetics.</p>
+                    </label>
                 </div>
                 
-                <div class="form-check">
+                <div class="area-card">
                     <input type="checkbox" id="small-arms" name="problem_areas" value="small_arms" {% if 'small_arms' in session.get('problem_areas', []) %}checked{% endif %}>
-                    <label for="small-arms"><strong>Small Arms</strong></label>
-                    <p>Developing the size and strength of arm muscles through targeted exercises.</p>
+                    <label for="small-arms">
+                        <h2>Small Arms</h2>
+                        <p>Developing the size and strength of arm muscles through targeted exercises.</p>
+                    </label>
                 </div>
                 
-                <div class="form-check">
+                <div class="area-card">
                     <input type="checkbox" id="small-legs" name="problem_areas" value="small_legs" {% if 'small_legs' in session.get('problem_areas', []) %}checked{% endif %}>
-                    <label for="small-legs"><strong>Small Legs</strong></label>
-                    <p>Enhancing leg strength and muscle size for athletic performance and functionality.</p>
+                    <label for="small-legs">
+                        <h2>Small Legs</h2>
+                        <p>Enhancing leg strength and muscle size for athletic performance and functionality.</p>
+                    </label>
                 </div>
             </div>
             
             <button type="submit" class="next-btn">Next</button>
         </form>
         
-        <a href="{{ url_for('body_goal') }}" class="back-btn">Back</a>
+
     </main>
 </body>
 </html>

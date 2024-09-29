@@ -4,37 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Planner - Fitness Level</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/fitness_level.css') }}">
 </head>
 <body>
     <main class="container">
-        <h1 id="choose-your-fitness-level">Choose Your Fitness Level</h1>
+        <h1>Choose Your Fitness Level</h1>
         
         <form action="{{ url_for('process_fitness_level') }}" method="post">
             <div class="fitness-levels">
-                <div class="form-check">
+                <div class="level-card">
                     <input type="radio" id="beginner" name="fitness_level" value="beginner" required {% if session.get('fitness_level') == 'beginner' %}checked{% endif %}>
-                    <label for="beginner"><strong>Beginner</strong></label>
-                    <p>Just started going to the gym, learning the basics of fitness.</p>
+                    <label for="beginner">
+                        <h2>Beginner</h2>
+                        <p>Just started going to the gym, learning the basics of fitness.</p>
+                    </label>
                 </div>
                 
-                <div class="form-check">
+                <div class="level-card">
                     <input type="radio" id="intermediate" name="fitness_level" value="intermediate" required {% if session.get('fitness_level') == 'intermediate' %}checked{% endif %}>
-                    <label for="intermediate"><strong>Intermediate</strong></label>
-                    <p>Have some experience but still looking to improve knowledge and skills.</p>
+                    <label for="intermediate">
+                        <h2>Intermediate</h2>
+                        <p>Have some experience but still looking to improve knowledge and skills.</p>
+                    </label>
                 </div>
                 
-                <div class="form-check">
+                <div class="level-card">
                     <input type="radio" id="advanced" name="fitness_level" value="advanced" required {% if session.get('fitness_level') == 'advanced' %}checked{% endif %}>
-                    <label for="advanced"><strong>Advanced</strong></label>
-                    <p>Extensive knowledge and experience in fitness and workouts.</p>
+                    <label for="advanced">
+                        <h2>Advanced</h2>
+                        <p>Extensive knowledge and experience in fitness and workouts.</p>
+                    </label>
                 </div>
             </div>
             
             <button type="submit" class="next-btn">Next</button>
         </form>
-        
-        <a href="{{ url_for('problem_area') }}" class="back-btn">Back</a>
     </main>
 </body>
 </html>

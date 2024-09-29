@@ -1,77 +1,123 @@
-#style.css
+/* Modern Workout Planner CSS */
 
-
-body {
-    font-family: Arial, sans-serif;
+:root {
+    --primary-color: #30add4;
+    --secondary-color: #000000;
+    --text-color: #333;
+    --background-color: #f5f5f5;
+    --card-background: #ffffff;
+    --input-background: #f0f0f0;
+    --input-border: #e0e0e0;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  body {
+    font-family: 'Roboto', Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #f0f0f0;
-    color: #333;
-}
-
-.container {
+    background-color: var(--background-color);
+    color: var(--text-color);
+    line-height: 1.6;
+  }
+  
+  .container {
     max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 5px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-h1 {
-    font-size: 2em;
-    color: #2c3e50;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--card-background);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+  
+  h1 {
+    font-size: 2.5em;
+    color: var(--secondary-color);
     text-align: center;
-}
-
-h2 {
-    font-size: 1.2em;
-    color: #7f8c8d;
+    margin-bottom: 10px;
+    font-weight: 700;
+  }
+  
+  h2 {
+    font-size: 1.3em;
+    color: var(--secondary-color);
     text-align: center;
     margin-bottom: 30px;
-}
-
-.form-group {
-    margin-bottom: 20px;
-}
-
-label {
+    font-weight: 400;
+  }
+  
+  .form-group {
+    margin-bottom: 25px;
+  }
+  
+  label {
     display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-select, input[type="number"] {
+    margin-bottom: 8px;
+    font-weight: 500;
+    color: var(--text-color);
+  }
+  
+  select, input[type="number"] {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+    padding: 12px;
+    border: 1px solid var(--input-border);
+    border-radius: 6px;
     font-size: 16px;
-}
-
-input[type="number"] {
+    background-color: var(--input-background);
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  select:focus, input[type="number"]:focus {
+    outline: none;
+    border-color: var(--secondary-color);
+    box-shadow: 0 0 0 2px rgba(33, 150, 243, 0.2);
+  }
+  
+  input[type="number"] {
     -moz-appearance: textfield;
-}
-
-input[type="number"]::-webkit-outer-spin-button,
-input[type="number"]::-webkit-inner-spin-button {
+  }
+  
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
     -webkit-appearance: none;
     margin: 0;
-}
-
-.next-btn {
+  }
+  
+  .next-btn {
     display: block;
     width: 100%;
-    padding: 10px;
-    background-color: #3498db;
-    color: #fff;
+    padding: 14px;
+    background-color: var(--primary-color);
+    color: white;
     border: none;
-    border-radius: 4px;
+    border-radius: 6px;
     font-size: 18px;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-.next-btn:hover {
-    background-color: #2980b9;
-}
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .next-btn:hover {
+    background-color: #2b9cbf;
+  }
+  
+  .next-btn:active {
+    transform: translateY(2px);
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .container {
+      margin: 20px;
+      padding: 20px;
+    }
+  
+    h1 {
+      font-size: 2em;
+    }
+  
+    h2 {
+      font-size: 1.1em;
+    }
+  }
