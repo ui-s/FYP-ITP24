@@ -6,6 +6,9 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score
 import random
 import os
+import logging
+
+logger = logging.getLogger(__name__)
 
 class WorkoutModel:
     def __init__(self):
@@ -16,18 +19,21 @@ class WorkoutModel:
         self.model = RandomForestClassifier(n_estimators=100, random_state=42)
 
     def load_data(self):
-        # Load and preprocess data
-        self.workout_schedule_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_WorkoutScheduleRecommendationDataset.csv'))
-        self.workout_exercises_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_WorkoutDaysDataset.csv'))
-        self.problem_area_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_ProblemAreaDataset.csv'))
-        
-        # Ensure data is cleaned and formatted correctly
-        self.workout_schedule_data = self.workout_schedule_data.dropna()
-        self.workout_schedule_data['WorkoutDaysPerWeek'] = self.workout_schedule_data['WorkoutDaysPerWeek'].astype(int)
-        
-        # Convert workout days to workout types
-        for day in self.target_days:
-            self.workout_schedule_data[day] = self.workout_schedule_data[day].apply(lambda x: x.title() if pd.notna(x) else 'Rest')
+        try:
+            self.workout_schedule_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_WorkoutScheduleRecommendationDataset.csv'))
+            self.workout_exercises_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_WorkoutDaysDataset.csv'))
+            self.problem_area_data = pd.read_csv(os.path.join('data', 'processed', 'Cleaned_ProblemAreaDataset.csv'))
+            
+            self.workout_schedule_data = self.workout_schedule_data.dropna()
+            self.workout_schedule_data['WorkoutDaysPerWeek'] = self.workout_schedule_data['WorkoutDaysPerWeek'].astype(int)
+            
+            for day in self.target_days:
+                self.workout_schedule_data[day] = self.workout_schedule_data[day].apply(lambda x: x.title() if pd.notna(x) else 'Rest')
+            
+            logger.info("Data loaded and preprocessed successfully")
+        except Exception as e:
+            logger.error(f"Error loading data: {str(e)}")
+            raise
 
     def preprocess_data(self):
         X = self.workout_schedule_data[self.features]
@@ -84,49 +90,80 @@ class WorkoutModel:
         return optimized_schedule
 
     def get_exercises_for_workout(self, workout_type, fitness_level, problem_areas):
-        suitable_exercises = self.workout_exercises_data[
-            (self.workout_exercises_data['WorkoutDay'].str.lower() == workout_type.lower()) &
-            (self.workout_exercises_data['FitnessLevel'].str.lower() == fitness_level.lower())
-        ]
-        
-        # Add exercises from ProblemAreaDataset based on user's problem areas
-        for area in problem_areas.split(', '):
-            problem_area_exercises = self.problem_area_data[
-                (self.problem_area_data['ProblemArea'].str.lower() == area.lower()) &
-                (self.problem_area_data['FitnessLevel'].str.lower() == fitness_level.lower())
-            ]
-            suitable_exercises = pd.concat([suitable_exercises, problem_area_exercises])
-        
-        if len(suitable_exercises) < 5:
-            # If not enough exercises, include exercises from adjacent fitness levels
-            adjacent_levels = ['beginner', 'intermediate', 'advanced']
-            idx = adjacent_levels.index(fitness_level.lower())
-            if idx > 0:
-                suitable_exercises = pd.concat([suitable_exercises, self.workout_exercises_data[
+            try:
+                suitable_exercises = self.workout_exercises_data[
                     (self.workout_exercises_data['WorkoutDay'].str.lower() == workout_type.lower()) &
-                    (self.workout_exercises_data['FitnessLevel'].str.lower() == adjacent_levels[idx-1])
-                ]])
-            if idx < 2:
-                suitable_exercises = pd.concat([suitable_exercises, self.workout_exercises_data[
-                    (self.workout_exercises_data['WorkoutDay'].str.lower() == workout_type.lower()) &
-                    (self.workout_exercises_data['FitnessLevel'].str.lower() == adjacent_levels[idx+1])
-                ]])
-        
-        return suitable_exercises.sample(n=min(5, len(suitable_exercises))).to_dict('records')
+                    (self.workout_exercises_data['FitnessLevel'].str.lower() == fitness_level.lower())
+                ]
+                
+                for area in problem_areas.split(', '):
+                    problem_area_exercises = self.problem_area_data[
+                        (self.problem_area_data['ProblemArea'].str.lower() == area.lower()) &
+                        (self.problem_area_data['FitnessLevel'].str.lower() == fitness_level.lower())
+                    ]
+                    suitable_exercises = pd.concat([suitable_exercises, problem_area_exercises])
+                
+                if len(suitable_exercises) < 5:
+                    adjacent_levels = ['beginner', 'intermediate', 'advanced']
+                    idx = adjacent_levels.index(fitness_level.lower())
+                    if idx > 0:
+                        suitable_exercises = pd.concat([suitable_exercises, self.workout_exercises_data[
+                            (self.workout_exercises_data['WorkoutDay'].str.lower() == workout_type.lower()) &
+                            (self.workout_exercises_data['FitnessLevel'].str.lower() == adjacent_levels[idx-1])
+                        ]])
+                    if idx < 2:
+                        suitable_exercises = pd.concat([suitable_exercises, self.workout_exercises_data[
+                            (self.workout_exercises_data['WorkoutDay'].str.lower() == workout_type.lower()) &
+                            (self.workout_exercises_data['FitnessLevel'].str.lower() == adjacent_levels[idx+1])
+                        ]])
+                
+                # Remove any rows with NaN values
+                suitable_exercises = suitable_exercises.dropna(subset=['Exercise', 'TargetedMuscle'])
+                
+                if suitable_exercises.empty:
+                    logger.warning(f"No suitable exercises found for {workout_type} at {fitness_level} level")
+                    return []
+                
+                selected_exercises = suitable_exercises.sample(n=min(5, len(suitable_exercises))).to_dict('records')
+                logger.info(f"Selected {len(selected_exercises)} exercises for {workout_type}")
+                return selected_exercises
+            except Exception as e:
+                logger.error(f"Error getting exercises for workout: {str(e)}")
+                return []
 
     def generate_workout_plan(self, user_input):
-        workout_schedule = self.predict_workout_types(user_input)
-        workout_plan = []
-        
-        for day, workout_type in workout_schedule.items():
-            if workout_type != 'Rest':
-                exercises = self.get_exercises_for_workout(workout_type, user_input['FitnessLevel'], user_input['ProblemAreas'])
-                workout_plan.append({
-                    'Day': day,
-                    'WorkoutType': workout_type,
-                    'Exercises': exercises
-                })
-        
-        return workout_plan
+        try:
+            workout_schedule = self.predict_workout_types(user_input)
+            workout_plan = []
+            
+            for day, workout_type in workout_schedule.items():
+                if workout_type != 'Rest':
+                    exercises = self.get_exercises_for_workout(workout_type, user_input['FitnessLevel'], user_input['ProblemAreas'])
+                    if exercises:
+                        workout_plan.append({
+                            'Day': day,
+                            'WorkoutType': workout_type,
+                            'Exercises': exercises
+                        })
+                    else:
+                        logger.warning(f"No exercises found for {day} ({workout_type}). Adding as rest day.")
+                        workout_plan.append({
+                            'Day': day,
+                            'WorkoutType': 'Rest',
+                            'Exercises': []
+                        })
+                else:
+                    workout_plan.append({
+                        'Day': day,
+                        'WorkoutType': 'Rest',
+                        'Exercises': []
+                    })
+            
+            logger.info(f"Generated workout plan with {len(workout_plan)} days")
+            return workout_plan
+        except Exception as e:
+            logger.error(f"Error generating workout plan: {str(e)}")
+            raise
+
     
 workout_model = WorkoutModel()

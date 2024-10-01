@@ -1,3 +1,6 @@
-Id,Username,Gender,Age,Height_cm,Weight_kg
-BRO0001,Hziqdnel,Male,20,171,74
-BRO0002,Sami,Male,20,176,74
+Username,Gender,Age_Group,Height_cm,Weight_kg,Body_Goal,Problem_Areas,Fitness_Level,Workout_Days
+hziqdnel,male,18-29,171,74,lose weight,"['weak chest', 'weak back', 'small arms']",intermediate,6
+sami,male,18-29,176,74,gain muscle,['weak chest'],beginner,4
+police,male,30-39,134,45,lose_weight,"['weak_chest', 'weak_back', 'big_belly']",intermediate,4
+mon,male,18-29,176,65,gain_muscle,['weak_back'],intermediate,4
+lawl,female,40-49,145,43,lose_weight,"['weak_chest', 'weak_back', 'big_belly', 'small_arms', 'small_legs']",beginner,6

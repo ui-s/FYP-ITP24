@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to Workout Planner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Roboto', Arial, sans-serif;
             background-color: #f0f0f0;
             display: flex;
             justify-content: center;
@@ -29,7 +30,7 @@
             color: #666;
             margin-bottom: 2rem;
         }
-        .get-started-btn {
+        .btn {
             background-color: #30add4;
             color: white;
             padding: 10px 20px;
@@ -38,9 +39,56 @@
             font-size: 1rem;
             cursor: pointer;
             transition: background-color 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            margin: 0 10px;
         }
-        .get-started-btn:hover {
+        .btn:hover {
             background-color: #2b9cbf;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.4);
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 300px;
+            border-radius: 10px;
+        }
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -48,7 +96,61 @@
     <div class="container">
         <h1>Welcome to Workout Planner</h1>
         <p>Your personalized fitness journey starts here. Get ready to build your perfect body with our customized workout plans.</p>
-        <a href="{{ url_for('index') }}" class="get-started-btn">Get Started</a>
+        <a href="{{ url_for('index') }}" class="btn">Get Started</a>
+        <button id="loginBtn" class="btn">Login</button>
     </div>
+
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Login</h2>
+            <form id="loginForm" action="{{ url_for('login') }}" method="post">
+                <div class="form-group">
+                    <label for="user_id">Enter your User ID:</label>
+                    <input type="text" id="user_id" name="user_id" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById("loginModal");
+        var btn = document.getElementById("loginBtn");
+        var span = document.getElementsByClassName("close")[0];
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
+   <script>
+    document.getElementById("loginForm").onsubmit = function(e) {
+        e.preventDefault();
+        var formData = new FormData(this);
+        fetch("{{ url_for('login') }}", {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                window.location.href = data.redirect;
+            } else {
+                alert(data.message);
+            }
+        })
+        .catch(error => console.error('Error:', error));
+    };
+
+
+
+   </script>
 </body>
 </html>

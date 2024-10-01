@@ -11,40 +11,91 @@ import random
 from flask import jsonify
 from datetime import datetime, timedelta
 import traceback
+import logging
 import csv
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 
-def load_users_df():
-    try:
-        # Try reading the CSV file normally
-        return pd.read_csv('GymAppUsersDataset.csv')
-    except pd.errors.ParserError:
-        # If there's an error, try to clean the file
-        with open('GymAppUsersDataset.csv', 'r') as f:
-            lines = f.readlines()
-        
-        # Remove any lines that don't have the correct number of fields
-        correct_field_count = len(lines[0].strip().split(','))
-        cleaned_lines = [line for line in lines if len(line.strip().split(',')) == correct_field_count]
-        
-        # Write the cleaned lines back to the file
-        with open('GymAppUsersDataset.csv', 'w') as f:
-            f.writelines(cleaned_lines)
-        
-        # Try reading the cleaned file
-        return pd.read_csv('GymAppUsersDataset.csv')
+# Configure logging
+logging.basicConfig(level=logging.DEBUG)
+logger = logging.getLogger(__name__)
 
-# Use this function instead of directly reading the CSV
-USERS_DF = load_users_df()
+def load_users_df():
+    # Read the CSV file using csv.DictReader
+    with open('GymAppUsersData.csv', 'r') as f:
+        csv_reader = csv.DictReader(f)
+        rows = list(csv_reader)
+
+    # Check the CSV content
+    print("Raw CSV content:")
+    for row in rows:
+        print(row)
+
+    # Convert rows to DataFrame
+    df = pd.DataFrame(rows)
+    
+    # Fix columns with list-like entries (e.g., 'Problem_Areas')
+    df['Problem_Areas'] = df['Problem_Areas'].apply(lambda x: eval(x) if isinstance(x, str) else x)
+    
+    # Set the first column (Username) as index and convert to lowercase
+    df.set_index('Username', inplace=True)
+    df.index = df.index.str.strip().str.lower()
+
+    print("DataFrame created:")
+    print(df.head())
+    print("DataFrame columns:", df.columns.tolist())
+    print("DataFrame index (usernames):", df.index.tolist())
+    
+    return df
+
+# Load user data
+users_df = load_users_df()
 
 @app.route('/')
 def intro():
     return render_template('intro.html')
 
+@app.route('/login', methods=['POST'])
+def login():
+    username = request.form['user_id'].strip().lower()
+    logger.info(f"Login attempt for username: {username}")
+    
+    if username in users_df.index:
+        user_data = users_df.loc[username].to_dict()
+        user_data['Username'] = username  # Add username to the user data
+        logger.info(f"User found: {user_data}")
+        
+        try:
+            # Store user data in session with consistent keys
+            session['username'] = username
+            session['gender'] = user_data['Gender']
+            session['age_group'] = user_data['Age_Group']
+            session['height'] = user_data['Height_cm']
+            session['weight'] = user_data['Weight_kg']
+            session['body_goal'] = user_data['Body_Goal']
+            
+            # Handle 'Problem_Areas' whether it's a string or a list
+            if isinstance(user_data['Problem_Areas'], str):
+                session['problem_areas'] = eval(user_data['Problem_Areas'])
+            else:
+                session['problem_areas'] = user_data['Problem_Areas']
+            
+            session['fitness_level'] = user_data['Fitness_Level']
+            session['workout_days'] = user_data['Workout_Days']
+            
+            logger.info(f"Session data set for user: {username}")
+            return jsonify({'success': True, 'redirect': url_for('generate_workout_plan')})
+        except Exception as e:
+            logger.error(f"Error setting session data for user {username}: {str(e)}")
+            return jsonify({'success': False, 'message': 'An error occurred during login. Please try again.'})
+    else:
+        logger.warning(f"User not found: {username}")
+        return jsonify({'success': False, 'message': 'User not found. Please register as a new user.'})
+    
 @app.route('/get-started')
 def index():
+    session.clear()  # Clear any existing session data
     session['age_group'] = ''
     session['gender'] = ''
     session['height'] = ''
@@ -57,11 +108,13 @@ def index():
 
 @app.route('/process_step1', methods=['POST'])
 def process_step1():
+    session['username'] = request.form.get('username', '')
     session['age_group'] = request.form.get('age_group', '')
     session['gender'] = request.form.get('gender', '')
     session['height'] = request.form.get('height', '')
     session['weight'] = request.form.get('weight', '')
     return redirect(url_for('body_goal'))
+
 
 @app.route('/body_goal')
 def body_goal():
@@ -103,89 +156,133 @@ def process_workout_days():
 def confirmation():
     return render_template('confirmation.html')
 
-@app.route('/generate_workout_plan', methods=['POST'])
+def ensure_file_termination():
+    filename = 'GymAppUsersData.csv'
+    with open(filename, 'ab+') as f:  # Open in binary append mode
+        f.seek(-1, os.SEEK_END)
+        last_char = f.read(1)
+        if last_char != b'\n':
+            f.write(b'\n')
+
+@app.route('/generate_workout_plan', methods=['GET', 'POST'])
 def generate_workout_plan():
-    try:
-        # Store original session data
-        original_session_data = {
-            'age_group': session.get('age_group', ''),
-            'gender': session.get('gender', ''),
-            'height': session.get('height', ''),
-            'weight': session.get('weight', ''),
-            'body_goal': session.get('body_goal', ''),
-            'problem_areas': session.get('problem_areas', []),
-            'fitness_level': session.get('fitness_level', ''),
-            'workout_days': session.get('workout_days', '')
-        }
-
-        # Perform data cleaning
-        clean_workout_schedule_data()
-        clean_workout_days_data()
-        clean_problem_area_data()
-
-        # Initialize the workout model
-        workout_model = WorkoutModel()
-
-        # Helper function to safely convert to int
-        def safe_int(value, default=0):
+    if request.method == 'GET':
+        # Check if all required session data is present (for logged-in users)
+        required_fields = ['username', 'gender', 'age_group', 'height', 'weight', 'body_goal', 'problem_areas', 'fitness_level', 'workout_days']
+        if all(field in session for field in required_fields):
             try:
-                return int(value)
-            except (ValueError, TypeError):
-                return default
+                user_data = {
+                    'Username': session['username'],
+                    'Gender': session['gender'],
+                    'Age_Group': session['age_group'],
+                    'Height_cm': session['height'],
+                    'Weight_kg': session['weight'],
+                    'Body_Goal': session['body_goal'],
+                    'Problem_Areas': session['problem_areas'],
+                    'Fitness_Level': session['fitness_level'],
+                    'Workout_Days': session['workout_days']
+                }
+                logger.info(f"Generating plan for logged-in user: {user_data['Username']}")
+                
+                # Generate workout plan
+                workout_plan = generate_workout(user_data)
+                
+                # Store the workout plan in the session
+                session['workout_plan'] = workout_plan
+                
+                # Redirect to display_workout_plan
+                return redirect(url_for('display_workout_plan'))
+            except Exception as e:
+                logger.error(f"Error generating workout plan: {str(e)}")
+                flash("An error occurred while generating your workout plan. Please try again.", "error")
+                return redirect(url_for('index'))
+        else:
+            missing_fields = [field for field in required_fields if field not in session]
+            logger.warning(f"Incomplete user data in session. Missing fields: {missing_fields}")
+            return redirect(url_for('index'))
 
-        # Prepare user input
-        user_input = {
-            'Gender': original_session_data['gender'],
-            'Age': safe_int(original_session_data['age_group'].split('-')[0]),
-            'BodyGoal': original_session_data['body_goal'],
-            'ProblemAreas': ', '.join(original_session_data['problem_areas']),
-            'Height_cm': float(original_session_data['height'] or 0),
-            'Weight_kg': float(original_session_data['weight'] or 0),
-            'FitnessLevel': original_session_data['fitness_level'],
-            'WorkoutDaysPerWeek': safe_int(original_session_data['workout_days'])
-        }
+    elif request.method == 'POST':
+        try:
+            # Collect user data from form submission
+            user_data = {
+                'Username': request.form.get('username', ''),
+                'Gender': request.form.get('gender', ''),
+                'Age_Group': request.form.get('age_group', ''),
+                'Height_cm': request.form.get('height', ''),
+                'Weight_kg': request.form.get('weight', ''),
+                'Body_Goal': request.form.get('body_goal', ''),
+                'Problem_Areas': request.form.getlist('problem_areas'),
+                'Fitness_Level': request.form.get('fitness_level', ''),
+                'Workout_Days': request.form.get('workout_days', '')
+            }
+            
+            logger.info(f"Generating plan for new user: {user_data['Username']}")
 
-        # Validate that essential fields are not empty or zero
-        if not all([user_input['Gender'], user_input['Age'], user_input['BodyGoal'], 
-                    user_input['FitnessLevel'], user_input['WorkoutDaysPerWeek']]):
-            flash('Please fill in all required fields.', 'error')
-            return redirect(url_for('confirmation'))
+            # Ensure file termination
+            ensure_file_termination()
 
-        # Generate workout plan
-        workout_plan_raw = workout_model.generate_workout_plan(user_input)
+            # Save new user data
+            with open('GymAppUsersData.csv', 'a', newline='') as f:
+                writer = csv.writer(f)
+                writer.writerow(list(user_data.values()))
 
-        # Format the workout plan for the session
-        workout_plan = {}
-        all_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        
-        for day in all_days:
-            day_plan = next((plan for plan in workout_plan_raw if plan['Day'] == day), None)
-            if day_plan:
+            # Generate workout plan
+            workout_plan = generate_workout(user_data)
+            
+            # Store the workout plan in the session
+            session['workout_plan'] = workout_plan
+            
+            # Redirect to display_workout_plan
+            return redirect(url_for('display_workout_plan'))
+        except Exception as e:
+            logger.error(f"Error in generate_workout_plan: {str(e)}")
+            flash(f"An error occurred while generating the workout plan: {str(e)}", 'error')
+            return redirect(url_for('index'))
+
+def generate_workout(user_data):
+    # Prepare user input for workout generation
+    user_input = {
+        'Gender': user_data['Gender'],
+        'Age': int(user_data['Age_Group'].split('-')[0]),
+        'BodyGoal': user_data['Body_Goal'],
+        'ProblemAreas': ', '.join(user_data['Problem_Areas']) if isinstance(user_data['Problem_Areas'], list) else user_data['Problem_Areas'],
+        'Height_cm': float(user_data['Height_cm']),
+        'Weight_kg': float(user_data['Weight_kg']),
+        'FitnessLevel': user_data['Fitness_Level'],
+        'WorkoutDaysPerWeek': int(user_data['Workout_Days'])
+    }
+
+    # Generate workout plan
+    workout_model = WorkoutModel()
+    workout_plan_raw = workout_model.generate_workout_plan(user_input)
+
+    # Format the workout plan
+    workout_plan = {}
+    all_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    for day in all_days:
+        day_plan = next((plan for plan in workout_plan_raw if plan['Day'] == day), None)
+        if day_plan:
+            # Filter out exercises with NaN values
+            valid_exercises = [
+                exercise for exercise in day_plan['Exercises']
+                if pd.notna(exercise.get('Exercise')) and pd.notna(exercise.get('TargetedMuscle'))
+            ]
+            if not valid_exercises:
+                logger.warning(f"No valid exercises found for {day}. Adding rest day.")
+                workout_plan[day] = {'type': 'Rest', 'exercises': []}
+            else:
                 workout_plan[day] = {
                     'type': day_plan['WorkoutType'],
-                    'exercises': day_plan['Exercises']
+                    'exercises': valid_exercises
                 }
-            else:
-                workout_plan[day] = {'type': 'Rest', 'exercises': []}
+        else:
+            workout_plan[day] = {'type': 'Rest', 'exercises': []}
 
-        # Store the workout plan in the session
-        session['workout_plan'] = workout_plan
-        
-        # Restore original session data
-        session.update(original_session_data)
+    # Log the generated workout plan for debugging
+    logger.info(f"Generated workout plan: {workout_plan}")
 
-        print("Workout plan generated:", workout_plan)  # Debugging line
+    return workout_plan
 
-        return redirect(url_for('display_workout_plan'))
-    except Exception as e:
-        print(f"Error occurred: {str(e)}")
-        flash(f"An error occurred while generating the workout plan: {str(e)}", 'error')
-        
-        # Restore original session data in case of error
-        session.update(original_session_data)
-        
-        return redirect(url_for('confirmation'))
-    
 @app.route('/workout_plan')
 def display_workout_plan():
     workout_plan = session.get('workout_plan', {})
