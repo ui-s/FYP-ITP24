@@ -47,78 +47,78 @@
             </div>
         </div>
 
-    <!-- Charts -->
-<div id="chartsContainer">
-    <div class="row">
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="muscleGroupChart"></canvas>
+        <!-- Charts -->
+        <div id="chartsContainer">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="muscleGroupChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="workoutDurationChart"></canvas>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="averageWeightChart"></canvas>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="totalRepsChart"></canvas>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="totalWeightChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="calorieBurnChart"></canvas>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="workoutDurationChart"></canvas>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="benchPRChart"></canvas>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="totalRepsChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="deadliftPRChart"></canvas>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="squatPRChart"></canvas>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="deadliftPRChart"></canvas>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="benchPRChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="squatPRChart"></canvas>
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="afterWorkoutWeightChart"></canvas>
-            </div>
-        </div>
-    </div>
 
-    <div class="row">
-        <div class="col-md-3">
-            <!-- Empty column for spacing -->
-        </div>
-        <div class="col-md-6">
-            <div class="chart-container">
-                <canvas id="totalWeightChart"></canvas>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="averageWeightChart"></canvas>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="chart-container">
+                        <canvas id="afterWorkoutWeightChart"></canvas>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <!-- Empty column for spacing -->
+
+        <div class="text-center mt-4 mb-5">
+            <a href="{{ url_for('display_workout_plan') }}" class="btn btn-secondary">Back to Workout Plan</a>
         </div>
     </div>
-</div>
-<div class="text-center mt-4 mb-5">
-    <a href="{{ url_for('display_workout_plan') }}" class="btn btn-secondary">Back to Workout Plan</a>
-</div>
-</div>
 
     <!-- Modal for selecting charts -->
     <div class="modal fade" id="filterModal" tabindex="-1" role="dialog" aria-labelledby="filterModalLabel" aria-hidden="true">
@@ -138,21 +138,33 @@
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="averageWeightChart" id="averageWeightChartCheck" checked>
-                        <label class="form-check-label" for="averageWeightChartCheck">
-                            Average Weight Chart
+                        <input class="form-check-input" type="checkbox" value="workoutDurationChart" id="workoutDurationChartCheck" checked>
+                        <label class="form-check-label" for="workoutDurationChartCheck">
+                            Workout Duration by Day
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="totalWeightChart" id="totalWeightChartCheck" checked>
+                        <label class="form-check-label" for="totalWeightChartCheck">
+                            Total Weight Lifted by Day
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="calorieBurnChart" id="calorieBurnChartCheck" checked>
+                        <label class="form-check-label" for="calorieBurnChartCheck">
+                            Calories Burned per Workout
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="totalRepsChart" id="totalRepsChartCheck" checked>
                         <label class="form-check-label" for="totalRepsChartCheck">
-                            Total Reps Chart
+                            Total Reps by Day
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="workoutDurationChart" id="workoutDurationChartCheck" checked>
-                        <label class="form-check-label" for="workoutDurationChartCheck">
-                            Workout Duration Chart
+                        <input class="form-check-input" type="checkbox" value="deadliftPRChart" id="deadliftPRChartCheck" checked>
+                        <label class="form-check-label" for="deadliftPRChartCheck">
+                            Deadlift PR Progression
                         </label>
                     </div>
                     <div class="form-check">
@@ -168,21 +180,15 @@
                         </label>
                     </div>
                     <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="deadliftPRChart" id="deadliftPRChartCheck" checked>
-                        <label class="form-check-label" for="deadliftPRChartCheck">
-                            Deadlift PR Progression
+                        <input class="form-check-input" type="checkbox" value="averageWeightChart" id="averageWeightChartCheck" checked>
+                        <label class="form-check-label" for="averageWeightChartCheck">
+                            Average Weight After Workout
                         </label>
                     </div>
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" value="afterWorkoutWeightChart" id="afterWorkoutWeightChartCheck" checked>
                         <label class="form-check-label" for="afterWorkoutWeightChartCheck">
                             After-Workout Weight Progression
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" value="totalWeightChart" id="totalWeightChartCheck" checked>
-                        <label class="form-check-label" for="totalWeightChartCheck">
-                            Total Weight Chart
                         </label>
                     </div>
                 </div>

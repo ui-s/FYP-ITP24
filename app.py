@@ -13,6 +13,8 @@ from datetime import datetime, timedelta
 import traceback
 import logging
 import csv
+from werkzeug.exceptions import BadRequest
+import json
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -156,13 +158,43 @@ def process_workout_days():
 def confirmation():
     return render_template('confirmation.html')
 
+
 def ensure_file_termination():
     filename = 'GymAppUsersData.csv'
-    with open(filename, 'ab+') as f:  # Open in binary append mode
-        f.seek(-1, os.SEEK_END)
-        last_char = f.read(1)
-        if last_char != b'\n':
-            f.write(b'\n')
+    if os.path.exists(filename):
+        with open(filename, 'r+') as f:
+            f.seek(0, os.SEEK_END)
+            if f.tell() > 0:
+                f.seek(-1, os.SEEK_END)
+                last_char = f.read(1)
+                if last_char != '\n':
+                    f.write('\n')
+    else:
+        # If the file doesn't exist, create it with headers
+        with open(filename, 'w', newline='') as f:
+            writer = csv.writer(f)
+            writer.writerow(['Username', 'Gender', 'Age_Group', 'Height_cm', 'Weight_kg', 'Body_Goal', 'Problem_Areas', 'Fitness_Level', 'Workout_Days'])
+
+def format_problem_areas(problem_areas):
+    return "[" + ", ".join(f"'{area}'" for area in problem_areas) + "]"
+
+def save_user_data(user_data):
+    ensure_file_termination()
+    with open('GymAppUsersData.csv', 'a', newline='') as f:
+        writer = csv.writer(f)
+        problem_areas = format_problem_areas(user_data['Problem_Areas'])
+        writer.writerow([
+            user_data['Username'],
+            user_data['Gender'],
+            user_data['Age_Group'],
+            user_data['Height_cm'],
+            user_data['Weight_kg'],
+            user_data['Body_Goal'],
+            problem_areas,
+            user_data['Fitness_Level'],
+            user_data['Workout_Days']
+        ])
+    logger.info(f"New user data saved: {user_data['Username']}")
 
 @app.route('/generate_workout_plan', methods=['GET', 'POST'])
 def generate_workout_plan():
@@ -211,77 +243,93 @@ def generate_workout_plan():
                 'Height_cm': request.form.get('height', ''),
                 'Weight_kg': request.form.get('weight', ''),
                 'Body_Goal': request.form.get('body_goal', ''),
-                'Problem_Areas': request.form.getlist('problem_areas'),
+                'Problem_Areas': request.form.getlist('problem_areas'),  # This will be a list
                 'Fitness_Level': request.form.get('fitness_level', ''),
                 'Workout_Days': request.form.get('workout_days', '')
             }
             
-            logger.info(f"Generating plan for new user: {user_data['Username']}")
-
-            # Ensure file termination
-            ensure_file_termination()
-
-            # Save new user data
-            with open('GymAppUsersData.csv', 'a', newline='') as f:
-                writer = csv.writer(f)
-                writer.writerow(list(user_data.values()))
+            logger.info(f"Collected user data from form: {user_data}")
 
             # Generate workout plan
             workout_plan = generate_workout(user_data)
             
-            # Store the workout plan in the session
+            # Store the workout plan and user data in the session
             session['workout_plan'] = workout_plan
+            session['user_data'] = user_data
+
+            # Save new user data
+            save_user_data(user_data)
             
             # Redirect to display_workout_plan
             return redirect(url_for('display_workout_plan'))
         except Exception as e:
-            logger.error(f"Error in generate_workout_plan: {str(e)}")
-            flash(f"An error occurred while generating the workout plan: {str(e)}", 'error')
+            logger.error(f"Error in generate_workout_plan: {str(e)}", exc_info=True)
+            flash("An unexpected error occurred. Please try again.", 'error')
             return redirect(url_for('index'))
-
+        
 def generate_workout(user_data):
-    # Prepare user input for workout generation
-    user_input = {
-        'Gender': user_data['Gender'],
-        'Age': int(user_data['Age_Group'].split('-')[0]),
-        'BodyGoal': user_data['Body_Goal'],
-        'ProblemAreas': ', '.join(user_data['Problem_Areas']) if isinstance(user_data['Problem_Areas'], list) else user_data['Problem_Areas'],
-        'Height_cm': float(user_data['Height_cm']),
-        'Weight_kg': float(user_data['Weight_kg']),
-        'FitnessLevel': user_data['Fitness_Level'],
-        'WorkoutDaysPerWeek': int(user_data['Workout_Days'])
-    }
+    try:
+        logger.info(f"Generating workout for user data: {user_data}")
+        
+        # Prepare user input for workout generation with default values and error handling
+        user_input = {
+            'Gender': user_data.get('Gender', '').strip() or 'Not specified',
+            'Age': safe_int(user_data.get('Age_Group', '').split('-')[0], default=30),
+            'BodyGoal': user_data.get('Body_Goal', '').strip() or 'Not specified',
+            'ProblemAreas': ', '.join(user_data.get('Problem_Areas', [])) if isinstance(user_data.get('Problem_Areas'), list) else str(user_data.get('Problem_Areas', '')),
+            'Height_cm': safe_float(user_data.get('Height_cm', ''), default=170),
+            'Weight_kg': safe_float(user_data.get('Weight_kg', ''), default=70),
+            'FitnessLevel': user_data.get('Fitness_Level', '').strip() or 'Beginner',
+            'WorkoutDaysPerWeek': safe_int(user_data.get('Workout_Days', ''), default=3)
+        }
+        
+        logger.info(f"Prepared user input: {user_input}")
 
-    # Generate workout plan
-    workout_model = WorkoutModel()
-    workout_plan_raw = workout_model.generate_workout_plan(user_input)
+        # Generate workout plan
+        workout_model = WorkoutModel()
+        workout_plan_raw = workout_model.generate_workout_plan(user_input)
 
-    # Format the workout plan
-    workout_plan = {}
-    all_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    for day in all_days:
-        day_plan = next((plan for plan in workout_plan_raw if plan['Day'] == day), None)
-        if day_plan:
-            # Filter out exercises with NaN values
-            valid_exercises = [
-                exercise for exercise in day_plan['Exercises']
-                if pd.notna(exercise.get('Exercise')) and pd.notna(exercise.get('TargetedMuscle'))
-            ]
-            if not valid_exercises:
-                logger.warning(f"No valid exercises found for {day}. Adding rest day.")
-                workout_plan[day] = {'type': 'Rest', 'exercises': []}
+        # Format the workout plan
+        workout_plan = {}
+        all_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+        for day in all_days:
+            day_plan = next((plan for plan in workout_plan_raw if plan['Day'] == day), None)
+            if day_plan:
+                # Filter out exercises with NaN values
+                valid_exercises = [
+                    exercise for exercise in day_plan['Exercises']
+                    if pd.notna(exercise.get('Exercise')) and pd.notna(exercise.get('TargetedMuscle'))
+                ]
+                if not valid_exercises:
+                    logger.warning(f"No valid exercises found for {day}. Adding rest day.")
+                    workout_plan[day] = {'type': 'Rest', 'exercises': []}
+                else:
+                    workout_plan[day] = {
+                        'type': day_plan['WorkoutType'],
+                        'exercises': valid_exercises
+                    }
             else:
-                workout_plan[day] = {
-                    'type': day_plan['WorkoutType'],
-                    'exercises': valid_exercises
-                }
-        else:
-            workout_plan[day] = {'type': 'Rest', 'exercises': []}
+                workout_plan[day] = {'type': 'Rest', 'exercises': []}
 
-    # Log the generated workout plan for debugging
-    logger.info(f"Generated workout plan: {workout_plan}")
+        # Log the generated workout plan for debugging
+        logger.info(f"Generated workout plan: {workout_plan}")
 
-    return workout_plan
+        return workout_plan
+    except Exception as e:
+        logger.error(f"Error in generate_workout: {str(e)}", exc_info=True)
+        raise BadRequest(f"Error generating workout plan: {str(e)}")
+
+def safe_int(value, default=0):
+    try:
+        return int(value)
+    except (ValueError, TypeError):
+        return default
+
+def safe_float(value, default=0.0):
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        return default
 
 @app.route('/workout_plan')
 def display_workout_plan():

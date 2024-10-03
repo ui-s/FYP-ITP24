@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confirmation - Workout Planner</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Confirm Your Choices</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/confirmation.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <main class="container">
+    <div class="container">
         <h1>Confirm Your Choices</h1>
         <p>Please review your selections below. If you need to make any changes, use the 'Back' button to navigate to the appropriate page.</p>
         
         <div class="summary">
             <section>
-                <h2>Your Information</h2>
+                <h2>Your Information:</h2>
                 <ul>
+                    <li><strong>Username:</strong> {{ session.get('username', 'Not specified') }}</li>
                     <li><strong>Age Group:</strong> {{ session.get('age_group', 'Not specified') }}</li>
                     <li><strong>Gender:</strong> {{ session.get('gender', 'Not specified')|capitalize }}</li>
                     <li><strong>Height:</strong> {{ session.get('height', 'Not specified') }} cm</li>
@@ -24,12 +25,12 @@
             </section>
 
             <section>
-                <h2>Your Goals</h2>
+                <h2>Your Goals:</h2>
                 <ul>
                     <li><strong>Body Goal:</strong> {{ session.get('body_goal', 'Not specified')|replace('_', ' ')|capitalize }}</li>
                     <li><strong>Problem Areas:</strong> 
                         {% if session.get('problem_areas') %}
-                            {{ session.get('problem_areas')|map('replace', '_', ' ')|map('capitalize')|join(', ') }}
+                            {{ session.get('problem_areas')|join(', ')|replace('_', ' ')|capitalize }}
                         {% else %}
                             Not specified
                         {% endif %}
@@ -38,19 +39,31 @@
             </section>
 
             <section>
-                <h2>Your Fitness Profile</h2>
+                <h2>Your Fitness Profile:</h2>
                 <ul>
                     <li><strong>Fitness Level:</strong> {{ session.get('fitness_level', 'Not specified')|capitalize }}</li>
                     <li><strong>Workout Days Per Week:</strong> {{ session.get('workout_days', 'Not specified') }}</li>
                 </ul>
             </section>
         </div>
-        
+
         <form action="{{ url_for('generate_workout_plan') }}" method="post">
+            <input type="hidden" name="username" value="{{ session.get('username', '') }}">
+            <input type="hidden" name="gender" value="{{ session.get('gender', '') }}">
+            <input type="hidden" name="age_group" value="{{ session.get('age_group', '') }}">
+            <input type="hidden" name="height" value="{{ session.get('height', '') }}">
+            <input type="hidden" name="weight" value="{{ session.get('weight', '') }}">
+            <input type="hidden" name="body_goal" value="{{ session.get('body_goal', '') }}">
+            {% for area in session.get('problem_areas', []) %}
+                <input type="hidden" name="problem_areas" value="{{ area }}">
+            {% endfor %}
+            <input type="hidden" name="fitness_level" value="{{ session.get('fitness_level', '') }}">
+            <input type="hidden" name="workout_days" value="{{ session.get('workout_days', '') }}">
+
             <button type="submit" class="next-btn">Generate Workout Plan</button>
         </form>
-        
-        <!-- <a href="{{ url_for('workout_days') }}" class="back-btn">Back</a> -->
-    </main>
+
+        <a href="{{ url_for('workout_days') }}" class="back-btn">Back</a>
+    </div>
 </body>
 </html>
