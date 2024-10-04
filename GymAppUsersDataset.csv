@@ -1,4 +1,4 @@
-Id,Date,Day,Bench_pr(kg),Squat_pr(kg),Deadlift_pr(kg),Chest_sets,Back_sets,Legs_sets,Arms_sets,Shoulder_sets,Core_sets,Duration_mins,Total_reps,Total_weight(kg),aftworkout_weight
+Username,Date,Day,Bench_pr(kg),Squat_pr(kg),Deadlift_pr(kg),Chest_sets,Back_sets,Legs_sets,Arms_sets,Shoulder_sets,Core_sets,Duration_mins,Total_reps,Total_weight(kg),aftworkout_weight
 BRO0001,2/9/2024,Monday,90,100,120,12,0,0,0,0,0,90,143,1080,75
 BRO0001,3/9/2024,Tuesday,90,100,160,0,12,0,0,6,0,120,162,1080,75.2
 BRO0001,5/9/2024,Thursday,90,120,160,0,0,15,0,0,0,85,120,1100,74.7

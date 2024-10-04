@@ -7,3 +7,4 @@ lawl,female,40-49,145,43,lose_weight,"['weak_chest', 'weak_back', 'big_belly', '
 hello,male,40-49,160,87,lose_weight,"[""weak_chest"", ""weak_back""]",intermediate,3
 pop,male,18-29,190,75,increase_strength,"['weak_chest', 'weak_back', 'small_legs']",intermediate,5
 ewrww,female,30-39,154,54,gain_muscle,['weak_back'],intermediate,4
+BRO0001,male,30-39,180,67,gain_muscle,"['weak_chest', 'weak_back', 'small_arms', 'small_legs']",intermediate,5

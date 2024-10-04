@@ -149,8 +149,8 @@
                     <div class="modal-body">
                         <form id="workoutDataForm">
                             <div class="form-group">
-                                <label for="userId">User ID:</label>
-                                <input type="text" class="form-control" id="userId" required>
+                                <label for="username">Username:</label>
+                                <input type="text" class="form-control" id="username" readonly>
                             </div>
                         <div class="form-group">
                             <label for="chestSets">Chest Sets:</label>
@@ -471,6 +471,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function populateModal(workoutData) {
+        $('#username').val('{{ session.username }}');  // Populate username from session
         $('#chestSets').val(workoutData.chestSets);
         $('#backSets').val(workoutData.backSets);
         $('#legsSets').val(workoutData.legsSets);

@@ -374,22 +374,22 @@ console.log("JavaScript is loaded!");
         const applyFilterBtn = document.getElementById('applyFilterBtn');
         const resetFilterBtn = document.getElementById('resetFilterBtn');
         const timePeriodSelect = document.getElementById('timePeriodSelect');
-        const userIdInput = document.getElementById('userIdInput');
+        const usernameInput = document.getElementById('usernameInput');  
         const chartSelect = document.getElementById('chartSelect');
         const applyChartSelection = document.getElementById('applyChartSelection');
         const chartsContainer = document.getElementById('chartsContainer');
     
         if (applyFilterBtn) {
             applyFilterBtn.addEventListener('click', function() {
-                const userId = userIdInput.value.trim();
+                const username = usernameInput.value.trim(); 
                 const timePeriod = timePeriodSelect.value;
                 
-                if (userId) {
-                    console.log(`User ID: ${userId}, Time Period: ${timePeriod}, Selected Charts: ${selectedCharts.join(', ')}`);
-                    fetchDataAndUpdateCharts(userId, timePeriod);
+                if (username) {
+                    console.log(`Username: ${username}, Time Period: ${timePeriod}, Selected Charts: ${selectedCharts.join(', ')}`);
+                    fetchDataAndUpdateCharts(username, timePeriod);
                     chartsContainer.style.display = 'block';
                 } else {
-                    alert('Please enter a User ID');
+                    alert('Please enter a Username');  
                     chartsContainer.style.display = 'none';
                 }
             });
@@ -397,7 +397,7 @@ console.log("JavaScript is loaded!");
     
         if (resetFilterBtn) {
             resetFilterBtn.addEventListener('click', function() {
-                userIdInput.value = '';
+                usernameInput.value = '';  
                 timePeriodSelect.value = '7days';
                 selectedCharts = [
                     'muscleGroupChart', 'averageWeightChart', 'totalRepsChart', 'workoutDurationChart',
@@ -530,27 +530,30 @@ console.log("JavaScript is loaded!");
         });
     }
     
-function fetchDataAndUpdateCharts(userId, timePeriod) {
-    console.log(`Fetching data for user ${userId} and time period ${timePeriod}`);
-    fetch(`/get_chart_data?user_id=${userId}&time_period=${timePeriod}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Received data:', data);
-            if (data.error) {
-                throw new Error(data.error);
-            }
-            updateCharts(data);
-            document.getElementById('chartsContainer').style.display = 'block';
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('An error occurred while fetching data. Please try again.');
-            document.getElementById('chartsContainer').style.display = 'none';
-        });
-}
+    function fetchDataAndUpdateCharts(username, timePeriod) {
+        console.log(`Fetching data for username ${username} and time period ${timePeriod}`);
+        fetch(`/get_chart_data?username=${encodeURIComponent(username)}&time_period=${timePeriod}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Received data:', data);
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                if (Object.keys(data).length === 0) {
+                    throw new Error('No data received for this username');
+                }
+                updateCharts(data);
+                document.getElementById('chartsContainer').style.display = 'block';
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`An error occurred: ${error.message}`);
+                document.getElementById('chartsContainer').style.display = 'none';
+            });
+    }
 

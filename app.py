@@ -396,7 +396,10 @@ def ensure_file_termination():
 def save_workout():
     try:
         data = request.json
-        user_id = data['userId']
+        username = session.get('username')  # Get username from session
+        
+        if not username:
+            return jsonify({'error': 'User not logged in'}), 401
         
         # Get current date and derive day
         current_date = datetime.now()
@@ -412,7 +415,7 @@ def save_workout():
         
         # Load existing user data
         user_data_df = pd.read_csv('GymAppUsersDataset.csv')
-        user_previous_data = user_data_df[user_data_df['Id'] == user_id].sort_values('Date').tail(1)
+        user_previous_data = user_data_df[user_data_df['Username'] == username].sort_values('Date').tail(1)
         
         # Initialize PR values
         bench_pr = float(user_previous_data['Bench_pr(kg)'].values[0]) if not user_previous_data.empty else 0
@@ -433,7 +436,7 @@ def save_workout():
         
         # Prepare the row to be written to CSV
         row = [
-            user_id,
+            username,
             current_date.strftime('%d/%m/%Y'),
             day,
             str(bench_pr),
@@ -471,12 +474,12 @@ def stats():
 @app.route('/get_chart_data')
 def get_chart_data():
     try:
-        user_id = request.args.get('user_id', '')
+        username = request.args.get('username', '')
         time_period = request.args.get('time_period', '7days')
         
-        app.logger.info(f"Received request with user_id: {user_id}, time_period: {time_period}")
+        app.logger.info(f"Received request with username: {username}, time_period: {time_period}")
 
-        columns_to_use = ['Id', 'Date', 'Day', 'Bench_pr(kg)', 'Squat_pr(kg)', 'Deadlift_pr(kg)',
+        columns_to_use = ['Username', 'Date', 'Day', 'Bench_pr(kg)', 'Squat_pr(kg)', 'Deadlift_pr(kg)',
                           'Chest_sets', 'Back_sets', 'Legs_sets', 'Arms_sets', 'Shoulder_sets',
                           'Core_sets', 'Duration_mins', 'Total_reps', 'Total_weight(kg)', 'aftworkout_weight']
         
@@ -486,13 +489,13 @@ def get_chart_data():
         df = pd.read_csv('GymAppUsersDataset.csv', usecols=columns_to_use, parse_dates=['Date'], 
                          dayfirst=True, dtype=dtype_dict)
         
-        app.logger.info(f"Raw Duration_mins data: {df['Duration_mins'].tolist()}")
-        
-        if user_id:
-            df = df[df['Id'] == user_id]
+        if username:
+            df = df[df['Username'] == username]
         
         if df.empty:
-            return jsonify({"error": "No data found for the given user ID"}), 404
+            app.logger.warning(f"No data found for username: {username}")
+            return jsonify({"error": "No data found for the given username"}), 404
+        
         
         end_date = df['Date'].max()
         if time_period == '7days':
