@@ -9,9 +9,9 @@ function formatDate(dateString) {
 
 let muscleGroupChart, averageWeightChart, totalRepsChart, workoutDurationChart, bodyweightChart, benchPRChart, squatPRChart, deadliftPRChart, afterWorkoutWeightChart, totalWeightChart;
 let selectedCharts = [
-    'muscleGroupChart', 'averageWeightChart', 'totalRepsChart', 'workoutDurationChart',
-    'bodyweightChart', 'benchPRChart', 'squatPRChart', 'deadliftPRChart',
-    'afterWorkoutWeightChart', 'totalWeightChart'
+    'muscleGroupChart', 'workoutDurationChart', 'totalWeightChart', 'caloriesBurnedChart',
+    'totalRepsChart', 'deadliftPRChart', 'benchPRChart', 'squatPRChart',
+    'averageWeightChart', 'afterWorkoutWeightChart'
 ];
 
 // Common chart options
@@ -360,6 +360,49 @@ function createTotalWeightChart(chartData) {
     });
 }
 
+function createCaloriesBurnedChart(chartData) {
+    if (!chartData.workout_days || !chartData.calories_burned || chartData.calories_burned.length === 0) {
+        console.warn('No calories burned data available');
+        return;
+    }
+
+    const ctx = document.getElementById('caloriesBurnedChart').getContext('2d');
+    if (chartInstances.caloriesBurnedChart) {
+        chartInstances.caloriesBurnedChart.destroy();
+    }
+    chartInstances.caloriesBurnedChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: chartData.workout_days,
+            datasets: [{
+                label: 'Calories Burned',
+                data: chartData.calories_burned,
+                borderColor: 'rgb(255, 159, 64)',
+                tension: 0.1
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'Calories'
+                    }
+                }
+            },
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Calories Burned per Workout'
+                }
+            }
+        }
+    });
+}
+
 function createCharts(chartData) {
     console.log("Creating charts with data:", chartData);
     try {
@@ -369,14 +412,15 @@ function createCharts(chartData) {
 
         const chartCreationFunctions = {
             muscleGroupChart: createMuscleGroupChart,
-            averageWeightChart: createAverageWeightChart,
-            totalRepsChart: createTotalRepsChart,
             workoutDurationChart: createWorkoutDurationChart,
+            totalWeightChart: createTotalWeightChart,
+            caloriesBurnedChart: createCaloriesBurnedChart,
+            totalRepsChart: createTotalRepsChart,
+            deadliftPRChart: createDeadliftPRChart,
             benchPRChart: createBenchPRChart,
             squatPRChart: createSquatPRChart,
-            deadliftPRChart: createDeadliftPRChart,
-            afterWorkoutWeightChart: createAfterWorkoutWeightChart,
-            totalWeightChart: createTotalWeightChart
+            averageWeightChart: createAverageWeightChart,
+            afterWorkoutWeightChart: createAfterWorkoutWeightChart
         };
 
         for (const [chartId, createFunction] of Object.entries(chartCreationFunctions)) {
@@ -481,9 +525,9 @@ document.addEventListener('DOMContentLoaded', function() {
             usernameInput.value = sessionUsername || '';  // Reset to session username or empty string
             timePeriodSelect.value = '7days';
             selectedCharts = [
-                'muscleGroupChart', 'averageWeightChart', 'totalRepsChart', 'workoutDurationChart',
-                'bodyweightChart', 'benchPRChart', 'squatPRChart', 'deadliftPRChart',
-                'afterWorkoutWeightChart', 'totalWeightChart'
+                'muscleGroupChart', 'workoutDurationChart', 'totalWeightChart', 'caloriesBurnedChart',
+                'totalRepsChart', 'deadliftPRChart', 'benchPRChart', 'squatPRChart',
+                'averageWeightChart', 'afterWorkoutWeightChart'
             ];
             document.querySelectorAll('#filterModal input[type="checkbox"]').forEach(checkbox => {
                 checkbox.checked = true;
@@ -493,6 +537,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else {
                 chartsContainer.style.display = 'none';
             }
+            updateChartVisibility();  // Add this line to update chart visibility after reset
         });
     }
 

@@ -495,7 +495,14 @@ def get_chart_data():
 
         columns_to_use = ['Username', 'Date', 'Day', 'Bench_pr(kg)', 'Squat_pr(kg)', 'Deadlift_pr(kg)',
                           'Chest_sets', 'Back_sets', 'Legs_sets', 'Arms_sets', 'Shoulder_sets',
-                          'Core_sets', 'Duration_mins', 'Total_reps', 'Total_weight(kg)', 'aftworkout_weight']
+                          'Core_sets', 'Duration_mins', 'Total_reps', 'Total_weight(kg)', 'aftworkout_weight',
+                          'Calories_Burned']  
+        
+        dtype_dict = {'Duration_mins': float, 'Total_reps': float, 'Total_weight(kg)': float, 'Calories_Burned': float}
+        
+        df = pd.read_csv('GymAppUsersDataset.csv', usecols=columns_to_use, parse_dates=['Date'], 
+                         dayfirst=True, dtype=dtype_dict)
+        
         
         # Specify dtypes explicitly for problematic columns
         dtype_dict = {'Duration_mins': float, 'Total_reps': float, 'Total_weight(kg)': float}
@@ -550,7 +557,8 @@ def get_chart_data():
             'squat_pr_data': df_filtered[['Date', 'Squat_pr(kg)']].to_dict('records'),
             'deadlift_pr_data': df_filtered[['Date', 'Deadlift_pr(kg)']].to_dict('records'),
             'after_workout_weight_data': df_filtered[['Date', 'aftworkout_weight']].to_dict('records'),
-            'total_weights': [safe_float(x) for x in df_filtered['Total_weight(kg)']]
+            'total_weights': [safe_float(x) for x in df_filtered['Total_weight(kg)']],
+            'calories_burned': [safe_float(x) for x in df_filtered['Calories_Burned']]
         }
 
         # Ensure all dates are formatted as strings
