@@ -451,7 +451,8 @@ def save_workout():
             str(data['durationMins']),
             str(data['totalReps']),
             str(data['totalWeight']),
-            str(data['aftworkoutWeight'])
+            str(data['aftworkoutWeight']),
+            str(data['caloriesBurned'])  # Add this line
         ]
         
         # Join the row with commas and add a newline character

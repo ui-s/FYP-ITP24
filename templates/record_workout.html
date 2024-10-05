@@ -192,6 +192,10 @@
                             <label for="aftworkoutWeight">Weight after workout (kg):</label>
                             <input type="number" class="form-control" id="aftworkoutWeight" step="0.1" required>
                         </div>
+                        <div class="form-group">
+                            <label for="caloriesBurned">Calories Burned:</label>
+                            <input type="number" class="form-control" id="caloriesBurned" readonly>
+                        </div>
                     </form>
                 </div>
                 <div class="modal-footer">
@@ -437,6 +441,7 @@ document.addEventListener('DOMContentLoaded', function() {
             coreSets: 0,
             totalReps: 0,
             totalWeight: 0,
+            caloriesBurned: 0, 
             exerciseData: []
         };
 
@@ -467,6 +472,16 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
 
+         // Calculate calories burned
+        let totalTimeArray = $('#total-time').text().split(':');
+        let hours = parseInt(totalTimeArray[0]);
+        let minutes = parseInt(totalTimeArray[1]);
+        let seconds = parseInt(totalTimeArray[2]);
+        let totalMinutes = hours * 60 + minutes + Math.ceil(seconds / 60);
+        
+        workoutData.caloriesBurned = Math.round((totalMinutes * workoutData.totalWeight) / 600);
+
+
         return workoutData;
     }
 
@@ -490,7 +505,11 @@ document.addEventListener('DOMContentLoaded', function() {
         $('#aftworkoutWeight').val($('#current-weight').val());
         $('#totalReps').val(workoutData.totalReps);
         $('#totalWeight').val(workoutData.totalWeight.toFixed(1));
-    }
+        $('#caloriesBurned').val(workoutData.caloriesBurned);
+
+        // Store total weight as a data attribute on the modal
+        $('#workoutDataModal').data('totalWeight', workoutData.totalWeight);
+}
 
     saveWorkoutBtn.addEventListener('click', function(e) {
         e.preventDefault();
@@ -505,47 +524,58 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     $('#submitWorkoutData').click(function() {
-        if (!$('#userId').val().trim()) {
-            alert('Please enter a User ID.');
-            return;
+    if (!$('#username').val().trim()) {
+        alert('Please enter a Username.');
+        return;
+    }
+
+    var formData = {
+        username: $('#username').val(),
+        chestSets: $('#chestSets').val() || 0,
+        backSets: $('#backSets').val() || 0,
+        legsSets: $('#legsSets').val() || 0,
+        armsSets: $('#armsSets').val() || 0,
+        shoulderSets: $('#shoulderSets').val() || 0,
+        coreSets: $('#coreSets').val() || 0,
+        durationMins: $('#durationMins').val(),
+        totalReps: $('#totalReps').val(),
+        totalWeight: $('#totalWeight').val(),
+        aftworkoutWeight: $('#aftworkoutWeight').val(),
+        caloriesBurned: $('#caloriesBurned').val(),  // Add this line
+        exerciseData: processWorkoutData().exerciseData
+    };
+
+    $.ajax({
+        url: '/save_workout',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify(formData),
+        success: function(response) {
+            alert('Workout saved successfully!');
+            workoutDataModal.hide();
+            isWorkoutModified = false;
+            window.location.href = '/workout_plan';
+        },
+        error: function(error) {
+            alert('Error saving workout: ' + error.responseText);
         }
-
-        var formData = {
-            userId: $('#userId').val(),
-            chestSets: $('#chestSets').val() || 0,
-            backSets: $('#backSets').val() || 0,
-            legsSets: $('#legsSets').val() || 0,
-            armsSets: $('#armsSets').val() || 0,
-            shoulderSets: $('#shoulderSets').val() || 0,
-            coreSets: $('#coreSets').val() || 0,
-            durationMins: $('#durationMins').val(),
-            totalReps: $('#totalReps').val(),
-            totalWeight: $('#totalWeight').val(),
-            aftworkoutWeight: $('#aftworkoutWeight').val(),
-            exerciseData: processWorkoutData().exerciseData
-        };
-
-        $.ajax({
-            url: '/save_workout',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(formData),
-            success: function(response) {
-                alert('Workout saved successfully!');
-                workoutDataModal.hide();
-                isWorkoutModified = false;
-                window.location.href = '/workout_plan';
-            },
-            error: function(error) {
-                alert('Error saving workout: ' + error.responseText);
-            }
-        });
     });
-
+});
     // Handle modal close button (X)
     document.querySelector('.modal .close').addEventListener('click', function() {
         workoutDataModal.hide();
     });
+
+    const durationInput = document.getElementById('durationMins');
+    const caloriesBurnedInput = document.getElementById('caloriesBurned');
+
+    durationInput.addEventListener('input', function() {
+        const totalWeight = $('#workoutDataModal').data('totalWeight');
+        const duration = parseFloat(this.value) || 0;
+        const caloriesBurned = Math.round((duration * totalWeight) / 600);
+        caloriesBurnedInput.value = caloriesBurned;
+    });
+
 
 
     // Add event listeners to remove 'is-invalid' class when user starts typing
@@ -634,6 +664,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     
     });
+
+    
     </script>
 </body>
 </html>
