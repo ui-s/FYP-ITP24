@@ -469,8 +469,21 @@ def save_workout():
     
 @app.route('/stats')
 def stats():
-    username = session.get('username', '')  # Get username from session, default to empty string if not found
-    return render_template('stats.html', username=username)
+    username = session.get('username', '')
+    if not username:
+        flash('Please log in to view your statistics.', 'warning')
+        return redirect(url_for('login'))
+
+    # Check if user has any workout data
+    df = pd.read_csv('GymAppUsersDataset.csv')
+    user_data = df[df['Username'] == username]
+    
+    if user_data.empty:
+        # User has no workout data
+        return render_template('stats.html', username=username, has_data=False)
+    else:
+        # User has workout data
+        return render_template('stats.html', username=username, has_data=True)
 
 @app.route('/get_chart_data')
 def get_chart_data():

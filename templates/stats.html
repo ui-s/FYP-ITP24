@@ -25,6 +25,7 @@
     <div class="container-fluid">
         <h1 class="mt-5 mb-4 text-center">Workout Statistics</h1>
         
+        {% if has_data %}
         <!-- Filter Section -->
         <div class="row mb-4">
             <div class="col-md-12">
@@ -61,7 +62,7 @@
                     </div>
                 </div>
             </div>
-
+        
             <div class="row">
                 <div class="col-md-6">
                     <div class="chart-container">
@@ -114,6 +115,17 @@
                 </div>
             </div>
         </div>
+
+        {% else %}
+            <div class="alert alert-info text-center" role="alert">
+                <h4 class="alert-heading">No Workout Data Yet</h4>
+                <p>It looks like you haven't recorded any workouts yet. Start by recording your first workout to see your statistics here!</p>
+                <hr>
+                <p class="mb-0">
+                    <a href="{{ url_for('display_workout_plan') }}" class="btn btn-primary">Go to Workout Plan</a>
+                </p>
+            </div>
+        {% endif %}
 
         <div class="text-center mt-4 mb-5">
             <a href="{{ url_for('display_workout_plan') }}" class="btn btn-secondary">Back to Workout Plan</a>

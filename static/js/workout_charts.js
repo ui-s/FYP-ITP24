@@ -416,7 +416,7 @@ function loadCharts() {
         fetchDataAndUpdateCharts(username, timePeriod);
     } else {
         console.log('No username provided');
-        document.getElementById('chartsContainer').style.display = 'none';
+        chartsContainer.style.display = 'none';
     }
 }
 
@@ -425,6 +425,9 @@ function fetchDataAndUpdateCharts(username, timePeriod) {
     fetch(`/get_chart_data?username=${encodeURIComponent(username)}&time_period=${timePeriod}`)
         .then(response => {
             if (!response.ok) {
+                if (response.status === 404) {
+                    throw new Error('No workout data found for this user.');
+                }
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             return response.json();
@@ -435,11 +438,12 @@ function fetchDataAndUpdateCharts(username, timePeriod) {
                 throw new Error(data.error);
             }
             updateCharts(data);
+            chartsContainer.style.display = 'block';
         })
         .catch(error => {
             console.error('Error:', error);
             alert(`An error occurred while fetching data: ${error.message}`);
-            document.getElementById('chartsContainer').style.display = 'none';
+            chartsContainer.style.display = 'none';
         });
 }
 
@@ -450,6 +454,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const usernameInput = document.getElementById('usernameInput');
     const applyChartSelection = document.getElementById('applyChartSelection');
     const chartsContainer = document.getElementById('chartsContainer');
+    
+    if (!chartsContainer) {
+        console.log('No charts container found. User might not have workout data yet.');
+        return;  // Exit early if there's no charts container
+    }
 
     // Auto-load charts if username is present
     const sessionUsername = usernameInput.dataset.sessionUsername;
