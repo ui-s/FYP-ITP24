@@ -469,7 +469,8 @@ def save_workout():
     
 @app.route('/stats')
 def stats():
-    return render_template('stats.html')
+    username = session.get('username', '')  # Get username from session, default to empty string if not found
+    return render_template('stats.html', username=username)
 
 @app.route('/get_chart_data')
 def get_chart_data():
