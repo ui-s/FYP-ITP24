@@ -60,37 +60,47 @@ def intro():
 
 @app.route('/login', methods=['POST'])
 def login():
-    username = request.form['user_id'].strip().lower()
+    username = request.form['username'].strip().lower()
+    password = request.form['password']
     logger.info(f"Login attempt for username: {username}")
-    
+
+    # Read the CSV file
+    df = pd.read_csv('GymAppUsersData.csv', index_col='Username')
+    df.index = df.index.str.lower()
+
     if username in users_df.index:
         user_data = users_df.loc[username].to_dict()
         user_data['Username'] = username  # Add username to the user data
         logger.info(f"User found: {user_data}")
         
-        try:
-            # Store user data in session with consistent keys
-            session['username'] = username
-            session['gender'] = user_data['Gender']
-            session['age_group'] = user_data['Age_Group']
-            session['height'] = user_data['Height_cm']
-            session['weight'] = user_data['Weight_kg']
-            session['body_goal'] = user_data['Body_Goal']
-            
-            # Handle 'Problem_Areas' whether it's a string or a list
-            if isinstance(user_data['Problem_Areas'], str):
-                session['problem_areas'] = eval(user_data['Problem_Areas'])
-            else:
-                session['problem_areas'] = user_data['Problem_Areas']
-            
-            session['fitness_level'] = user_data['Fitness_Level']
-            session['workout_days'] = user_data['Workout_Days']
-            
-            logger.info(f"Session data set for user: {username}")
-            return jsonify({'success': True, 'redirect': url_for('generate_workout_plan')})
-        except Exception as e:
-            logger.error(f"Error setting session data for user {username}: {str(e)}")
-            return jsonify({'success': False, 'message': 'An error occurred during login. Please try again.'})
+        # Check password
+        if user_data['Password'] == password:
+            try:
+                # Store user data in session with consistent keys
+                session['username'] = username
+                session['gender'] = user_data['Gender']
+                session['age_group'] = user_data['Age_Group']
+                session['height'] = user_data['Height_cm']
+                session['weight'] = user_data['Weight_kg']
+                session['body_goal'] = user_data['Body_Goal']
+                
+                # Handle 'Problem_Areas' whether it's a string or a list
+                if isinstance(user_data['Problem_Areas'], str):
+                    session['problem_areas'] = eval(user_data['Problem_Areas'])
+                else:
+                    session['problem_areas'] = user_data['Problem_Areas']
+                
+                session['fitness_level'] = user_data['Fitness_Level']
+                session['workout_days'] = user_data['Workout_Days']
+                
+                logger.info(f"Session data set for user: {username}")
+                return jsonify({'success': True, 'redirect': url_for('generate_workout_plan')})
+            except Exception as e:
+                logger.error(f"Error setting session data for user {username}: {str(e)}")
+                return jsonify({'success': False, 'message': 'An error occurred during login. Please try again.'})
+        else:
+            logger.warning(f"Incorrect password for user: {username}")
+            return jsonify({'success': False, 'message': 'Incorrect password. Please try again.'})
     else:
         logger.warning(f"User not found: {username}")
         return jsonify({'success': False, 'message': 'User not found. Please register as a new user.'})
@@ -110,13 +120,13 @@ def index():
 
 @app.route('/process_step1', methods=['POST'])
 def process_step1():
-    session['username'] = request.form.get('username', '')
+    session['username'] = request.form.get('username', '').strip()
+    session['password'] = request.form.get('password', '') 
     session['age_group'] = request.form.get('age_group', '')
     session['gender'] = request.form.get('gender', '')
     session['height'] = request.form.get('height', '')
     session['weight'] = request.form.get('weight', '')
     return redirect(url_for('body_goal'))
-
 
 @app.route('/body_goal')
 def body_goal():
@@ -178,6 +188,12 @@ def ensure_file_termination():
 def format_problem_areas(problem_areas):
     return "[" + ", ".join(f"'{area}'" for area in problem_areas) + "]"
 
+def reload_users_df():
+    global users_df
+    users_df = pd.read_csv('GymAppUsersData.csv', index_col='Username')
+    users_df.index = users_df.index.str.lower()  # Ensure case-insensitive username matching
+    logger.info("Users DataFrame reloaded from CSV")
+
 def save_user_data(user_data):
     ensure_file_termination()
     with open('GymAppUsersData.csv', 'a', newline='') as f:
@@ -185,6 +201,7 @@ def save_user_data(user_data):
         problem_areas = format_problem_areas(user_data['Problem_Areas'])
         writer.writerow([
             user_data['Username'],
+            user_data.get('Password', ''),  # Us,  # Add this line
             user_data['Gender'],
             user_data['Age_Group'],
             user_data['Height_cm'],
@@ -238,6 +255,7 @@ def generate_workout_plan():
             # Collect user data from form submission
             user_data = {
                 'Username': request.form.get('username', ''),
+                'Password': request.form.get('password', ''),
                 'Gender': request.form.get('gender', ''),
                 'Age_Group': request.form.get('age_group', ''),
                 'Height_cm': request.form.get('height', ''),
@@ -259,6 +277,8 @@ def generate_workout_plan():
 
             # Save new user data
             save_user_data(user_data)
+
+            reload_users_df()
             
             # Redirect to display_workout_plan
             return redirect(url_for('display_workout_plan'))
