@@ -120,8 +120,8 @@ def index():
 
 @app.route('/process_step1', methods=['POST'])
 def process_step1():
-    session['username'] = request.form.get('username', '').strip()
-    session['password'] = request.form.get('password', '') 
+    session['username'] = request.form.get('username', '').lower()
+    session['password'] = request.form.get('password', '')
     session['age_group'] = request.form.get('age_group', '')
     session['gender'] = request.form.get('gender', '')
     session['height'] = request.form.get('height', '')
@@ -201,7 +201,7 @@ def save_user_data(user_data):
         problem_areas = format_problem_areas(user_data['Problem_Areas'])
         writer.writerow([
             user_data['Username'],
-            user_data.get('Password', ''),  # Us,  # Add this line
+            user_data['Password'],
             user_data['Gender'],
             user_data['Age_Group'],
             user_data['Height_cm'],
@@ -254,16 +254,16 @@ def generate_workout_plan():
         try:
             # Collect user data from form submission
             user_data = {
-                'Username': request.form.get('username', ''),
-                'Password': request.form.get('password', ''),
-                'Gender': request.form.get('gender', ''),
-                'Age_Group': request.form.get('age_group', ''),
-                'Height_cm': request.form.get('height', ''),
-                'Weight_kg': request.form.get('weight', ''),
-                'Body_Goal': request.form.get('body_goal', ''),
-                'Problem_Areas': request.form.getlist('problem_areas'),  # This will be a list
-                'Fitness_Level': request.form.get('fitness_level', ''),
-                'Workout_Days': request.form.get('workout_days', '')
+                'Username': session.get('username', ''),
+                'Password': session.get('password', ''),
+                'Gender': session.get('gender', ''),
+                'Age_Group': session.get('age_group', ''),
+                'Height_cm': session.get('height', ''),
+                'Weight_kg': session.get('weight', ''),
+                'Body_Goal': session.get('body_goal', ''),
+                'Problem_Areas': session.get('problem_areas', []),
+                'Fitness_Level': session.get('fitness_level', ''),
+                'Workout_Days': session.get('workout_days', '')
             }
             
             logger.info(f"Collected user data from form: {user_data}")
@@ -356,6 +356,69 @@ def display_workout_plan():
     workout_plan = session.get('workout_plan', {})
     return render_template('weekly_workout_plan.html', workout_plan=workout_plan)
 
+@app.route('/update_settings', methods=['POST'])
+def update_settings():
+    if 'username' not in session:
+        flash('Please log in to update your settings.', 'warning')
+        return redirect(url_for('login'))
+
+    # Update session data
+    session['body_goal'] = request.form.get('body_goal')
+    session['problem_areas'] = request.form.getlist('problem_areas')
+    session['fitness_level'] = request.form.get('fitness_level')
+    session['workout_days'] = int(request.form.get('workout_days', 3))  # Default to 3 if not provided
+
+    # Update user data in CSV
+    update_user_data_in_csv(session['username'], {
+        'Body_Goal': session['body_goal'],
+        'Problem_Areas': session['problem_areas'],
+        'Fitness_Level': session['fitness_level'],
+        'Workout_Days': session['workout_days']
+    })
+
+    # Regenerate workout plan
+    user_data = {
+        'Username': session['username'],
+        'Gender': session['gender'],
+        'Age_Group': session['age_group'],
+        'Height_cm': session['height'],
+        'Weight_kg': session['weight'],
+        'Body_Goal': session['body_goal'],
+        'Problem_Areas': session['problem_areas'],
+        'Fitness_Level': session['fitness_level'],
+        'Workout_Days': session['workout_days']
+    }
+    new_workout_plan = generate_workout(user_data)
+    session['workout_plan'] = new_workout_plan
+
+    flash('Your settings have been updated and a new workout plan has been generated.', 'success')
+    return redirect(url_for('display_workout_plan'))
+
+def update_user_data_in_csv(username, new_data):
+    filename = 'GymAppUsersData.csv'
+    temp_filename = 'temp_' + filename
+    
+    with open(filename, 'r') as csvfile, open(temp_filename, 'w', newline='') as temp_csvfile:
+        reader = csv.DictReader(csvfile)
+        fieldnames = reader.fieldnames
+        writer = csv.DictWriter(temp_csvfile, fieldnames=fieldnames)
+        writer.writeheader()
+
+        for row in reader:
+            if row['Username'] == username:
+                row.update(new_data)
+            writer.writerow(row)
+    
+    os.replace(temp_filename, filename)
+
+
+
+@app.route('/logout')
+def logout():
+    # Clear the session
+    session.clear()
+    flash('You have been logged out successfully.', 'info')
+    return redirect(url_for('intro'))
 
 @app.route('/workout/<day>')
 def workout(day):

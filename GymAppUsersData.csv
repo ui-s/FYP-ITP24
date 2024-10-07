@@ -1,4 +1,5 @@
 Username,Password,Gender,Age_Group,Height_cm,Weight_kg,Body_Goal,Problem_Areas,Fitness_Level,Workout_Days
 hziqdnel,123,male,18-29,171,74,lose weight,"['weak chest', 'weak back', 'small arms']",intermediate,6
-sami,456,male,18-29,176,74,gain muscle,['weak chest'],beginner,4
-Salmon,,male,30-39,175,80,lose_weight,"['weak_chest', 'weak_back', 'big_belly', 'small_arms', 'small_legs']",beginner,6
+sami,456,male,18-29,176,74,gain_muscle,"['small_arms', 'small_legs']",beginner,4
+salmon,pizza,male,30-39,175,80,lose_weight,"['weak_chest', 'weak_back', 'big_belly', 'small_arms', 'small_legs']",beginner,6
+bro0001,tyler,female,18-29,164,65,increase_strength,"['weak_chest', 'weak_back', 'big_belly', 'small_legs']",intermediate,5

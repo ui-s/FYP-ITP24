@@ -20,11 +20,90 @@
         .rest-day {
             background-color: #e9ecef;
         }
+        .settings-form {
+            display: none;
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        #showSettingsBtn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1 class="mt-5 text-center text-primary">Your Weekly Workout Plan</h1>
+
+        <button id="logoutBtn" class="btn btn-danger" style="position: fixed; top: 20px; left: 20px; z-index: 1000;">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+    
+
+        <button id="showSettingsBtn" class="btn btn-secondary">
+            <i class="fas fa-cog"></i> Update Settings
+        </button>
+        
+        <div id="settingsForm" class="settings-form">
+            <h3>Update Your Workout Settings</h3>
+            <form id="updateSettingsForm" method="POST" action="{{ url_for('update_settings') }}" onsubmit="return validateForm()">
+                <div class="form-group">
+                    <label for="body_goal">Body Goal:</label>
+                    <select class="form-control" id="body_goal" name="body_goal">
+                        <option value="lose_weight" {% if session.body_goal == 'lose_weight' %}selected{% endif %}>Lose Weight</option>
+                        <option value="gain_muscle" {% if session.body_goal == 'gain_muscle' %}selected{% endif %}>Gain Muscle</option>
+                        <option value="increase_strength" {% if session.body_goal == 'increase_strength' %}selected{% endif %}>Increase Strength</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Problem Areas (select at least one):</label><br>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input problem-area" type="checkbox" id="weak_chest" name="problem_areas" value="weak_chest" {% if 'weak_chest' in session.problem_areas %}checked{% endif %}>
+                        <label class="form-check-label" for="weak_chest">Weak Chest</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input problem-area" type="checkbox" id="weak_back" name="problem_areas" value="weak_back" {% if 'weak_back' in session.problem_areas %}checked{% endif %}>
+                        <label class="form-check-label" for="weak_back">Weak Back</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input problem-area" type="checkbox" id="big_belly" name="problem_areas" value="big_belly" {% if 'big_belly' in session.problem_areas %}checked{% endif %}>
+                        <label class="form-check-label" for="big_belly">Big Belly</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input problem-area" type="checkbox" id="small_arms" name="problem_areas" value="small_arms" {% if 'small_arms' in session.problem_areas %}checked{% endif %}>
+                        <label class="form-check-label" for="small_arms">Small Arms</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input problem-area" type="checkbox" id="small_legs" name="problem_areas" value="small_legs" {% if 'small_legs' in session.problem_areas %}checked{% endif %}>
+                        <label class="form-check-label" for="small_legs">Small Legs</label>
+                    </div>
+                    <div id="problem-areas-error" class="text-danger" style="display: none;">Please select at least one problem area.</div>
+                </div>
+                <div class="form-group">
+                    <label for="fitness_level">Fitness Level:</label>
+                    <select class="form-control" id="fitness_level" name="fitness_level">
+                        <option value="beginner" {% if session.fitness_level == 'beginner' %}selected{% endif %}>Beginner</option>
+                        <option value="intermediate" {% if session.fitness_level == 'intermediate' %}selected{% endif %}>Intermediate</option>
+                        <option value="advanced" {% if session.fitness_level == 'advanced' %}selected{% endif %}>Advanced</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="workout_days">Workout Days per Week:</label>
+                    <select class="form-control" id="workout_days" name="workout_days">
+                        {% for i in range(1, 8) %}
+                            <option value="{{ i }}" {% if session.workout_days|int == i %}selected{% endif %}>{{ i }} day{% if i != 1 %}s{% endif %}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Update and Regenerate Plan</button>
+            </form>
+        </div>
+
         <div class="row">
             {% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'] %}
                 <div class="col-md-4">
@@ -45,6 +124,7 @@
             {% endfor %}
         </div>
 
+        
         <!-- Button to navigate to stats page -->
         <div class="text-center mt-4">
             <a href="{{ url_for('stats') }}" class="btn btn-info">View Workout Statistics</a>
@@ -53,5 +133,41 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            $('#showSettingsBtn').click(function() {
+                $('#settingsForm').toggle();
+            });
+        });
+    
+        function validateForm() {
+            var problemAreas = document.querySelectorAll('input[name="problem_areas"]:checked');
+            if (problemAreas.length === 0) {
+                document.getElementById('problem-areas-error').style.display = 'block';
+                return false;
+            }
+            document.getElementById('problem-areas-error').style.display = 'none';
+            return true;
+        }
+    
+        // Add event listeners to checkboxes
+        var checkboxes = document.querySelectorAll('.problem-area');
+        checkboxes.forEach(function(checkbox) {
+            checkbox.addEventListener('change', function() {
+                if (document.querySelectorAll('input[name="problem_areas"]:checked').length > 0) {
+                    document.getElementById('problem-areas-error').style.display = 'none';
+                }
+            });
+        });
+
+        document.getElementById('logoutBtn').addEventListener('click', function() {
+        if (confirm('Are you sure you want to logout?')) {
+            window.location.href = "{{ url_for('logout') }}";
+        }
+    });
+    </script>
+
+    
 </body>
 </html>
