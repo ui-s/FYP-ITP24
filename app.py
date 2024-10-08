@@ -54,6 +54,35 @@ def load_users_df():
 # Load user data
 users_df = load_users_df()
 
+def load_users_df():
+    # Read the CSV file using csv.DictReader
+    with open('GymAppUsersData.csv', 'r') as f:
+        csv_reader = csv.DictReader(f)
+        rows = list(csv_reader)
+
+    # Convert rows to DataFrame
+    df = pd.DataFrame(rows)
+    
+    # Fix columns with list-like entries (e.g., 'Problem_Areas')
+    df['Problem_Areas'] = df['Problem_Areas'].apply(lambda x: eval(x) if isinstance(x, str) else x)
+    
+    # Set the first column (Username) as index and convert to lowercase
+    df.set_index('Username', inplace=True)
+    df.index = df.index.str.strip().str.lower()
+
+    logger.info("Users DataFrame loaded from CSV")
+    return df
+
+# Load user data
+users_df = load_users_df()
+
+def reload_users_df():
+    global users_df
+    users_df = load_users_df()
+    logger.info("Users DataFrame reloaded from CSV")
+
+
+
 @app.route('/')
 def intro():
     return render_template('intro.html')
@@ -63,6 +92,8 @@ def login():
     username = request.form['username'].strip().lower()
     password = request.form['password']
     logger.info(f"Login attempt for username: {username}")
+
+    reload_users_df()
 
     # Read the CSV file
     df = pd.read_csv('GymAppUsersData.csv', index_col='Username')
@@ -216,6 +247,7 @@ def save_user_data(user_data):
 @app.route('/generate_workout_plan', methods=['GET', 'POST'])
 def generate_workout_plan():
     if request.method == 'GET':
+        reload_users_df()
         # Check if all required session data is present (for logged-in users)
         required_fields = ['username', 'gender', 'age_group', 'height', 'weight', 'body_goal', 'problem_areas', 'fitness_level', 'workout_days']
         if all(field in session for field in required_fields):
@@ -251,6 +283,7 @@ def generate_workout_plan():
             return redirect(url_for('index'))
 
     elif request.method == 'POST':
+        reload_users_df()
         try:
             # Collect user data from form submission
             user_data = {
@@ -419,6 +452,7 @@ def logout():
     session.clear()
     flash('You have been logged out successfully.', 'info')
     return redirect(url_for('intro'))
+
 
 @app.route('/workout/<day>')
 def workout(day):

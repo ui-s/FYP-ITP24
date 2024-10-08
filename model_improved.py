@@ -60,19 +60,62 @@ class WorkoutModel:
             accuracy = accuracy_score(y_test[day], y_pred)
             print(f"Model Accuracy for {day}: {accuracy:.2f}")
 
+    
     def optimize_workout_schedule(self, workout_days, predictions):
         schedule = {day: 'Rest' for day in self.target_days}
         workout_count = 0
         
+        # First pass: Use model predictions
         for day, workout in predictions.items():
             if workout != 'Rest' and workout_count < workout_days:
                 schedule[day] = workout
                 workout_count += 1
-            
-            if workout_count == workout_days:
-                break
+        
+        # Second pass: Fill in remaining days if needed
+        if workout_count < workout_days:
+            remaining_days = [day for day in self.target_days if schedule[day] == 'Rest']
+            additional_workouts = random.sample(remaining_days, workout_days - workout_count)
+            for day in additional_workouts:
+                schedule[day] = random.choice([wt for wt in self.workout_types if wt != 'Rest'])
+        
+        # Apply logical structuring
+        self.apply_logical_structure(schedule, workout_days)
         
         return schedule
+
+    def apply_logical_structure(self, schedule, workout_days):
+        days = self.target_days
+        
+        if workout_days <= 3:
+            # For 1-3 workout days, ensure at least one rest day between workouts
+            workout_indices = [i for i, day in enumerate(days) if schedule[day] != 'Rest']
+            new_schedule = {day: 'Rest' for day in days}
+            for i, index in enumerate(workout_indices):
+                new_day_index = (index + i * 2) % 7
+                new_schedule[days[new_day_index]] = schedule[days[index]]
+            schedule.update(new_schedule)
+        elif 4 <= workout_days <= 5:
+            # For 4-5 workout days, try to have a rest day after every 2-3 workouts
+            workout_indices = [i for i, day in enumerate(days) if schedule[day] != 'Rest']
+            for i in range(len(workout_indices) - 1):
+                if workout_indices[i+1] - workout_indices[i] == 1:
+                    next_day = days[(workout_indices[i+1] + 1) % 7]
+                    if schedule[next_day] == 'Rest':
+                        schedule[days[workout_indices[i+1]]] = 'Rest'
+                        schedule[next_day] = schedule[days[workout_indices[i]]]
+        # For 6-7 workout days, keep the original distribution
+        
+        # Ensure no duplicate workout types in a week
+        used_workouts = set()
+        for day in days:
+            if schedule[day] != 'Rest':
+                if schedule[day] in used_workouts:
+                    unused_workouts = [wt for wt in self.workout_types if wt not in used_workouts and wt != 'Rest']
+                    if unused_workouts:
+                        schedule[day] = random.choice(unused_workouts)
+                    else:
+                        schedule[day] = 'Full Body'  # Fallback to full body if all workout types are used
+                used_workouts.add(schedule[day])
 
     def predict_workout_types(self, user_input):
         if not hasattr(self, 'models'):
@@ -88,7 +131,7 @@ class WorkoutModel:
         
         optimized_schedule = self.optimize_workout_schedule(user_input['WorkoutDaysPerWeek'], predictions)
         return optimized_schedule
-
+    
     def get_exercises_for_workout(self, workout_type, fitness_level, problem_areas):
             try:
                 suitable_exercises = self.workout_exercises_data[
