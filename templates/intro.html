@@ -8,23 +8,41 @@
     <style>
         body {
             font-family: 'Roboto', Arial, sans-serif;
-            background-color: #f0f0f0;
+            margin: 0;
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
+            position: relative; /* Allow absolute positioning for the pseudo-element */
+            overflow: hidden; /* Prevent scrolling */
+        }
+        .background {
+            background: url('/static/images/GymAppBackground.png') no-repeat center center fixed;
+            background-size: cover;
+            position: absolute; /* Position the background relative to the body */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(8px); /* Apply blur to the background */
+            z-index: 0; /* Send the background behind other content */
         }
         .container {
-            background-color: white;
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 2rem;
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             text-align: center;
+            max-width: 400px; /* Limit the maximum width */
+            position: relative; /* Make this content relative to stack above background */
+            z-index: 1; /* Bring the content above the blurred background */
         }
         h1 {
             color: #333;
             margin-bottom: 1rem;
+            background: linear-gradient(90deg, #30add4, #2b9cbf);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         p {
             color: #666;
@@ -38,18 +56,20 @@
             border-radius: 5px;
             font-size: 1rem;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s;
             text-decoration: none;
             display: inline-block;
             margin: 0 10px;
         }
         .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             background-color: #2b9cbf;
         }
         .modal {
             display: none;
             position: fixed;
-            z-index: 1;
+            z-index: 2; /* Ensure modal is on top of everything */
             left: 0;
             top: 0;
             width: 100%;
@@ -57,7 +77,6 @@
             overflow: auto;
             background-color: rgba(0,0,0,0.4);
         }
-        
         .modal-content {
             background-color: #fefefe;
             margin: 15% auto;
@@ -66,19 +85,21 @@
             width: 300px;
             border-radius: 10px;
             box-sizing: border-box;
+            opacity: 0;
+            transition: opacity 0.3s ease;
         }
-        
+        .modal.show .modal-content {
+            opacity: 1;
+        }
         .close {
-            color: #aaa;
+            color: #d9534f;
             float: right;
             font-size: 28px;
             font-weight: bold;
+            transition: color 0.3s;
         }
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
+        .close:hover {
+            color: #c9302c;
         }
         .form-group {
             margin-bottom: 1rem;
@@ -95,29 +116,33 @@
             border-radius: 4px;
             box-sizing: border-box;
         }
-        .form-group input[type="password"] {
-            width: 100%;
-            padding: 0.5rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            box-sizing: border-box;
+        .form-group input:focus {
+            border-color: #30add4;
+            box-shadow: 0 0 5px rgba(48, 173, 212, 0.5);
         }
         #loginForm {
             width: 100%;
         }
+        #loading {
+            display: none;
+            text-align: center;
+            color: #333;
+            margin-top: 1rem;
+        }
     </style>
 </head>
 <body>
+    <div class="background"></div>
     <div class="container">
-        <h1>Welcome to Workout Planner</h1>
-        <p>Your personalized fitness journey starts here. Get ready to build your perfect body with our customized workout plans.</p>
+        <h1>Welcome to Project Tagap!🏋🏻‍♂️</h1>
+        <p>Your personalized fitness journey starts here. Get ready to build your perfect body with our customized workout plans!💪</p>
         <a href="{{ url_for('index') }}" class="btn">Get Started</a>
         <button id="loginBtn" class="btn">Login</button>
     </div>
 
     <div id="loginModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
+            <span class="close" aria-label="Close Modal">&times;</span>
             <h2>Login</h2>
             <form id="loginForm" action="{{ url_for('login') }}" method="post">
                 <div class="form-group">
@@ -133,40 +158,58 @@
         </div>
     </div>
 
+    <div id="loading">Loading...</div>
+
     <script>
         var modal = document.getElementById("loginModal");
         var btn = document.getElementById("loginBtn");
         var span = document.getElementsByClassName("close")[0];
+
         btn.onclick = function() {
             modal.style.display = "block";
+            setTimeout(function() {
+                modal.classList.add('show');
+            }, 10); // Allow the modal to be visible before the fade-in
         }
+
         span.onclick = function() {
-            modal.style.display = "none";
-        }
-        window.onclick = function(event) {
-            if (event.target == modal) {
+            modal.classList.remove('show');
+            setTimeout(function() {
                 modal.style.display = "none";
+            }, 300); // Delay to match the fade-out transition
+        }
+
+        window.onclick = function(event) {
+            if (event.target === modal) {
+                span.onclick();
             }
         }
+
+        document.getElementById("loginForm").onsubmit = function(e) {
+            e.preventDefault();
+            document.getElementById("loading").style.display = "block"; // Show loading message
+            var formData = new FormData(this);
+            fetch("{{ url_for('login') }}", {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById("loading").style.display = "none"; // Hide loading message
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById("loading").style.display = "none"; // Hide loading message on error
+            });
+        };
     </script>
-    <script>
-    document.getElementById("loginForm").onsubmit = function(e) {
-        e.preventDefault();
-        var formData = new FormData(this);
-        fetch("{{ url_for('login') }}", {
-            method: 'POST',
-            body: formData
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                window.location.href = data.redirect;
-            } else {
-                alert(data.message);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    };
-   </script>
+
+    <footer>
+    </footer>
 </body>
 </html>
