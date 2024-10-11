@@ -1,14 +1,5 @@
-Username,Gender,Age_Group,Height_cm,Weight_kg,Body_Goal,Problem_Areas,Fitness_Level,Workout_Days
-hziqdnel,male,18-29,171,74,lose weight,"['weak chest', 'weak back', 'small arms']",intermediate,6
-sami,male,18-29,176,74,gain muscle,['weak chest'],beginner,4
-police,male,30-39,134,45,lose_weight,"['weak_chest', 'weak_back', 'big_belly']",intermediate,4
-mon,male,18-29,176,65,gain_muscle,['weak_back'],intermediate,4
-lawl,female,40-49,145,43,lose_weight,"['weak_chest', 'weak_back', 'big_belly', 'small_arms', 'small_legs']",beginner,6
-hello,male,40-49,160,87,lose_weight,"[""weak_chest"", ""weak_back""]",intermediate,3
-pop,male,18-29,190,75,increase_strength,"['weak_chest', 'weak_back', 'small_legs']",intermediate,5
-ewrww,female,30-39,154,54,gain_muscle,['weak_back'],intermediate,4
-BRO0001,male,30-39,180,67,gain_muscle,"['weak_chest', 'weak_back', 'small_arms', 'small_legs']",intermediate,5
-Hziqdnel,male,18-29,171,74,gain_muscle,['weak_chest'],intermediate,5
-hziqdnel,male,,172,74,gain_muscle,['weak_chest'],intermediate,5
-hziqdnel,male,,172,74,gain_muscle,['weak_chest'],advanced,7
-hziqdnel,male,20,172,74,gain_muscle,['weak_chest'],advanced,6
+Username,Password,Gender,Age_Group,Height_cm,Weight_kg,Body_Goal,Problem_Areas,Fitness_Level,Workout_Days
+hziqdnel,123,male,18-29,171,74,lose weight,"['weak chest', 'weak back', 'small arms']",intermediate,6
+sami,456,male,18-29,176,74,gain_muscle,"['weak_chest', 'weak_back']",advanced,4
+salmon,pizza,male,30-39,175,80,lose_weight,"['weak_chest', 'weak_back', 'big_belly', 'small_arms', 'small_legs']",beginner,6
+bro0001,tyler,female,18-29,164,65,increase_strength,"['weak_chest', 'weak_back', 'big_belly', 'small_legs']",intermediate,5
