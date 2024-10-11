@@ -10,11 +10,24 @@
 
 body {
   font-family: 'Roboto', Arial, sans-serif;
-  background-color: var(--background-color);
   margin: 0;
   padding: 0;
   color: var(--text-color);
   line-height: 1.6;
+  position: relative; /* Position for background */
+  overflow: hidden; /* Prevent scrolling */
+}
+
+.background {
+  background: url('/static/images/GymAppBackground.png') no-repeat center center fixed; /* Adjust the URL as necessary */
+  background-size: cover;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  filter: blur(8px); /* Apply blur to the background */
+  z-index: -1; /* Send the background behind other content */
 }
 
 .container {
@@ -24,6 +37,8 @@ body {
   background-color: var(--card-background);
   border-radius: 10px;
   box-shadow: var(--shadow);
+  position: relative; /* Ensure the container is above the blurred background */
+  z-index: 1; /* Bring the content above the background */
 }
 
 h1 {
