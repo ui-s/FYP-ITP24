@@ -5,12 +5,171 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Planner - Body Goal</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/body_goal.css') }}">
+    <style>
+        :root {
+            --primary-color: #30add4;
+            --text-color: #000000;
+            --background-color: #f5f5f5;
+            --card-background: #ffffff;
+            --card-hover-background: #f0f0f0;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background-color: var(--background-color);
+            margin: 0;
+            padding: 0;
+            color: var(--text-color);
+            line-height: 1.6;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .background {
+            background: url('/static/images/GymAppBackground.png') no-repeat center center fixed;
+            background-size: cover;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            filter: blur(8px);
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: var(--card-background);
+            border-radius: 10px;
+            box-shadow: var(--shadow);
+            position: relative;
+            z-index: 1;
+        }
+
+        h1 {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            font-weight: 700;
+        }
+
+        .body-goals {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .goal-card {
+            position: relative;
+            background-color: var(--card-background);
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .goal-card input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .goal-card label {
+            display: block;
+            padding: 20px;
+            cursor: pointer;
+        }
+
+        .goal-card h2 {
+            margin-top: 0;
+            color: var(--text-color);
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        .goal-card p {
+            margin-bottom: 0;
+            font-size: 0.9em;
+            color: var(--text-color);
+        }
+
+        .goal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow);
+            background-color: var(--card-hover-background);
+        }
+
+        .goal-card input[type="radio"]:checked + label {
+            background-color: #e6f7ff;
+            border: 2px solid var(--primary-color);
+        }
+
+        .next-btn, .back-btn {
+            display: block;
+            width: 100%;
+            padding: 14px;
+            border: none;
+            border-radius: 6px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.1s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .next-btn {
+            background-color: var(--primary-color);
+            color: white;
+            margin-bottom: 20px;
+        }
+
+        .next-btn:hover {
+            background-color: #2b9cbf;
+        }
+
+        .back-btn {
+            background-color: #f0f0f0;
+            color: var(--text-color);
+        }
+
+        .back-btn:hover {
+            background-color: #e0e0e0;
+        }
+
+        .next-btn:active, .back-btn:active {
+            transform: translateY(2px);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px;
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 2em;
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="background"></div>
     <main class="container">
         <h1>Choose Your Body Goal</h1>
-        
         <form action="{{ url_for('process_body_goal') }}" method="post">
             <div class="body-goals">
                 <div class="goal-card">
@@ -20,7 +179,6 @@
                         <p>Aim to reduce body weight through cardio, improving health and physique.</p>
                     </label>
                 </div>
-                
                 <div class="goal-card">
                     <input type="radio" id="gain-muscle" name="body_goal" value="gain_muscle" required {% if session.get('body_goal') == 'gain_muscle' %}checked{% endif %}>
                     <label for="gain-muscle">
@@ -28,7 +186,6 @@
                         <p>Focus on increasing muscle mass and strength through resistance training.</p>
                     </label>
                 </div>
-                
                 <div class="goal-card">
                     <input type="radio" id="increase-strength" name="body_goal" value="increase_strength" required {% if session.get('body_goal') == 'increase_strength' %}checked{% endif %}>
                     <label for="increase-strength">
@@ -37,12 +194,11 @@
                     </label>
                 </div>
             </div>
-
-            
-            
             <button type="submit" class="next-btn">Next</button>
         </form>
-        
     </main>
+    <script>
+        // Additional scripts if necessary
+    </script>
 </body>
 </html>

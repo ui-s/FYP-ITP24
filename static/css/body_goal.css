@@ -1,151 +1,154 @@
 /* Body Goal CSS */
 
 :root {
-  --primary-color: #30add4;
-  --text-color: #000000;  /* Changed to black */
-  --background-color: #f5f5f5;
-  --card-background: #ffffff;
-  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --primary-color: #30add4;
+    --text-color: #000000; /* Changed to black */
+    --background-color: #f5f5f5;
+    --card-background: #ffffff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+html, body {
+    height: 100%; /* Ensure the html and body cover full height */
+    margin: 0; /* Remove default margin */
 }
 
 body {
-  font-family: 'Roboto', Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  color: var(--text-color);
-  line-height: 1.6;
-  position: relative; /* Position for background */
-  overflow: hidden; /* Prevent scrolling */
+    font-family: 'Roboto', Arial, sans-serif;
+    color: var(--text-color);
+    line-height: 1.6;
+    position: relative; /* Position for background */
+    overflow: hidden; /* Prevent scrolling */
 }
 
 .background {
-  background: url('/static/images/GymAppBackground.png') no-repeat center center fixed; /* Adjust the URL as necessary */
-  background-size: cover;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  filter: blur(8px); /* Apply blur to the background */
-  z-index: -1; /* Send the background behind other content */
+    background: url('/static/images/GymAppBackground.png') no-repeat center center fixed; /* Adjust the URL as necessary */
+    background-size: cover;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Ensure it covers the whole viewport */
+    filter: blur(8px); /* Apply blur to the background */
+    z-index: -1; /* Send the background behind other content */
 }
 
 .container {
-  max-width: 600px;
-  margin: 40px auto;
-  padding: 30px;
-  background-color: var(--card-background);
-  border-radius: 10px;
-  box-shadow: var(--shadow);
-  position: relative; /* Ensure the container is above the blurred background */
-  z-index: 1; /* Bring the content above the background */
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 30px;
+    background-color: var(--card-background);
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    position: relative; /* Ensure the container is above the blurred background */
+    z-index: 1; /* Bring the content above the background */
 }
 
 h1 {
-  color: var(--text-color);  /* Changed to use text-color (black) */
-  text-align: center;
-  margin-bottom: 30px;
-  font-size: 2.5em;
-  font-weight: 700;
+    color: var(--text-color); /* Changed to use text-color (black) */
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2.5em;
+    font-weight: 700;
 }
 
 .body-goals {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  margin-bottom: 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    margin-bottom: 30px;
 }
 
 .goal-card {
-  position: relative;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  overflow: hidden;
-  transition: all 0.3s ease;
+    position: relative;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    overflow: hidden;
+    transition: all 0.3s ease;
 }
 
 .goal-card input[type="radio"] {
-  position: absolute;
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
+    position: absolute;
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
 
 .goal-card label {
-  display: block;
-  padding: 20px;
-  cursor: pointer;
+    display: block;
+    padding: 20px;
+    cursor: pointer;
 }
 
 .goal-card h2 {
-  margin-top: 0;
-  color: var(--text-color);  /* Changed to use text-color (black) */
-  font-size: 1.2em;
+    margin-top: 0;
+    color: var(--text-color); /* Changed to use text-color (black) */
+    font-size: 1.2em;
 }
 
 .goal-card p {
-  margin-bottom: 0;
-  font-size: 0.9em;
-  color: var(--text-color);  /* Explicitly set to text-color (black) */
+    margin-bottom: 0;
+    font-size: 0.9em;
+    color: var(--text-color); /* Explicitly set to text-color (black) */
 }
 
 .goal-card:hover {
-  transform: translateY(-5px);
-  box-shadow: var(--shadow);
+    transform: translateY(-5px);
+    box-shadow: var(--shadow);
 }
 
 .goal-card input[type="radio"]:checked + label {
-  background-color: #e6f7ff;
-  border: 2px solid var(--primary-color);
+    background-color: #e6f7ff;
+    border: 2px solid var(--primary-color);
 }
 
 .next-btn, .back-btn {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  border: none;
-  border-radius: 6px;
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.1s ease;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  text-align: center;
-  text-decoration: none;
+    display: block;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    text-align: center;
+    text-decoration: none;
 }
 
 .next-btn {
-  background-color: var(--primary-color);
-  color: white;
-  margin-bottom: 20px;
+    background-color: var(--primary-color);
+    color: white;
+    margin-bottom: 20px;
 }
 
 .next-btn:hover {
-  background-color: #2b9cbf;
+    background-color: #2b9cbf;
 }
 
 .back-btn {
-  background-color: #f0f0f0;
-  color: var(--text-color);
+    background-color: #f0f0f0;
+    color: var(--text-color);
 }
 
 .back-btn:hover {
-  background-color: #e0e0e0;
+    background-color: #e0e0e0;
 }
 
 .next-btn:active, .back-btn:active {
-  transform: translateY(2px);
+    transform: translateY(2px);
 }
 
 @media (max-width: 768px) {
-  .container {
-    margin: 20px;
-    padding: 20px;
-  }
+    .container {
+        margin: 20px;
+        padding: 20px;
+    }
 
-  h1 {
-    font-size: 2em;
-  }
+    h1 {
+        font-size: 2em;
+    }
 }

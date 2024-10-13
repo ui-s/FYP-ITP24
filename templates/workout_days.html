@@ -6,8 +6,110 @@
     <title>Workout Planner - Workout Days</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/workout_days.css') }}">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; /* Prevent default scroll */
+            position: relative; /* Position for the background */
+        }
+
+        /* Fixed blurred background */
+        .background {
+            background: url('/static/images/GymAppBackground.png') no-repeat center center fixed; /* Background image */
+            background-size: cover; /* Cover the entire area */
+            position: fixed; /* Fix to viewport */
+            top: 0; /* Align to the top */
+            left: 0; /* Align to the left */
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            filter: blur(8px); /* Apply blur */
+            z-index: -1; /* Send to back */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            margin: 40px auto; /* Center with margin */
+            padding: 30px; /* Padding for content */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Shadow */
+            max-width: 600px; /* Max width for the content */
+            width: 90%; /* Full width but with some margin */
+            position: relative; /* Ensure content is above the background */
+            z-index: 1; /* Layer above background */
+            overflow-y: auto; /* Allow vertical scrolling */
+            max-height: calc(100vh - 80px); /* Adjust max height, accounting for margins */
+        }
+
+        h1 {
+            color: #000; /* Text color */
+            text-align: center; /* Center the title */
+            margin-bottom: 30px; /* Space below */
+            font-size: 2.5em; /* Font size */
+            font-weight: 700; /* Font weight */
+        }
+
+        .form-group {
+            margin-bottom: 20px; /* Space below the form group */
+        }
+
+        label {
+            display: block; /* Block level label */
+            margin-bottom: 10px; /* Space below the label */
+            font-size: 1.2em; /* Font size */
+            color: #000; /* Text color */
+        }
+
+        select {
+            width: 100%; /* Full width for select */
+            padding: 10px; /* Padding for select box */
+            border: 1px solid #ccc; /* Border for select box */
+            border-radius: 5px; /* Rounded corners */
+            font-size: 1em; /* Font size */
+            cursor: pointer; /* Pointer on hover */
+        }
+
+        .next-btn {
+            display: block; /* Block level button */
+            width: 100%; /* Full width */
+            padding: 14px; /* Padding */
+            border: none; /* No border */
+            border-radius: 6px; /* Rounded corners */
+            font-size: 18px; /* Font size */
+            font-weight: 600; /* Font weight */
+            cursor: pointer; /* Pointer on hover */
+            background-color: #30add4; /* Background color */
+            color: white; /* Text color */
+            transition: background-color 0.3s ease, transform 0.1s ease; /* Transition effect */
+        }
+
+        .next-btn:hover {
+            background-color: #2b9cbf; /* Darker shade on hover */
+        }
+
+        .next-btn:active {
+            transform: translateY(2px); /* Press effect */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px; /* Reduce margin for small screens */
+                padding: 20px; /* Reduce padding for small screens */
+            }
+
+            h1 {
+                font-size: 2em; /* Reduce font size for small screens */
+            }
+        }
+    </style>
 </head>
 <body>
+    <div class="background"></div> <!-- This div holds the blurred background -->
     <main class="container">
         <h1>Choose Your Workout Days</h1>
         

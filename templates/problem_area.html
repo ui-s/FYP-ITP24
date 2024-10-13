@@ -1,13 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Workout Planner - Problem Areas</title>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/problem_area.css') }}">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; /* Prevent default scroll */
+            position: relative; /* Position for the background */
+        }
+
+        /* Fixed blurred background */
+        .background {
+            background: url('/static/images/GymAppBackground.png') no-repeat center center fixed; /* Background image */
+            background-size: cover; /* Cover the entire area */
+            position: fixed; /* Fix to viewport */
+            top: 0; /* Align to the top */
+            left: 0; /* Align to the left */
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            filter: blur(8px); /* Apply blur */
+            z-index: -1; /* Send to back */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            margin: 40px auto; /* Center with margin */
+            padding: 30px; /* Padding for content */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Shadow */
+            max-width: 600px; /* Max width for the content */
+            width: 90%; /* Full width but with some margin */
+            position: relative; /* Ensure content is above the background */
+            z-index: 1; /* Layer above background */
+            overflow-y: auto; /* Allow vertical scrolling */
+            max-height: calc(100vh - 80px); /* Adjust max height, accounting for margins */
+        }
+
+        h1 {
+            color: #000; /* Text color */
+            text-align: center; /* Center the title */
+            margin-bottom: 30px; /* Space below */
+            font-size: 2.5em; /* Font size */
+            font-weight: 700; /* Font weight */
+        }
+
+        .problem-areas {
+            display: flex; /* Flex container for cards */
+            flex-direction: column; /* Vertical stacking */
+            gap: 20px; /* Space between cards */
+            margin-bottom: 30px; /* Space below */
+        }
+
+        .area-card {
+            position: relative; /* Positioning for the checkbox */
+            background-color: #fff; /* Background color */
+            border: 1px solid #e0e0e0; /* Border */
+            border-radius: 8px; /* Rounded corners */
+            overflow: hidden; /* Clip overflow */
+            transition: all 0.3s ease; /* Smooth transition */
+        }
+
+        .area-card input[type="checkbox"] {
+            position: absolute; /* Position to fill the card */
+            opacity: 0; /* Hide checkbox */
+            width: 100%; /* Fill width */
+            height: 100%; /* Fill height */
+            cursor: pointer; /* Pointer on hover */
+        }
+
+        .area-card label {
+            display: block; /* Block level label */
+            padding: 20px; /* Padding inside card */
+            cursor: pointer; /* Pointer on hover */
+        }
+
+        .area-card h2 {
+            margin-top: 0; /* No margin on top */
+            color: #000; /* Text color */
+            font-size: 1.2em; /* Font size */
+            font-weight: bold; /* Bold text */
+        }
+
+        .area-card p {
+            margin-bottom: 0; /* No margin below paragraph */
+            font-size: 0.9em; /* Font size */
+            color: #000; /* Text color */
+        }
+
+        .area-card:hover {
+            transform: translateY(-5px); /* Lift effect */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* Shadow on hover */
+            background-color: #f0f0f0; /* Change background on hover */
+        }
+
+        .area-card input[type="checkbox"]:checked + label {
+            background-color: #e6f7ff; /* Background when checked */
+            border: 2px solid #30add4; /* Border color */
+        }
+
+        .next-btn {
+            display: block; /* Block level button */
+            width: 100%; /* Full width */
+            padding: 14px; /* Padding */
+            border: none; /* No border */
+            border-radius: 6px; /* Rounded corners */
+            font-size: 18px; /* Font size */
+            font-weight: 600; /* Font weight */
+            cursor: pointer; /* Pointer on hover */
+            background-color: #30add4; /* Background color */
+            color: white; /* Text color */
+            transition: background-color 0.3s ease, transform 0.1s ease; /* Transition effect */
+        }
+
+        .next-btn:hover {
+            background-color: #2b9cbf; /* Darker shade on hover */
+        }
+
+        .next-btn:active {
+            transform: translateY(2px); /* Press effect */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px; /* Reduce margin for small screens */
+                padding: 20px; /* Reduce padding for small screens */
+            }
+
+            h1 {
+                font-size: 2em; /* Reduce font size for small screens */
+            }
+        }
+
+    </style>
 </head>
+
 <body>
+    <div class="background"></div> <!-- This div holds the blurred background -->
     <main class="container">
         <h1>Focus on Problem Areas</h1>
         
@@ -56,8 +194,7 @@
             
             <button type="submit" class="next-btn">Next</button>
         </form>
-        
-
     </main>
 </body>
+
 </html>

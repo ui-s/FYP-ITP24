@@ -6,9 +6,125 @@
     <title>Confirm Your Choices</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/confirmation.css') }}">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            margin: 0;
+            height: 100vh;
+            overflow: hidden; /* Prevent default scroll */
+            position: relative; /* Position for the background */
+        }
+
+        /* Fixed blurred background */
+        .background {
+            background: url('/static/images/GymAppBackground.png') no-repeat center center fixed; /* Background image */
+            background-size: cover; /* Cover the entire area */
+            position: fixed; /* Fix to viewport */
+            top: 0; /* Align to the top */
+            left: 0; /* Align to the left */
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            filter: blur(8px); /* Apply blur */
+            z-index: -1; /* Send to back */
+        }
+
+        .container {
+            background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+            margin: 40px auto; /* Center with margin */
+            padding: 30px; /* Padding for content */
+            border-radius: 10px; /* Rounded corners */
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); /* Shadow */
+            max-width: 600px; /* Max width for the content */
+            width: 90%; /* Full width but with some margin */
+            position: relative; /* Ensure content is above the background */
+            z-index: 1; /* Layer above background */
+            overflow-y: auto; /* Allow vertical scrolling */
+            max-height: calc(100vh - 80px); /* Adjust max height, accounting for margins */
+        }
+
+        h1 {
+            color: #000; /* Text color */
+            text-align: center; /* Center the title */
+            margin-bottom: 20px; /* Space below */
+            font-size: 2.5em; /* Font size */
+            font-weight: 700; /* Font weight */
+        }
+
+        .summary {
+            margin-bottom: 20px; /* Space below the summary */
+        }
+
+        section {
+            margin-bottom: 20px; /* Space between sections */
+        }
+
+        h2 {
+            color: #000; /* Text color for subtitles */
+            font-size: 1.5em; /* Font size for subtitles */
+            margin-bottom: 10px; /* Space below subtitles */
+        }
+
+        ul {
+            list-style-type: none; /* Remove default list styling */
+            padding: 0; /* Remove padding */
+        }
+
+        li {
+            padding: 5px 0; /* Padding for list items */
+            color: #333; /* List item color */
+        }
+
+        .next-btn, .back-btn {
+            display: block; /* Block level button */
+            width: 100%; /* Full width */
+            padding: 14px; /* Padding */
+            border: none; /* No border */
+            border-radius: 6px; /* Rounded corners */
+            font-size: 18px; /* Font size */
+            font-weight: 600; /* Font weight */
+            cursor: pointer; /* Pointer on hover */
+            background-color: #30add4; /* Background color */
+            color: white; /* Text color */
+            transition: background-color 0.3s ease, transform 0.1s ease; /* Transition effect */
+            margin-top: 15px; /* Space above buttons */
+        }
+
+        .next-btn:hover {
+            background-color: #2b9cbf; /* Darker shade on hover */
+        }
+
+        .next-btn:active {
+            transform: translateY(2px); /* Press effect */
+        }
+
+        .back-btn {
+            background-color: #ccc; /* Gray color for back button */
+            color: #000; /* Text color */
+        }
+
+        .back-btn:hover {
+            background-color: #b3b3b3; /* Darker gray on hover */
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 20px; /* Reduce margin for small screens */
+                padding: 20px; /* Reduce padding for small screens */
+            }
+
+            h1 {
+                font-size: 2em; /* Reduce font size for small screens */
+            }
+        }
+    </style>
 </head>
 <body>
- <div class="container">
+    <div class="background"></div> <!-- This div holds the blurred background -->
+    <div class="container">
         <h1>Confirm Your Choices</h1>
         <p>Please review your selections below. If you need to make any changes, use the 'Back' button to navigate to the appropriate page.</p>
         
@@ -17,7 +133,7 @@
                 <h2>Your Information:</h2>
                 <ul>
                     <li><strong>Username:</strong> {{ session.get('username', 'Not specified') }}</li>
-                    <li><strong>Age:</strong> {{ session.get('age_group', 'Not specified') }}</li>
+                    <li><strong>Age Range:</strong> {{ session.get('age_group', 'Not specified') }}</li>
                     <li><strong>Gender:</strong> {{ session.get('gender', 'Not specified')|capitalize }}</li>
                     <li><strong>Height:</strong> {{ session.get('height', 'Not specified') }} cm</li>
                     <li><strong>Weight:</strong> {{ session.get('weight', 'Not specified') }} kg</li>
@@ -50,7 +166,7 @@
         <form action="{{ url_for('generate_workout_plan') }}" method="post">
             <input type="hidden" name="username" value="{{ session.get('username', '') }}">
             <input type="hidden" name="gender" value="{{ session.get('gender', '') }}">
-            <input type="hidden" name="age_group" value="{{ session.get('age_group', '') }}">
+            <input type="hidden" name="age" value="{{ session.get('age', '') }}">
             <input type="hidden" name="height" value="{{ session.get('height', '') }}">
             <input type="hidden" name="weight" value="{{ session.get('weight', '') }}">
             <input type="hidden" name="body_goal" value="{{ session.get('body_goal', '') }}">
