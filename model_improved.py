@@ -65,6 +65,11 @@ class WorkoutModel:
     def optimize_workout_schedule(self, workout_days, predictions):
         schedule = {day: 'Rest' for day in self.target_days}
         workout_count = 0
+
+        # If there's only one workout day, always assign a Full Body workout
+        if workout_days == 1:
+            schedule[self.target_days[0]] = 'Full Body Day'
+            return schedule
         
         # First pass: Use model predictions
         for day, workout in predictions.items():
