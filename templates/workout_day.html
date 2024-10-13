@@ -47,7 +47,7 @@
                 <select id="exerciseDropdown" class="form-select mb-2">
                     <option value="">Select an exercise to add</option>
                     {% for exercise in available_exercises %}
-                        <option value="{{ exercise }}">{{ exercise }}</option>
+                        <option value="{{ exercise.Exercise }}" data-muscle="{{ exercise.TargetedMuscle }}">{{ exercise.Exercise }}</option>
                     {% endfor %}
                 </select>
                 <button id="addExercise" class="btn btn-primary">
@@ -93,13 +93,15 @@
             });
 
             $('#addExercise').click(function() {
-                var selectedExercise = $('#exerciseDropdown').val();
+                var selectedOption = $('#exerciseDropdown option:selected');
+                var selectedExercise = selectedOption.val();
+                var targetedMuscle = selectedOption.data('muscle');
                 if (selectedExercise) {
                     $('#exerciseList').append(`
                         <li class="list-group-item d-flex justify-content-between align-items-center" data-exercise="${selectedExercise}">
                             <div>
                                 <strong>${selectedExercise}</strong><br>
-                                Targeted Muscle: To be determined
+                                Targeted Muscle: ${targetedMuscle}
                             </div>
                             <button class="btn btn-danger btn-sm remove-exercise">
                                 <i class="bi bi-trash"></i> Remove
