@@ -84,6 +84,10 @@
             border-color: #dc3545;
             box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
         }
+
+        .edit-mode-hidden {
+        display: none !important;
+    }
     </style>
 </head>
 <body>
@@ -611,61 +615,66 @@ document.addEventListener('DOMContentLoaded', function() {
 
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        const editButton = document.getElementById('edit-workouts');
-        const exerciseList = document.getElementById('exercise-list');
-        let isEditMode = false;
-    
-        editButton.addEventListener('click', function() {
-            isEditMode = !isEditMode;
-            editButton.textContent = isEditMode ? 'Done Editing' : 'Edit Workouts';
-            exerciseList.classList.toggle('edit-mode');
-    
-            document.querySelectorAll('.exercise-card').forEach(card => {
-                if (isEditMode) {
-                    // Add remove button
-                    const removeBtn = document.createElement('button');
-                    removeBtn.className = 'btn btn-danger remove-workout';
-                    removeBtn.textContent = 'Remove';
-                    removeBtn.style.position = 'absolute';
-                    removeBtn.style.top = '10px';
-                    removeBtn.style.right = '10px';
-                    card.style.position = 'relative';
-                    card.appendChild(removeBtn);
-    
-                    // Disable other interactions
-                    card.querySelectorAll('input, button').forEach(el => {
-                        if (!el.classList.contains('remove-workout')) {
-                            el.disabled = true;
-                        }
-                    });
-                } else {
-                    // Remove the remove button
-                    const removeBtn = card.querySelector('.remove-workout');
-                    if (removeBtn) {
-                        removeBtn.remove();
+    const editButton = document.getElementById('edit-workouts');
+    const exerciseList = document.getElementById('exercise-list');
+    let isEditMode = false;
+
+    editButton.addEventListener('click', function() {
+        isEditMode = !isEditMode;
+        editButton.textContent = isEditMode ? 'Done Editing' : 'Edit Workouts';
+        exerciseList.classList.toggle('edit-mode');
+
+        document.querySelectorAll('.exercise-card').forEach(card => {
+            const completeBtn = card.querySelector('.toggle-complete');
+            if (isEditMode) {
+                // Add remove button
+                const removeBtn = document.createElement('button');
+                removeBtn.className = 'btn btn-danger remove-workout';
+                removeBtn.textContent = 'Remove';
+                removeBtn.style.position = 'absolute';
+                removeBtn.style.top = '10px';
+                removeBtn.style.right = '10px';
+                card.style.position = 'relative';
+                card.appendChild(removeBtn);
+
+                // Hide complete button
+                completeBtn.classList.add('edit-mode-hidden');
+
+                // Disable other interactions
+                card.querySelectorAll('input, button').forEach(el => {
+                    if (!el.classList.contains('remove-workout')) {
+                        el.disabled = true;
                     }
-    
-                    // Re-enable interactions
-                    card.querySelectorAll('input, button').forEach(el => {
-                        el.disabled = false;
-                    });
+                });
+            } else {
+                // Remove the remove button
+                const removeBtn = card.querySelector('.remove-workout');
+                if (removeBtn) {
+                    removeBtn.remove();
                 }
-            });
-        });
-    
-        // Event delegation for remove buttons
-        exerciseList.addEventListener('click', function(e) {
-            if (e.target.classList.contains('remove-workout')) {
-                const card = e.target.closest('.exercise-card');
-                if (confirm('Are you sure you want to remove this workout?')) {
-                    card.remove();
-                }
+
+                // Show complete button
+                completeBtn.classList.remove('edit-mode-hidden');
+
+                // Re-enable interactions
+                card.querySelectorAll('input, button').forEach(el => {
+                    el.disabled = false;
+                });
             }
         });
-    
     });
 
+    // Event delegation for remove buttons
+    exerciseList.addEventListener('click', function(e) {
+        if (e.target.classList.contains('remove-workout')) {
+            const card = e.target.closest('.exercise-card');
+            if (confirm('Are you sure you want to remove this workout?')) {
+                card.remove();
+            }
+        }
+    });
+});
     
-    </script>
+</script>
 </body>
 </html>
