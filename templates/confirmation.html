@@ -17,7 +17,7 @@
                 <h2>Your Information:</h2>
                 <ul>
                     <li><strong>Username:</strong> {{ session.get('username', 'Not specified') }}</li>
-                    <li><strong>Age:</strong> {{ session.get('age', 'Not specified') }}</li> <!-- Changed from age_group to age -->
+                    <li><strong>Age:</strong> {{ session.get('age_group', 'Not specified') }}</li>
                     <li><strong>Gender:</strong> {{ session.get('gender', 'Not specified')|capitalize }}</li>
                     <li><strong>Height:</strong> {{ session.get('height', 'Not specified') }} cm</li>
                     <li><strong>Weight:</strong> {{ session.get('weight', 'Not specified') }} kg</li>
@@ -50,7 +50,7 @@
         <form action="{{ url_for('generate_workout_plan') }}" method="post">
             <input type="hidden" name="username" value="{{ session.get('username', '') }}">
             <input type="hidden" name="gender" value="{{ session.get('gender', '') }}">
-            <input type="hidden" name="age" value="{{ session.get('age', '') }}"> <!-- Changed from age_group to age -->
+            <input type="hidden" name="age_group" value="{{ session.get('age_group', '') }}">
             <input type="hidden" name="height" value="{{ session.get('height', '') }}">
             <input type="hidden" name="weight" value="{{ session.get('weight', '') }}">
             <input type="hidden" name="body_goal" value="{{ session.get('body_goal', '') }}">

@@ -464,7 +464,7 @@ def workout(day):
     
     # Filter exercises based on the workout type
     workout_type = day_workout.get('type', '')
-    available_exercises = df[df['WorkoutDay'] == workout_type]['Exercise'].tolist()
+    available_exercises = df[df['WorkoutDay'] == workout_type].to_dict('records')
     
     return render_template('workout_day.html', day=day, workout=day_workout, available_exercises=available_exercises)
 
@@ -492,7 +492,12 @@ def update_workout(day):
     workout_plan[day.capitalize()] = day_workout
     session['workout_plan'] = workout_plan
     
+    # Force the session to update
+    session.modified = True
+    
     return jsonify({'success': True})
+
+
 
 @app.route('/record_workout/<day>')
 def record_workout(day):
