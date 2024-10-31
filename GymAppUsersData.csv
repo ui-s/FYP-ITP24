@@ -6,3 +6,4 @@ bro0001,tyler,female,18-29,164,65,increase_strength,"['weak_chest', 'weak_back',
 diddy,diddy123,male,18-29,196,65,lose_weight,['big_belly'],advanced,4
 monster,543,male,40-49,165,76,gain_muscle,['small_legs'],beginner,1
 diddy128,654,male,30-39,198,76,gain_muscle,['weak_back'],intermediate,4
+rete,tre,male,30-39,165,76,lose_weight,"['weak_chest', 'big_belly']",beginner,4
